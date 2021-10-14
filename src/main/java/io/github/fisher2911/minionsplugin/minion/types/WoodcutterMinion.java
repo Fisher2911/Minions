@@ -47,7 +47,6 @@ public class WoodcutterMinion extends BaseMinion {
             return;
         }
 
-        final ArmorStand minion = this.getMinion();
         final int posX = this.position.getBlockX();
         final int posY = this.position.getBlockY();
         final int posZ = this.position.getBlockZ();
