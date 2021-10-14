@@ -1,4 +1,4 @@
-package io.github.fisher2911.minion;
+package io.github.fisher2911.minionsplugin.minion;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
@@ -6,6 +6,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class Armor {
 
+    private ItemStack mainHand;
+    private ItemStack offHand;
     private ItemStack boots;
     private ItemStack pants;
     private ItemStack chestPlate;
@@ -15,11 +17,34 @@ public class Armor {
         return new Builder();
     }
 
-    private Armor(final ItemStack boots, final ItemStack pants, final ItemStack chestPlate, final ItemStack helmet) {
+    public Armor(final ItemStack mainHand,
+                 final ItemStack offHand,
+                 final ItemStack boots,
+                 final ItemStack pants,
+                 final ItemStack chestPlate,
+                 final ItemStack helmet) {
+        this.mainHand = mainHand;
+        this.offHand = offHand;
         this.boots = boots;
         this.pants = pants;
         this.chestPlate = chestPlate;
         this.helmet = helmet;
+    }
+
+    public ItemStack getMainHand() {
+        return this.mainHand;
+    }
+
+    public void setMainHand(final ItemStack mainHand) {
+        this.mainHand = mainHand;
+    }
+
+    public ItemStack getOffHand() {
+        return this.offHand;
+    }
+
+    public void setOffHand(final ItemStack offHand) {
+        this.offHand = offHand;
     }
 
     public ItemStack getBoots() {
@@ -75,10 +100,19 @@ public class Armor {
             return;
         }
         equipment.setArmorContents(this.toArray());
+        equipment.setItemInMainHand(this.mainHand);
+        equipment.setItemInOffHand(this.offHand);
+        equipment.setBoots(this.boots);
+        equipment.setLeggings(this.pants);
+        equipment.setChestplate(this.chestPlate);
+        equipment.setHelmet(this.helmet);
+
     }
 
     public static class Builder {
 
+        private ItemStack mainHand;
+        private ItemStack offHand;
         private ItemStack boots;
         private ItemStack pants;
         private ItemStack chestPlate;
@@ -89,6 +123,16 @@ public class Armor {
 
         public static Builder create() {
             return new Builder();
+        }
+
+        public Builder mainHand(final ItemStack mainHand) {
+            this.mainHand = mainHand;
+            return this;
+        }
+
+        public Builder offHand(final ItemStack offHand) {
+            this.offHand = offHand;
+            return this;
         }
 
         public Builder boots(final ItemStack boots) {
@@ -112,7 +156,13 @@ public class Armor {
         }
 
         public Armor build() {
-            return new Armor(this.boots, this.pants, this.chestPlate, this.helmet);
+            return new Armor(
+                    this.mainHand,
+                    this.offHand,
+                    this.boots,
+                    this.pants,
+                    this.chestPlate,
+                    this.helmet);
         }
     }
 }

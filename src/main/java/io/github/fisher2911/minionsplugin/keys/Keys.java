@@ -1,6 +1,6 @@
-package io.github.fisher2911.keys;
+package io.github.fisher2911.minionsplugin.keys;
 
-import io.github.fisher2911.MinionsPlugin;
+import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import org.bukkit.NamespacedKey;
 
 public class Keys {

@@ -1,4 +1,4 @@
-package io.github.fisher2911.minion;
+package io.github.fisher2911.minionsplugin.minion;
 
 public class MinionData {
 

@@ -1,4 +1,4 @@
-package io.github.fisher2911.exception;
+package io.github.fisher2911.minionsplugin.exception;
 
 public class MinionException extends RuntimeException {
 
