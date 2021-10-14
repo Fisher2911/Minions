@@ -65,12 +65,12 @@ public class WoodcutterMinion extends BaseMinion {
 
         final Region region = new CuboidRegion(
                 world,
-                minX, minY, minZ,
-                maxX, maxY, maxZ
+                minX, posY - 30, minZ,
+                maxX, posY + 30, maxZ
                 );
 
         for (int x = posX - size; x < posX + size; x++) {
-            for (int y = posY - 30; y < posY + 30; y++) {
+            for (int y = posY - size; y < posY + size; y++) {
                 for (int z = posZ - size; z < posZ + size; z++) {
                     final Position position = new Position(
                             world,
