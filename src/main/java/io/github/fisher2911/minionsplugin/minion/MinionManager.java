@@ -43,7 +43,11 @@ public class MinionManager {
         final Optional<Map<Long, BaseMinion>> minionsInChunkOptional = this.getMinionsInChunk(chunkKey);
 
         minionsInChunkOptional.ifPresentOrElse(map -> map.put(baseMinion.getId(), baseMinion),
-                () -> this.minionMap.put(chunkKey, new HashMap<>())
+                () -> {
+                    final Map<Long, BaseMinion> newMap = new HashMap<>();
+                    newMap.put(baseMinion.getId(), baseMinion);
+                    this.minionMap.put(chunkKey, newMap);
+                }
         );
     }
 
