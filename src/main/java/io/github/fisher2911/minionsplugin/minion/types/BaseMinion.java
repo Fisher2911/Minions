@@ -37,7 +37,7 @@ public abstract class BaseMinion implements IdHolder<Long>, InventoryHolder {
     public abstract void performAction();
 
     public boolean isPlaced() {
-        return this.minion != null;
+        return this.minion != null && this.minion.isValid();
     }
 
     public void place() {
@@ -58,6 +58,8 @@ public abstract class BaseMinion implements IdHolder<Long>, InventoryHolder {
            entity.setCustomNameVisible(true);
            entity.setSmall(true);
            entity.setArms(true);
+           entity.setGravity(false);
+           entity.setInvulnerable(true);
            this.minionData.getInventory().setArmor(entity);
 
         });
@@ -72,8 +74,20 @@ public abstract class BaseMinion implements IdHolder<Long>, InventoryHolder {
         return this.minion;
     }
 
+    public void despawn() {
+        if (!this.isPlaced()) {
+            return;
+        }
+
+        this.minion.remove();
+    }
+
     @Override
     public @NotNull Inventory getInventory() {
         return this.minionData.getInventory().getInventory();
+    }
+
+    public Position getPosition() {
+        return this.position;
     }
 }

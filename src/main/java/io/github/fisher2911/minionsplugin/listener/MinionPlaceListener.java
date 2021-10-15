@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 public class MinionPlaceListener implements Listener {
 
     private final MinionsPlugin plugin;
-    private final MinionManager<BaseMinion> minionManager;
+    private final MinionManager minionManager;
 
     private static int id = 0;
 
@@ -90,7 +90,7 @@ public class MinionPlaceListener implements Listener {
                                 parseStringToString("<gradient:blue:green>WoodCutter Minion</gradient>!"),
                         0));
         baseMinion.place();
-        this.minionManager.add(baseMinion);
+        this.minionManager.addMinion(baseMinion);
         event.setCancelled(true);
     }
 }

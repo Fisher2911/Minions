@@ -18,7 +18,7 @@ import java.util.Optional;
 public class EntityKillListener implements Listener  {
 
     private final MinionsPlugin minionsPlugin;
-    private final MinionManager<BaseMinion> minionManager;
+    private final MinionManager minionManager;
 
     public EntityKillListener(final MinionsPlugin minionsPlugin) {
         this.minionsPlugin = minionsPlugin;
@@ -36,13 +36,7 @@ public class EntityKillListener implements Listener  {
             final Entity damager = entityDamageByEntityEvent.getDamager();
 
             if (damager instanceof final ArmorStand armorStand) {
-                final long id = this.minionManager.getId(armorStand);
-
-                if (id == -1) {
-                    return;
-                }
-
-                final Optional<BaseMinion> minionOptional = this.minionManager.get(id);
+                final Optional<BaseMinion> minionOptional = this.minionManager.getMinion(armorStand);
 
                 minionOptional.ifPresent(minion -> {
                     final Inventory inventory = minion.getInventory();

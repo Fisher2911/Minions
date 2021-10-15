@@ -14,7 +14,7 @@ import java.util.Optional;
 public class EntityClickListener implements Listener {
 
     private final MinionsPlugin  plugin;
-    private final MinionManager<BaseMinion> minionManager;
+    private final MinionManager minionManager;
 
     public EntityClickListener(final MinionsPlugin plugin) {
         this.plugin = plugin;
@@ -26,13 +26,7 @@ public class EntityClickListener implements Listener {
         final Entity interactedWith = event.getRightClicked();
 
         if (interactedWith instanceof final ArmorStand armorStand) {
-            final long id = this.minionManager.getId(armorStand);
-
-            if (id == -1) {
-                return;
-            }
-
-            final Optional<BaseMinion> minionOptional = this.minionManager.get(id);
+            final Optional<BaseMinion> minionOptional = this.minionManager.getMinion(armorStand);
 
             minionOptional.ifPresent(minion -> {
                 event.getPlayer().openInventory(minion.getInventory());

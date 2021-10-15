@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
 public class MinionScheduler {
 
     private final MinionsPlugin plugin;
-    private final MinionManager<BaseMinion> minionManager;
+    private final MinionManager minionManager;
     private BukkitTask task;
 
     public MinionScheduler(final MinionsPlugin plugin) {
