@@ -11,7 +11,7 @@ import io.github.fisher2911.minionsplugin.minion.MinionData;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
-import io.github.fisher2911.minionsplugin.minion.types.WoodcutterMinion;
+import io.github.fisher2911.minionsplugin.minion.types.MinerMinion;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -58,7 +58,7 @@ public class MinionPlaceListener implements Listener {
                 LeatherArmorBuilder.from(Material.LEATHER_BOOTS).
                         color(Color.AQUA);
 
-        final BaseMinion baseMinion = new WoodcutterMinion(
+        final BaseMinion baseMinion = new MinerMinion(
                 this.plugin,
                 id++,
                 player.getUniqueId(),

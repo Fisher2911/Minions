@@ -56,7 +56,7 @@ public class WoodcutterMinion extends BaseMinion {
         final int minY = posY - size;
         final int minZ = posZ - size;
         final int maxX = posX + size;
-        final int maxY= posY + size;
+        final int maxY = posY + size;
         final int maxZ = posZ + size;
 
         final World world = this.minion.getWorld();
@@ -65,11 +65,11 @@ public class WoodcutterMinion extends BaseMinion {
                 world,
                 minX, posY - 30, minZ,
                 maxX, posY + 30, maxZ
-                );
+        );
 
-        for (int x = posX - size; x < posX + size; x++) {
-            for (int y = posY - size; y < posY + size; y++) {
-                for (int z = posZ - size; z < posZ + size; z++) {
+        for (int y = posY - size; y < posY + size; y++) {
+            for (int x = posX - size; x < posX + size; x++) {
+            for (int z = posZ - size; z < posZ + size; z++) {
                     final Position position = new Position(
                             world,
                             x, y, z
@@ -82,13 +82,13 @@ public class WoodcutterMinion extends BaseMinion {
                     }
 
                     final BlockBreakTask task = new BlockBreakTask(
-                        this.plugin,
+                            this.plugin,
                             position,
                             region,
                             1,
                             allowedMaterials,
                             brokenBlock -> this.getInventory().addItem(
-                                        brokenBlock.getDrops().toArray(new ItemStack[0])),
+                                    brokenBlock.getDrops().toArray(new ItemStack[0])),
                             () -> this.isPerformingTask.set(false)
                     );
                     task.start();
