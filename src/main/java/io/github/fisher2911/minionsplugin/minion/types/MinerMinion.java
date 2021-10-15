@@ -5,8 +5,10 @@ import io.github.fisher2911.minionsplugin.minion.MinionData;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public class MinerMinion extends BaseMinion {
@@ -29,8 +31,11 @@ public class MinerMinion extends BaseMinion {
             return;
         }
 
-        blockInFront.breakNaturally();
+        final Collection<ItemStack> drops = blockInFront.getDrops();
 
+        blockInFront.setType(Material.AIR);
+
+        this.getInventory().addItem(drops.toArray(new ItemStack[0]));
     }
     
 }
