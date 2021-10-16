@@ -3,6 +3,10 @@ package io.github.fisher2911.minionsplugin.world;
 import io.github.fisher2911.fishcore.world.Position;
 import org.bukkit.World;
 
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+
 public class RectangularRegion implements Region {
 
     private final Position origin;
@@ -84,5 +88,29 @@ public class RectangularRegion implements Region {
 
     public double getMaxZ() {
         return this.max.getZ();
+    }
+
+    @Override
+    public Set<Position> getAllPositionsInY(final int minY, final int maxY) {
+        final Set<Position> positions = new HashSet<>();
+
+        final Optional<World> worldOptional = this.origin.getWorld();
+
+        if (worldOptional.isEmpty()) {
+            return positions;
+        }
+
+        final World world = worldOptional.get();
+
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = (int) (this.getMinX()); x <= (int) this.getMaxX(); x++) {
+                for (int z = (int) (this.getMinZ()); z <= (int) this.getMaxZ(); z++) {
+
+                    positions.add(new Position(world, x, y, z));
+                }
+            }
+        }
+
+        return positions;
     }
 }

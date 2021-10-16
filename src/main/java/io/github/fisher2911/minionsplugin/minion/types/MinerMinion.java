@@ -1,8 +1,8 @@
 package io.github.fisher2911.minionsplugin.minion.types;
 
+import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.MinionData;
 import io.github.fisher2911.minionsplugin.world.Region;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -25,9 +25,13 @@ public class MinerMinion extends BlockMinion {
     }
 
     @Override
-    public void performAction(final Block block) {
+    public boolean performAction(final BlockChangedInWorldEvent event) {
         if (!this.isPlaced()) {
-            return;
+            return true;
+        }
+
+        if (!this.canPerformAction()) {
+            return false;
         }
 
         final ArmorStand minion = this.getMinion();
@@ -35,7 +39,7 @@ public class MinerMinion extends BlockMinion {
         final Block blockInFront = minion.getTargetBlock(null, 1);
 
         if (blockInFront.getType() == Material.AIR) {
-            return;
+            return true;
         }
 
         final Collection<ItemStack> drops = blockInFront.getDrops();
@@ -44,6 +48,7 @@ public class MinerMinion extends BlockMinion {
 
         this.getInventory().addItem(drops.toArray(new ItemStack[0]));
         this.setLastActionTime(LocalDateTime.now());
+        return true;
     }
     
 }

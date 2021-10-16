@@ -5,8 +5,10 @@ import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.EntityMinion;
+import io.github.fisher2911.minionsplugin.minion.types.Scheduleable;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,8 +24,13 @@ public class MinionManager {
     private final MinionWorldPositions<BlockMinion> blockMinionsWorldPositions = new MinionWorldPositions<>();
     private final MinionWorldPositions<EntityMinion> entityMinionsWorldPositions = new MinionWorldPositions<>();
 
+    private final Map<Long, Scheduleable> schedulerMinionMap = new HashMap<>();
+
+    private BukkitTask schedulerMinionTask;
+
     public MinionManager(final MinionsPlugin plugin) {
         this.plugin = plugin;
+        this.startSchedulerMinionTask();
     }
 
     public void addBlockMinion(final BlockMinion blockMinion) {
@@ -83,6 +90,9 @@ public class MinionManager {
                                                      final MinionWorldPositions<T> worldPositions) {
         worldPositions.set(minion);
         this.allMinions.put(minion.getId(), minion);
+        if (minion instanceof final Scheduleable scheduleable) {
+            this.schedulerMinionMap.put(minion.getId(), scheduleable);
+        }
     }
 
     private <T extends BaseMinion<?>> Optional<T> getMinionAt(final Position position,
@@ -101,7 +111,6 @@ public class MinionManager {
                                                                                     final long chunkKey,
                                                                                     final MinionWorldPositions<T> minionWorldPositions) {
 
-
         final Optional<MinionChunkPositions<T>> optionalMinionChunkPositions =
                 minionWorldPositions.get(world);
 
@@ -116,6 +125,10 @@ public class MinionManager {
                                                                final MinionWorldPositions<T> worldPositions) {
         final Optional<MinionChunkPositions<T>> chunkPositionsOptional =
                 this.getMinionChunksPosition(minion.getPosition(), worldPositions);
+
+        if (minion instanceof Scheduleable) {
+            this.schedulerMinionMap.remove(minion.getId());
+        }
 
         if (chunkPositionsOptional.isEmpty()) {
             return Optional.empty();
@@ -132,4 +145,12 @@ public class MinionManager {
         return removed;
     }
 
+    public void startSchedulerMinionTask() {
+        // todo - change interval based on config value
+        this.schedulerMinionTask = Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
+            for (final Scheduleable minion : this.schedulerMinionMap.values()) {
+                minion.run();
+            }
+        }, 20, 20);
+    }
 }

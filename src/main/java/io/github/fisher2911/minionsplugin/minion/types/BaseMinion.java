@@ -43,7 +43,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         this.minionData = minionData;
     }
 
-    public abstract void performAction(final T t);
+    public abstract boolean performAction(final T t);
 
     public boolean isPlaced() {
         return this.minion != null && this.minion.isValid();
@@ -110,7 +110,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
 
     public boolean canPerformAction() {
         // todo remove hard coded speed
-        final int speedInSeconds = 3;
+        final int speedInSeconds = 1;
 
         return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speedInSeconds;
     }

@@ -48,8 +48,7 @@ public class MinionScheduler<T extends BaseMinion<R>, R> {
 
                 final T minion = taskData.getMinion();
 
-                if (minion.canPerformAction()) {
-                    minion.performAction(taskData.getData());
+                if (minion.performAction(taskData.getData())) {
                     continue;
                 }
 

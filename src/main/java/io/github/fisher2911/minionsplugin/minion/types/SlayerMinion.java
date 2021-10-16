@@ -34,12 +34,17 @@ public class SlayerMinion extends EntityMinion {
             EnumSet.of(EntityType.SHEEP, EntityType.COW, EntityType.PIG, EntityType.CHICKEN);
 
     @Override
-    public void performAction(final Entity entity) {
+    public boolean performAction(final Entity entity) {
+
+        if (!this.canPerformAction()) {
+            return false;
+        }
+
         final Position position = this.getPosition();
 
         final Optional<World> worldOptional = position.getWorld();
         if (worldOptional.isEmpty()) {
-            return;
+            return true;
         }
 
         final World world = worldOptional.get();
@@ -53,19 +58,20 @@ public class SlayerMinion extends EntityMinion {
                         collect(Collectors.toList());
 
         if (livingEntities.isEmpty()) {
-            return;
+            return true;
         }
 
         final int rand = RandomUtil.rand(livingEntities.size());
         final LivingEntity livingEntity = livingEntities.get(rand);
 
         if (!isPlaced()) {
-            return;
+            return true;
         }
 
         final ArmorStand minion = this.getMinion();
 
         livingEntity.damage(livingEntity.getHealth(), minion);
+        return true;
     }
 
 }

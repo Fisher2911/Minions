@@ -2,6 +2,7 @@ package io.github.fisher2911.minionsplugin.listener;
 
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
+import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionPositions;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
@@ -18,7 +19,7 @@ public class BlockAddedToWorldListener implements Listener {
 
     private final MinionsPlugin plugin;
     private final MinionManager minionManager;
-    private final MinionScheduler<BlockMinion, Block> minionScheduler;
+    private final MinionScheduler<BlockMinion, BlockChangedInWorldEvent> minionScheduler;
 
     public BlockAddedToWorldListener(final MinionsPlugin plugin) {
         this.plugin = plugin;
@@ -41,17 +42,19 @@ public class BlockAddedToWorldListener implements Listener {
                                 position.getChunkKey()
                 );
 
+        final BlockChangedInWorldEvent blockChangedInWorldEvent = new BlockChangedInWorldEvent(block, BlockChangedInWorldEvent.Type.ADDED);
+
         optionalBlockMinionMinionPositions.ifPresent(chunkPositions ->
                 chunkPositions.getMinionMap().values().forEach(
                 minion -> {
 
                     if (minion.canPerformAction()) {
-                        minion.performAction(block);
+                        minion.performAction(blockChangedInWorldEvent);
                         return;
                     }
 
                     this.minionScheduler.addMinionTaskData(
-                            new MinionTaskData<>(minion, block)
+                            new MinionTaskData<>(minion, blockChangedInWorldEvent)
                     );
                 }));
     }

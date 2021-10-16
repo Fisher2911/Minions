@@ -2,6 +2,8 @@ package io.github.fisher2911.minionsplugin.world;
 
 import io.github.fisher2911.fishcore.world.Position;
 
+import java.util.Set;
+
 public interface Region {
 
     /**
@@ -27,4 +29,15 @@ public interface Region {
 
     Position getOrigin();
 
+    double getMinY();
+
+    double getMaxY();
+
+    /**
+     *
+     * @param minY start y level
+     * @param maxY end y level
+     * @return
+     */
+    Set<Position> getAllPositionsInY(final int minY, final int maxY);
 }

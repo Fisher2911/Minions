@@ -11,7 +11,7 @@ import io.github.fisher2911.minionsplugin.minion.MinionData;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
-import io.github.fisher2911.minionsplugin.minion.types.MinerMinion;
+import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
 import io.github.fisher2911.minionsplugin.world.RectangularRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -62,18 +62,18 @@ public class MinionPlaceListener implements Listener {
                         color(Color.RED);
 
         final String name = MessageHandler.getInstance().
-                parseStringToString("<gradient:blue:green>Miner Minion</gradient>");
+                parseStringToString("<gradient:blue:green>Farmer Minion</gradient>");
 
         final Position origin = Position.fromBukkitLocation(event.getClickedBlock().getLocation().add(0.5, 1, 0.5));
 
-        final BlockMinion baseMinion = new MinerMinion(
+        final BlockMinion baseMinion = new FarmerMinion(
                 this.plugin,
                 LocalDateTime.now(),
                 id++,
                 player.getUniqueId(),
                 new RectangularRegion(
                         origin,
-                        origin.subtract(5, 5, 5),
+                        origin.subtract(5, 1, 5),
                         origin.add(5, 5, 5)
                 ),
                 new MinionData(
@@ -93,14 +93,14 @@ public class MinionPlaceListener implements Listener {
                                                 create().
                                                 owner(Bukkit.getOfflinePlayer("NOTCH")).
                                                 build()).
-                                        mainHand(ItemBuilder.from(Material.DIAMOND_PICKAXE).
+                                        mainHand(ItemBuilder.from(Material.DIAMOND_HOE).
                                                 glow(true).build()).
-                                        offHand(ItemBuilder.from(Material.OBSIDIAN).
+                                        offHand(ItemBuilder.from(Material.WHEAT_SEEDS).
                                                 glow(true).build()).
                                         build()
                         ),
                         name,
-                        0));
+                        0), Material.WHEAT);
         baseMinion.place();
         this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);

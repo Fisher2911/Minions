@@ -1,6 +1,7 @@
 package io.github.fisher2911.minionsplugin.minion.types;
 
 import io.github.fisher2911.fishcore.world.Position;
+import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.MinionData;
 import io.github.fisher2911.minionsplugin.task.BlockBreakTask;
 import io.github.fisher2911.minionsplugin.world.Region;
@@ -41,16 +42,26 @@ public class WoodcutterMinion extends BlockMinion {
 
 
     @Override
-    public void performAction(final Block block) {
+    public boolean performAction(final BlockChangedInWorldEvent event) {
         if (!this.isPlaced() ||
                 this.isPerformingTask.get()) {
-            return;
+            return true;
         }
+
+        if (!this.canPerformAction()) {
+            return false;
+        }
+
+        if (event.getType() == BlockChangedInWorldEvent.Type.REMOVED) {
+            return true;
+        }
+
+        final Block block = event.getBlock();
 
         final Position position = Position.fromBukkitLocation(block.getLocation());
 
         if (!allowedMaterials.contains(block.getType())) {
-            return;
+            return true;
         }
 
         final BlockBreakTask task = new BlockBreakTask(
@@ -68,5 +79,6 @@ public class WoodcutterMinion extends BlockMinion {
         );
         task.start();
         this.isPerformingTask.set(true);
+        return true;
     }
 }
