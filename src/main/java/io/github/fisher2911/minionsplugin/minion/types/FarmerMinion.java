@@ -106,7 +106,7 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
 
         final Block above = block.getRelative(BlockFace.UP);
 
-        if (above.getType() != this.cropType) {
+        if (above.getType().isAir()) {
             above.setType(this.cropType);
             this.setLastActionTime(LocalDateTime.now());
             return true;
