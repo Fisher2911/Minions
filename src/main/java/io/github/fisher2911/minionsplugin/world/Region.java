@@ -20,4 +20,11 @@ public interface Region {
 
     boolean within(final Position position);
 
+    /**
+     *
+     * @return origin of the Region, not necessarily the center
+     */
+
+    Position getOrigin();
+
 }

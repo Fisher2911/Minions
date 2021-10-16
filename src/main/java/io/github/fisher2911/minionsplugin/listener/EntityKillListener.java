@@ -1,8 +1,9 @@
 package io.github.fisher2911.minionsplugin.listener;
 
+import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
-import io.github.fisher2911.minionsplugin.minion.MinionManager;
-import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
+import io.github.fisher2911.minionsplugin.minion.types.EntityMinion;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -36,7 +37,8 @@ public class EntityKillListener implements Listener  {
             final Entity damager = entityDamageByEntityEvent.getDamager();
 
             if (damager instanceof final ArmorStand armorStand) {
-                final Optional<BaseMinion> minionOptional = this.minionManager.getMinion(armorStand);
+                final Optional<EntityMinion> minionOptional =
+                        this.minionManager.getEntityMinionAt(Position.fromBukkitLocation(armorStand.getLocation()));
 
                 minionOptional.ifPresent(minion -> {
                     final Inventory inventory = minion.getInventory();

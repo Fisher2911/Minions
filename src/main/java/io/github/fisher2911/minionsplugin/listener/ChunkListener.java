@@ -2,7 +2,7 @@ package io.github.fisher2911.minionsplugin.listener;
 
 import io.github.fisher2911.fishcore.util.PositionUtil;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
-import io.github.fisher2911.minionsplugin.minion.MinionManager;
+import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import org.bukkit.Chunk;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +23,5 @@ public class ChunkListener implements Listener {
         final Chunk chunk = event.getChunk();
         final long key = PositionUtil.getChunkKey(chunk);
         this.minionManager.removeMinionsInChunk(key);
-
     }
 }

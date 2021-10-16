@@ -9,9 +9,10 @@ import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.Armor;
 import io.github.fisher2911.minionsplugin.minion.MinionData;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
-import io.github.fisher2911.minionsplugin.minion.MinionManager;
-import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
+import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.MinerMinion;
+import io.github.fisher2911.minionsplugin.world.RectangularRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -22,6 +23,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.time.LocalDateTime;
 
 public class MinionPlaceListener implements Listener {
 
@@ -56,41 +59,50 @@ public class MinionPlaceListener implements Listener {
 
         final LeatherArmorBuilder builder =
                 LeatherArmorBuilder.from(Material.LEATHER_BOOTS).
-                        color(Color.AQUA);
+                        color(Color.RED);
 
-        final BaseMinion baseMinion = new MinerMinion(
+        final String name = MessageHandler.getInstance().
+                parseStringToString("<gradient:blue:green>Miner Minion</gradient>");
+
+        final Position origin = Position.fromBukkitLocation(event.getClickedBlock().getLocation().add(0.5, 1, 0.5));
+
+        final BlockMinion baseMinion = new MinerMinion(
                 this.plugin,
+                LocalDateTime.now(),
                 id++,
                 player.getUniqueId(),
-                Position.fromBukkitLocation(event.getClickedBlock().getLocation().add(0.5, 1, 0.5)),
+                new RectangularRegion(
+                        origin,
+                        origin.subtract(5, 5, 5),
+                        origin.add(5, 5, 5)
+                ),
                 new MinionData(
                         new MinionInventory(
-                                Bukkit.createInventory(null, 9, "test"),
+                                Bukkit.createInventory(null, 9, name + "'s Inventory"),
                                 Armor.builder().
                                         boots(builder.build()).
                                         pants(LeatherArmorBuilder.
                                                 from(Material.LEATHER_LEGGINGS).
-                                                color(Color.AQUA).
+                                                color(Color.BLUE).
                                                 build()).
                                         chestPlate(LeatherArmorBuilder.
-                                        from(Material.LEATHER_CHESTPLATE).
-                                        color(Color.AQUA).
-                                        build()).
+                                                from(Material.LEATHER_CHESTPLATE).
+                                                color(Color.GREEN).
+                                                build()).
                                         helmet(SkullBuilder.
                                                 create().
-                                                owner(Bukkit.getOfflinePlayer("Notch")).
+                                                owner(Bukkit.getOfflinePlayer("NOTCH")).
                                                 build()).
-                                        mainHand(ItemBuilder.from(Material.DIAMOND_AXE).
+                                        mainHand(ItemBuilder.from(Material.DIAMOND_PICKAXE).
                                                 glow(true).build()).
-                                        offHand(ItemBuilder.from(Material.OAK_LOG).
+                                        offHand(ItemBuilder.from(Material.OBSIDIAN).
                                                 glow(true).build()).
                                         build()
                         ),
-                        MessageHandler.getInstance().
-                                parseStringToString("<gradient:blue:green>WoodCutter Minion</gradient>!"),
+                        name,
                         0));
         baseMinion.place();
-        this.minionManager.addMinion(baseMinion);
+        this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);
     }
 }

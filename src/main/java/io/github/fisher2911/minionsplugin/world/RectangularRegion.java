@@ -3,19 +3,22 @@ package io.github.fisher2911.minionsplugin.world;
 import io.github.fisher2911.fishcore.world.Position;
 import org.bukkit.World;
 
-public class CuboidRegion implements Region {
+public class RectangularRegion implements Region {
 
+    private final Position origin;
     private final Position min;
     private final Position max;
 
-    public CuboidRegion(final Position min, final Position max) {
+    public RectangularRegion(final Position origin, final Position min, final Position max) {
+        this.origin = origin;
         this.min = min;
         this.max = max;
     }
 
-    public CuboidRegion(final World world, final double minX, final double minY, final double minZ,
-                        final double maxX, final double maxY, final double maxZ) {
-        this(new Position(world, minX, minY, minZ), new Position(world, maxX, maxY, maxZ));
+    public RectangularRegion(final World world, final Position origin,
+                             final double minX, final double minY, final double minZ,
+                             final double maxX, final double maxY, final double maxZ) {
+        this(origin, new Position(world, minX, minY, minZ), new Position(world, maxX, maxY, maxZ));
     }
 
     @Override
@@ -52,6 +55,11 @@ public class CuboidRegion implements Region {
         minY <= y && y <= maxY &&
         minZ <= z && z <= maxZ;
 
+    }
+
+    @Override
+    public Position getOrigin() {
+        return this.origin;
     }
 
     public double getMinX() {
