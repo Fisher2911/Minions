@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public class MinionChunkPositions<T extends BaseMinion<?>> {
 
-    private final Map<Long, MinionPositions<T>> minionMap;
+    private final Map<Long, MinionStorage<T>> minionMap;
 
-    public MinionChunkPositions(final Map<Long, MinionPositions<T>> minionMap) {
+    public MinionChunkPositions(final Map<Long, MinionStorage<T>> minionMap) {
         this.minionMap = minionMap;
     }
 
@@ -20,12 +20,12 @@ public class MinionChunkPositions<T extends BaseMinion<?>> {
     }
 
     public void set(final Position position, final T minion) {
-        final Optional<MinionPositions<T>> optional = this.get(position);
+        final Optional<MinionStorage<T>> optional = this.get(position);
 
         if (optional.isEmpty()) {
-            final Map<Position, T> map = new HashMap<>();
-            map.put(position, minion);
-            this.minionMap.put(position.getChunkKey(), new MinionPositions<>(
+            final Map<Long, T> map = new HashMap<>();
+            map.put(minion.getId(), minion);
+            this.minionMap.put(position.getChunkKey(), new MinionStorage<>(
                     map
             ));
             return;
@@ -34,40 +34,40 @@ public class MinionChunkPositions<T extends BaseMinion<?>> {
         optional.get().set(minion);
     }
 
-    public Optional<MinionPositions<T>> get(final Position position) {
+    public Optional<MinionStorage<T>> get(final Position position) {
         final long chunkKey = position.getChunkKey();
         return this.get(chunkKey);
     }
 
-    public Optional<MinionPositions<T>> get(final long chunkKey) {
+    public Optional<MinionStorage<T>> get(final long chunkKey) {
         return Optional.ofNullable(this.minionMap.get(chunkKey));
     }
 
-    public Optional<T> getMinionAt(final Position position) {
-        final Optional<MinionPositions<T>> optional = this.get(position);
+    public Optional<T> getMinionWithId(final Long id) {
+        final Optional<MinionStorage<T>> optional = this.get(id);
 
         if (optional.isEmpty()) {
             return Optional.empty();
         }
 
-        return optional.get().get(position);
+        return optional.get().get(id);
     }
 
-    public Optional<MinionPositions<T>> remove(final Position position) {
+    public Optional<MinionStorage<T>> remove(final Position position) {
         return Optional.ofNullable(this.minionMap.remove(position.getChunkKey()));
     }
 
-    public Optional<T> removeMinion(final Position position) {
-        final Optional<MinionPositions<T>> optional = this.get(position);
+    public Optional<T> removeMinion(final Position position, final long id) {
+        final Optional<MinionStorage<T>> optional = this.get(position);
 
         if (optional.isEmpty()) {
             return Optional.empty();
         }
 
-        return optional.get().remove(position);
+        return optional.get().remove(id);
     }
 
-    public Map<Long, MinionPositions<T>> getMinionMap() {
+    public Map<Long, MinionStorage<T>> getMinionMap() {
         return this.minionMap;
     }
 

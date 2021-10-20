@@ -11,7 +11,7 @@ import io.github.fisher2911.minionsplugin.minion.Armor;
 import io.github.fisher2911.minionsplugin.minion.MinionData;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
-import io.github.fisher2911.minionsplugin.minion.manager.MinionPositions;
+import io.github.fisher2911.minionsplugin.minion.manager.MinionStorage;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
 import io.github.fisher2911.minionsplugin.scheduler.MinionScheduler;
@@ -120,7 +120,7 @@ public class BlockAddedToWorldListener implements Listener {
 
         final Position position = Position.fromBukkitLocation(block.getLocation());
 
-        final Optional<MinionPositions<BlockMinion>> optionalBlockMinionMinionPositions =
+        final Optional<MinionStorage<BlockMinion>> optionalBlockMinionMinionPositions =
                 this.
                         minionManager.
                         getBlockMinionsInChunk(

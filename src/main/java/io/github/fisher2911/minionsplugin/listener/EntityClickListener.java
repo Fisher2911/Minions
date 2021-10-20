@@ -3,7 +3,6 @@ package io.github.fisher2911.minionsplugin.listener;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
-import io.github.fisher2911.minionsplugin.util.MinionUtil;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -28,9 +27,7 @@ public class EntityClickListener implements Listener {
 
         if (interactedWith instanceof final ArmorStand armorStand) {
 
-            final long id = MinionUtil.getId(armorStand);
-
-            final Optional<BaseMinion<?>> minionOptional = this.minionManager.getBaseMinion(id);
+            final Optional<? extends BaseMinion<?>> minionOptional = this.minionManager.getBaseMinion(armorStand);
 
             minionOptional.ifPresent(minion -> {
                 event.getPlayer().openInventory(minion.getInventory());

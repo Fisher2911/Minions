@@ -1,6 +1,5 @@
 package io.github.fisher2911.minionsplugin.minion.types;
 
-import io.github.fisher2911.minionsplugin.exception.MinionException;
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.keys.Keys;
@@ -49,11 +48,8 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         return this.minion != null && this.minion.isValid();
     }
 
-    public void place() {
+    public void place()  {
         final Location location = this.getPosition().toBukkitLocation();
-        if (location == null) {
-           throw new MinionException("Attempted to place minion with location that does not have a valid world");
-        }
 
         final World world = location.getWorld();
 

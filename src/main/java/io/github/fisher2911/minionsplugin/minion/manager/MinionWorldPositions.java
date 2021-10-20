@@ -36,13 +36,13 @@ public class MinionWorldPositions<T extends BaseMinion<?>> {
                 get(world);
 
         if (optionalChunkPositions.isEmpty()) {
-            final Map<Position, T> minionMap = new HashMap<>();
-            minionMap.put(position, minion);
+            final Map<Long, T> minionMap = new HashMap<>();
+            minionMap.put(minion.getId(), minion);
 
-            final MinionPositions<T> minionPositions = new MinionPositions<>(minionMap);
+            final MinionStorage<T> minionStorage = new MinionStorage<>(minionMap);
 
-            final Map<Long, MinionPositions<T>> minionPositionsMap = new HashMap<>();
-            minionPositionsMap.put(position.getChunkKey(), minionPositions);
+            final Map<Long, MinionStorage<T>> minionPositionsMap = new HashMap<>();
+            minionPositionsMap.put(position.getChunkKey(), minionStorage);
 
             final MinionChunkPositions<T> minionChunkPositions =
                     new MinionChunkPositions<>(minionPositionsMap);
