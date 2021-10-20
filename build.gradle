@@ -30,6 +30,7 @@ dependencies {
     implementation "cloud.commandframework:cloud-core:1.5.0"
     implementation "cloud.commandframework:cloud-annotations:1.5.0"
     implementation "cloud.commandframework:cloud-bukkit:1.5.0"
+    implementation "org.spongepowered:configurate-yaml:4.0.0"
 }
 
 test {
@@ -39,8 +40,9 @@ test {
 shadowJar {
     relocate "io.github.fisher2911.fish-core", "io.github.fisher2911.minionsplugin.fish-core"
     relocate "net.kyori.adventure", "io.github.fisher2911.minionsplugin.adventure"
-    relocate "dev.triumphteam.gui", "io.github.fisher2911.lootchests.gui"
-    relocate "cloud.commandframework", "me.fisher2911.enchantsexpansion.cloudframework"
+    relocate "dev.triumphteam.gui", "io.github.fisher2911.minionsplugin.gui"
+    relocate "cloud.commandframework", "io.github.fisher2911.minionsplugin.cloudframework"
+    relocate "org.spongepowered.configurate", "io.github.fisher2911.minionsplugin.configurate"
 }
 
 shadowJar {
