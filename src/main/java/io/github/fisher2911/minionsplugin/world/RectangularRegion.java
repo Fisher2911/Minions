@@ -2,6 +2,7 @@ package io.github.fisher2911.minionsplugin.world;
 
 import io.github.fisher2911.fishcore.world.Position;
 import org.bukkit.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -13,38 +14,38 @@ public class RectangularRegion implements Region {
     private final Position min;
     private final Position max;
 
-    public RectangularRegion(final Position origin, final Position min, final Position max) {
+    public RectangularRegion(final @NotNull Position origin, final @NotNull Position min, final @NotNull Position max) {
         this.origin = origin;
         this.min = min;
         this.max = max;
     }
 
-    public RectangularRegion(final World world, final Position origin,
+    public RectangularRegion(final @NotNull World world, final @NotNull Position origin,
                              final double minX, final double minY, final double minZ,
                              final double maxX, final double maxY, final double maxZ) {
         this(origin, new Position(world, minX, minY, minZ), new Position(world, maxX, maxY, maxZ));
     }
 
     @Override
-    public boolean contains(final Position position) {
+    public boolean contains(final @NotNull Position position) {
         return this.contains(position,
                 this.getMinX(), this.getMinY(), this.getMinZ(),
                 this.getMaxX(), this.getMaxY(), this.getMaxZ());
     }
 
     @Override
-    public boolean onBorder(final Position position) {
+    public boolean onBorder(final @NotNull Position position) {
         return false;
     }
 
     @Override
-    public boolean within(final Position position) {
+    public boolean within(final @NotNull Position position) {
         return this.contains(position,
                 this.getMinX() + 1, this.getMinY() + 1, this.getMinZ() + 1,
                 this.getMaxX() - 1, this.getMaxY() - 1, this.getMaxZ() - 1);
     }
 
-    private boolean contains(final Position position,
+    private boolean contains(final @NotNull Position position,
                              final double minX,
                              final double minY,
                              final double minZ,
@@ -62,7 +63,7 @@ public class RectangularRegion implements Region {
     }
 
     @Override
-    public Position getOrigin() {
+    public @NotNull Position getOrigin() {
         return this.origin;
     }
 
@@ -91,7 +92,7 @@ public class RectangularRegion implements Region {
     }
 
     @Override
-    public Set<Position> getAllPositionsInY(final int minY, final int maxY) {
+    public @NotNull Set<Position> getAllPositionsInY(final int minY, final int maxY) {
         final Set<Position> positions = new HashSet<>();
 
         final Optional<World> worldOptional = this.origin.getWorld();

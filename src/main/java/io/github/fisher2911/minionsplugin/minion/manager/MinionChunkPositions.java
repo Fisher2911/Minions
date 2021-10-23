@@ -2,6 +2,7 @@ package io.github.fisher2911.minionsplugin.minion.manager;
 
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +12,7 @@ public class MinionChunkPositions<T extends BaseMinion<?>> {
 
     private final Map<Long, MinionStorage<T>> minionMap;
 
-    public MinionChunkPositions(final Map<Long, MinionStorage<T>> minionMap) {
+    public MinionChunkPositions(final @NotNull Map<Long, MinionStorage<T>> minionMap) {
         this.minionMap = minionMap;
     }
 
@@ -67,7 +68,7 @@ public class MinionChunkPositions<T extends BaseMinion<?>> {
         return optional.get().remove(id);
     }
 
-    public Map<Long, MinionStorage<T>> getMinionMap() {
+    public @NotNull Map<Long, MinionStorage<T>> getMinionMap() {
         return this.minionMap;
     }
 

@@ -1,4 +1,7 @@
-package io.github.fisher2911.minionsplugin.minion;
+package io.github.fisher2911.minionsplugin.minion.types.data;
+
+import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import org.jetbrains.annotations.NotNull;
 
 public class MinionData {
 
@@ -6,17 +9,17 @@ public class MinionData {
     private String name;
     private int foodLevel;
 
-    public MinionData(final MinionInventory inventory, final String name, final int foodLevel) {
+    public MinionData(final @NotNull MinionInventory inventory, final @NotNull String name, final int foodLevel) {
         this.inventory = inventory;
         this.name = name;
         this.foodLevel = foodLevel;
     }
 
-    public MinionInventory getInventory() {
+    public @NotNull MinionInventory getInventory() {
         return this.inventory;
     }
 
-    public String getName() {
+    public @NotNull String getName() {
         return this.name;
     }
 
@@ -24,7 +27,7 @@ public class MinionData {
         return this.foodLevel;
     }
 
-    public void setName(final String name) {
+    public void setName(final @NotNull String name) {
         this.name = name;
     }
 

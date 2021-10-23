@@ -2,6 +2,7 @@ package io.github.fisher2911.minionsplugin.minion;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 public class MinionInventory {
 
@@ -14,16 +15,16 @@ public class MinionInventory {
      * @param armor armor
      */
 
-    public MinionInventory(final Inventory inventory, final Armor armor) {
+    public MinionInventory(final @NotNull Inventory inventory, final @NotNull Armor armor) {
         this.inventory = inventory;
         this.armor = armor;
     }
 
-    public Inventory getInventory() {
+    public @NotNull Inventory getInventory() {
         return this.inventory;
     }
 
-    public Armor getArmor() {
+    public @NotNull Armor getArmor() {
         return this.armor;
     }
 
@@ -34,7 +35,7 @@ public class MinionInventory {
 
 
 
-    public void setArmor(final LivingEntity entity) {
+    public void setArmor(final @NotNull LivingEntity entity) {
         this.armor.setArmor(entity);
     }
 }

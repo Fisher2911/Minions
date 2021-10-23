@@ -2,7 +2,8 @@ package io.github.fisher2911.minionsplugin.minion.types;
 
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
-import io.github.fisher2911.minionsplugin.minion.MinionData;
+import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.world.Region;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,6 +11,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -22,13 +24,14 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
     private final Queue<Position> dirtPositions = new LinkedList<>();
     private final LinkedList<Position> farmlandPositions = new LinkedList<>();
 
-    public FarmerMinion(final JavaPlugin plugin,
-                        final LocalDateTime lastActionTime,
+    public FarmerMinion(final @NotNull JavaPlugin plugin,
+                        final @NotNull LocalDateTime lastActionTime,
                         final long id, final UUID owner,
-                        final Region region,
-                        final MinionData minionData,
-                        final Material cropType) {
-        super(plugin, lastActionTime, id, owner, region, minionData);
+                        final @NotNull Region region,
+                        final @NotNull MinionData minionData,
+                        final @NotNull Material cropType,
+                        final @NotNull Upgrades upgrades) {
+        super(plugin, lastActionTime, id, owner, region, minionData, upgrades);
         this.cropType = cropType;
         this.checkDirtPositions();
     }
@@ -78,7 +81,7 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
     }
 
     @Override
-    public boolean performAction(final BlockChangedInWorldEvent event) {
+    public boolean performAction(final @NotNull BlockChangedInWorldEvent event) {
         final Block block = event.getBlock();
         final Position position = Position.fromBukkitLocation(block.getLocation());
 

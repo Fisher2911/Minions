@@ -1,36 +1,36 @@
 plugins {
-    id "java"
-    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
 }
 
-group "io.github.fisher2911"
-version "1.0-SNAPSHOT"
+group 'io.github.fisher2911'
+version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
     mavenLocal()
-    maven { url = "https://hub.spigotmc.org/nexus/content/repositories/snapshots/" }
-    maven { url = "https://s01.oss.sonatype.org/content/repositories/releases/" }
-    maven { url = "https://s01.oss.sonatype.org/content/repositories/snapshots/" }
-    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
-    maven { url = "https://repo.extendedclip.com/content/repositories/placeholderapi/" }
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url = 'https://s01.oss.sonatype.org/content/repositories/releases/' }
+    maven { url = 'https://s01.oss.sonatype.org/content/repositories/snapshots/' }
+    maven { url = 'https://repo.aikar.co/content/groups/aikar/' }
+    maven { url = 'https://repo.extendedclip.com/content/repositories/placeholderapi/' }
     maven {
-        name = "sonatype-oss-snapshots"
-        url = "https://oss.sonatype.org/content/repositories/snapshots/"
+        name = 'sonatype-oss-snapshots'
+        url = 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
-    maven { url = "https://repo.mattstudios.me/artifactory/public/" }
+    maven { url = 'https://repo.mattstudios.me/artifactory/public/' }
 }
 
 dependencies {
-    compileOnly "org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT"
-    testImplementation "org.junit.jupiter:junit-jupiter-api:5.8.1"
-    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.8.1"
-    implementation "io.github.fisher2911:fish-core:0.2.0-SNAPSHOT"
-    implementation "dev.triumphteam:triumph-gui:3.0.3"
-    implementation "cloud.commandframework:cloud-core:1.5.0"
-    implementation "cloud.commandframework:cloud-annotations:1.5.0"
-    implementation "cloud.commandframework:cloud-bukkit:1.5.0"
-    implementation "org.spongepowered:configurate-yaml:4.0.0"
+    compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'io.github.fisher2911:fish-core:0.2.2-SNAPSHOT'
+    implementation 'dev.triumphteam:triumph-gui:3.0.3'
+    implementation 'cloud.commandframework:cloud-core:1.5.0'
+    implementation 'cloud.commandframework:cloud-annotations:1.5.0'
+    implementation 'cloud.commandframework:cloud-bukkit:1.5.0'
+    implementation 'org.spongepowered:configurate-yaml:4.1.2'
 }
 
 test {
@@ -38,15 +38,15 @@ test {
 }
 
 shadowJar {
-    relocate "io.github.fisher2911.fish-core", "io.github.fisher2911.minionsplugin.fish-core"
-    relocate "net.kyori.adventure", "io.github.fisher2911.minionsplugin.adventure"
-    relocate "dev.triumphteam.gui", "io.github.fisher2911.minionsplugin.gui"
-    relocate "cloud.commandframework", "io.github.fisher2911.minionsplugin.cloudframework"
-    relocate "org.spongepowered.configurate", "io.github.fisher2911.minionsplugin.configurate"
+    relocate 'io.github.fisher2911.fish-core', 'io.github.fisher2911.minionsplugin.fish-core'
+    relocate 'net.kyori.adventure', 'io.github.fisher2911.minionsplugin.adventure'
+    relocate 'dev.triumphteam.gui', 'io.github.fisher2911.minionsplugin.gui'
+    relocate 'cloud.commandframework', 'io.github.fisher2911.minionsplugin.cloudframework'
+    relocate 'org.spongepowered.configurate', 'io.github.fisher2911.minionsplugin.configurate'
 }
 
 shadowJar {
-    archiveBaseName.set("Minions")
-    archiveClassifier.set("")
-    archiveVersion.set("")
+    archiveBaseName.set('Minions')
+    archiveClassifier.set('')
+    archiveVersion.set('')
 }

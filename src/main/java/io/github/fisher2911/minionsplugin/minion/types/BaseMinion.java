@@ -3,7 +3,8 @@ package io.github.fisher2911.minionsplugin.minion.types;
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.keys.Keys;
-import io.github.fisher2911.minionsplugin.minion.MinionData;
+import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.world.Region;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,19 +28,22 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
     protected final UUID owner;
     protected final Region region;
     private final MinionData minionData;
+    private final Upgrades upgrades;
 
-    public BaseMinion(final JavaPlugin plugin,
-                      final LocalDateTime lastActionTime,
+    public BaseMinion(final @NotNull JavaPlugin plugin,
+                      final @NotNull LocalDateTime lastActionTime,
                       final long id,
-                      final UUID owner,
-                      final Region region,
-                      final MinionData minionData) {
+                      final @NotNull UUID owner,
+                      final @NotNull Region region,
+                      final @NotNull MinionData minionData,
+                      final @NotNull Upgrades upgrades) {
         this.plugin = plugin;
         this.lastActionTime = lastActionTime;
         this.id = id;
         this.owner = owner;
         this.region = region;
         this.minionData = minionData;
+        this.upgrades = upgrades;
     }
 
     public abstract boolean performAction(final T t);
@@ -75,7 +79,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         return this.id;
     }
 
-    public ArmorStand getMinion() {
+    public @NotNull ArmorStand getMinion() {
         return this.minion;
     }
 
@@ -92,15 +96,15 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         return this.minionData.getInventory().getInventory();
     }
 
-    public Position getPosition() {
+    public @NotNull Position getPosition() {
         return this.region.getOrigin();
     }
 
-    public void setLastActionTime(final LocalDateTime lastActionTime) {
+    public void setLastActionTime(final @NotNull LocalDateTime lastActionTime) {
         this.lastActionTime = lastActionTime;
     }
 
-    public LocalDateTime getLastActionTime() {
+    public @NotNull LocalDateTime getLastActionTime() {
         return this.lastActionTime;
     }
 
@@ -109,5 +113,9 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         final int speedInSeconds = 1;
 
         return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speedInSeconds;
+    }
+
+    public @NotNull Upgrades getUpgrades() {
+        return this.upgrades;
     }
 }

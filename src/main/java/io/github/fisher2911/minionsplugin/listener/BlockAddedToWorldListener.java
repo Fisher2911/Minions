@@ -8,7 +8,7 @@ import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.Armor;
-import io.github.fisher2911.minionsplugin.minion.MinionData;
+import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionStorage;

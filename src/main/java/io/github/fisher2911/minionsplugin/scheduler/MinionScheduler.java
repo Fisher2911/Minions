@@ -4,6 +4,7 @@ import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -17,11 +18,11 @@ public class MinionScheduler<T extends BaseMinion<R>, R> {
     private boolean active = false;
     private BukkitTask task;
 
-    public MinionScheduler(final MinionsPlugin plugin) {
+    public MinionScheduler(final @NotNull MinionsPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void addMinionTaskData(final MinionTaskData<T, R> taskData) {
+    public void addMinionTaskData(final @NotNull MinionTaskData<T, R> taskData) {
         this.minionQueue.add(taskData);
 
 

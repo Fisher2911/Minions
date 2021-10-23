@@ -8,6 +8,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -27,13 +28,13 @@ public class BlockBreakTask implements BlockTask {
     private BukkitTask task;
     private final Queue<Position> blocks;
 
-    public BlockBreakTask(final JavaPlugin plugin,
-                          final Position start,
-                          final Region region,
+    public BlockBreakTask(final @NotNull JavaPlugin plugin,
+                          final @NotNull Position start,
+                          final @NotNull Region region,
                           final int blocksPerTick,
-                          final Set<Material> acceptedBlocks,
-                          final Consumer<Block> onBreak,
-                          final Runnable onComplete) {
+                          final @NotNull Set<Material> acceptedBlocks,
+                          final @NotNull Consumer<Block> onBreak,
+                          final @NotNull Runnable onComplete) {
         this.plugin = plugin;
         this.start = start;
         this.region = region;
@@ -72,10 +73,10 @@ public class BlockBreakTask implements BlockTask {
         this.task.cancel();
     }
 
-    private Queue<Position> recursiveCollect(final Block block,
-                                          final AtomicInteger total,
+    private @NotNull Queue<Position> recursiveCollect(final @NotNull Block block,
+                                          final @NotNull AtomicInteger total,
                                           int allowedBlocks,
-                                          final Queue<Position> collected) {
+                                          final @NotNull Queue<Position> collected) {
         final Position position = Position.fromBukkitLocation(
                 block.getLocation()
         );

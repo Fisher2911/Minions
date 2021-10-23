@@ -1,0 +1,46 @@
+title: "<aqua>%minion-name%'s Menu</aqua>"
+size: 54
+border-items:
+  1:
+    material: WHITE_STAINED_GLASS_PANE
+    name: " "
+    glow: true
+  2:
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+    glow: true
+menu:
+  10:
+    # Which menu to send to
+    send-on-click: "upgrades-menu"
+    item:
+      material: BEACON
+      name: "<green>Upgrades</green>"
+      lore:
+        - ""
+        - "<green>Click here to view upgrades</green>"
+  11:
+    send-on-click: "name-editor"
+    item:
+      material: SIGN
+      name: "<green>Edit Name</green>"
+      lore:
+        - ""
+        - "<green>Click here to edit the minion's name</green>"
+  12:
+    send-on-click: "animation-editor"
+    item:
+      material: ARMOR_STAND
+      name: "<green>Edit Animation</green>"
+      lore:
+        - ""
+        - "<green>Click here to edit the minion's animation</green>"
+  13:
+    send-on-click: "permissions-menu"
+    item:
+      material: BOOK_AND_QUILL
+      name: "<green>Permissions Editor</green>"
+      lore:
+        - ""
+        - "<green>Click here to edit the minion's player permissions</green>"
+

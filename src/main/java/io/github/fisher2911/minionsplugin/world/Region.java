@@ -1,6 +1,7 @@
 package io.github.fisher2911.minionsplugin.world;
 
 import io.github.fisher2911.fishcore.world.Position;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public interface Region {
      * @return origin of the Region, not necessarily the center
      */
 
-    Position getOrigin();
+    @NotNull Position getOrigin();
 
     double getMinY();
 
@@ -39,5 +40,5 @@ public interface Region {
      * @param maxY end y level
      * @return
      */
-    Set<Position> getAllPositionsInY(final int minY, final int maxY);
+    @NotNull Set<Position> getAllPositionsInY(final int minY, final int maxY);
 }

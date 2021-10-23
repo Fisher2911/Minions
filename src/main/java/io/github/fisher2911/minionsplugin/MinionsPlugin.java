@@ -10,6 +10,7 @@ import io.github.fisher2911.minionsplugin.listener.EntityKillListener;
 import io.github.fisher2911.minionsplugin.listener.MinionPlaceListener;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -44,11 +45,11 @@ public class MinionsPlugin extends FishCore {
                 forEach(this::registerListener);
     }
 
-    public UserManager<MinionUser> getUserManager() {
+    public @NotNull UserManager<MinionUser> getUserManager() {
         return this.userManager;
     }
 
-    public MinionManager getMinionManager() {
+    public @NotNull MinionManager getMinionManager() {
         return this.minionManager;
     }
 }
