@@ -38,7 +38,8 @@ test {
 }
 
 shadowJar {
-    relocate 'net.kyori.adventure', 'io.github.fisher2911.minionsplugin.adventure'
+    relocate 'net.kyori.adventure.text.minimessage', 'io.github.fisher2911.minionsplugin.adventure.minimessage'
+    relocate 'net.kyori.adventure.platform.bukkit', 'io.github.fisher2911.minionsplugin.adventure.platform'
     relocate 'dev.triumphteam.gui', 'io.github.fisher2911.minionsplugin.gui'
     relocate 'cloud.commandframework', 'io.github.fisher2911.minionsplugin.cloudframework'
     relocate 'org.spongepowered.configurate', 'io.github.fisher2911.minionsplugin.configurate'
