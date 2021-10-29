@@ -1,10 +1,13 @@
 package io.github.fisher2911.minionsplugin.listener;
 
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
+import io.github.fisher2911.minionsplugin.gui.BaseMinionGui;
+import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -29,9 +32,19 @@ public class EntityClickListener implements Listener {
 
             final Optional<? extends BaseMinion<?>> minionOptional = this.minionManager.getBaseMinion(armorStand);
 
-            minionOptional.ifPresent(minion -> {
-                event.getPlayer().openInventory(minion.getInventory());
-                        event.setCancelled(true);
+            GuiManager.getGui(BaseMinionGui.MAIN).create().open(event.getPlayer());
+            event.getPlayer().sendMessage("Opened");
+
+            event.setCancelled(true);
+
+            final Player player = event.getPlayer();
+
+            minionOptional.ifPresentOrElse(minion -> {
+                    player.sendMessage("Found Minion");
+//                event.getPlayer().openInventory(minion.getInventory());
+//                        event.setCancelled(true);
+            }, () -> {
+                player.sendMessage("Minion not found");
             });
         }
     }

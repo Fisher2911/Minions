@@ -1,8 +1,9 @@
 package io.github.fisher2911.minionsplugin.upgrade;
 
 import io.github.fisher2911.fishcore.economy.Cost;
-import io.github.fisher2911.fishcore.message.MessageHandler;
+import io.github.fisher2911.fishcore.message.MessageHandlerRegistry;
 import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
+import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.lang.MinionMessages;
 import io.github.fisher2911.minionsplugin.lang.Placeholder;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
@@ -31,7 +32,7 @@ public class SpeedUpgrade extends MinionUpgrade<Float> {
         final String moneyPrice;
 
         if (cost == null) {
-            moneyPrice = MessageHandler.getInstance().getMessage(MinionMessages.MAX_LEVEL);
+            moneyPrice = MessageHandlerRegistry.REGISTRY.get(MinionsPlugin.class).getMessage(MinionMessages.MAX_LEVEL);
         } else {
             moneyPrice = String.valueOf(cost.getMoneyCost());
         }

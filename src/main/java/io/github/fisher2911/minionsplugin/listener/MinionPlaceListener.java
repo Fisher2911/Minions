@@ -1,17 +1,20 @@
 package io.github.fisher2911.minionsplugin.listener;
 
-import io.github.fisher2911.fishcore.message.MessageHandler;
 import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
 import io.github.fisher2911.fishcore.util.builder.LeatherArmorBuilder;
 import io.github.fisher2911.fishcore.util.builder.SkullBuilder;
+import io.github.fisher2911.fishcore.util.helper.StringUtils;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.Armor;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
+import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.upgrade.SpeedUpgrade;
+import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
+import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.world.RectangularRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -25,6 +28,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 public class MinionPlaceListener implements Listener {
 
@@ -61,7 +65,7 @@ public class MinionPlaceListener implements Listener {
                 LeatherArmorBuilder.from(Material.LEATHER_BOOTS).
                         color(Color.RED);
 
-        final String name = MessageHandler.getInstance().
+        final String name = StringUtils.
                 parseStringToString("<gradient:blue:green>Farmer Minion</gradient>");
 
         final Position origin = Position.fromBukkitLocation(event.getClickedBlock().getLocation().add(0.5, 1, 0.5));
@@ -100,7 +104,9 @@ public class MinionPlaceListener implements Listener {
                                         build()
                         ),
                         name,
-                        0), Material.WHEAT);
+                        0), Material.WHEAT, new Upgrades(new UpgradeData<>(0,
+                new SpeedUpgrade("test", "test", new HashMap<>(),
+                        new HashMap<>(), new ItemStack(Material.ITEM_FRAME)))));
         baseMinion.place();
         this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);

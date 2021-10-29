@@ -1,21 +1,24 @@
 package io.github.fisher2911.minionsplugin.listener;
 
-import io.github.fisher2911.fishcore.message.MessageHandler;
 import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
 import io.github.fisher2911.fishcore.util.builder.LeatherArmorBuilder;
 import io.github.fisher2911.fishcore.util.builder.SkullBuilder;
+import io.github.fisher2911.fishcore.util.helper.StringUtils;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.Armor;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionStorage;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
+import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.scheduler.MinionScheduler;
 import io.github.fisher2911.minionsplugin.scheduler.MinionTaskData;
+import io.github.fisher2911.minionsplugin.upgrade.SpeedUpgrade;
+import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
+import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.world.RectangularRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -24,8 +27,10 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 public class BlockAddedToWorldListener implements Listener {
@@ -66,7 +71,7 @@ public class BlockAddedToWorldListener implements Listener {
                                 LeatherArmorBuilder.from(Material.LEATHER_BOOTS).
                                         color(Color.RED);
 
-                        final String name = MessageHandler.getInstance().
+                        final String name = StringUtils.
                                 parseStringToString("<gradient:blue:green>Farmer Minion</gradient>");
 
                         final Position origin = position.add(0, 1, 0);
@@ -98,15 +103,17 @@ public class BlockAddedToWorldListener implements Listener {
                                                                 create().
                                                                 owner(Bukkit.getOfflinePlayer("NOTCH")).
                                                                 build()).
-                                                        mainHand(ItemBuilder.from(Material.DIAMOND_HOE).
+                                                        mainHand(io.github.fisher2911.fishcore.util.builder.ItemBuilder.from(Material.DIAMOND_HOE).
                                                                 glow(true).build()).
                                                         offHand(ItemBuilder.from(Material.WHEAT_SEEDS).
                                                                 glow(true).build()).
                                                         build()
                                         ),
                                         name,
-                                        0), Material.WHEAT);
-                        baseMinion.place();
+                                        0), Material.WHEAT, new Upgrades(new UpgradeData<>(0,
+                                new SpeedUpgrade("test", "test", new HashMap<>(),
+                                        new HashMap<>(), new ItemStack(Material.ITEM_FRAME)))));
+
                         this.minionManager.addBlockMinion(baseMinion);
                         totalMinions++;
                         continue;

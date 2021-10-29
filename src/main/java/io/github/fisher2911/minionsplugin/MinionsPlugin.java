@@ -3,6 +3,7 @@ package io.github.fisher2911.minionsplugin;
 
 import io.github.fisher2911.fishcore.FishCore;
 import io.github.fisher2911.fishcore.user.UserManager;
+import io.github.fisher2911.minionsplugin.config.GuiLoader;
 import io.github.fisher2911.minionsplugin.listener.BlockAddedToWorldListener;
 import io.github.fisher2911.minionsplugin.listener.ChunkListener;
 import io.github.fisher2911.minionsplugin.listener.EntityClickListener;
@@ -24,6 +25,7 @@ public class MinionsPlugin extends FishCore {
         super.onEnable();
         this.initializeClasses();
         this.registerListeners();
+        this.test();
     }
 
     @Override
@@ -51,5 +53,14 @@ public class MinionsPlugin extends FishCore {
 
     public @NotNull MinionManager getMinionManager() {
         return this.minionManager;
+    }
+
+    private void test() {
+        final GuiLoader guiLoader = new GuiLoader(this);
+        guiLoader.load("menus", "main.yml");
+        guiLoader.load("menus", "permissions.yml");
+        guiLoader.load("menus", "upgrades.yml");
+        guiLoader.load("menus", "cosmetics.yml");
+
     }
 }

@@ -2,7 +2,6 @@ package io.github.fisher2911.minionsplugin.user;
 
 
 import io.github.fisher2911.fishcore.user.BaseUser;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.UUID;
@@ -11,8 +10,13 @@ public class MinionUser extends BaseUser {
 
     private final Set<Long> ownedMinions;
 
-    public MinionUser(final @NotNull UUID uuid, final @NotNull Set<Long> ownedMinions) {
-        super(uuid);
+    public MinionUser(final UUID uuid, final String name, final Set<Long> ownedMinions) {
+        super(uuid, name);
+        this.ownedMinions = ownedMinions;
+    }
+
+    public MinionUser(final UUID uuid, final double money, final String name, final Set<Long> ownedMinions) {
+        super(uuid, money, name);
         this.ownedMinions = ownedMinions;
     }
 

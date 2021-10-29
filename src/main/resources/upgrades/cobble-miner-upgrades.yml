@@ -1,0 +1,112 @@
+upgrades:
+  allowed-blocks:
+    levels:
+      1:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        allowed-blocks:
+          - COBBLESTONE
+      2:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        allowed-blocks:
+          - COBBLESTONE
+          - STONE
+  speed:
+    levels:
+      1:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        speed: 5
+      2:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        speed: 3
+  total-food:
+    levels:
+      1:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        total-food: 100
+      2:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        total-food: 200
+  food-loss:
+    levels:
+      1:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        food-loss: 1
+      2:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        food-loss: 0.5
+  range:
+    levels:
+      1:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        range: 3
+      2:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        range: 5
+  fortune:
+    levels:
+      1:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        level: 1
+      2:
+        money-cost: 0
+        item-cost:
+          1:
+            item:
+              material: GOLD_BLOCK
+              amount: 1
+        level: 2
