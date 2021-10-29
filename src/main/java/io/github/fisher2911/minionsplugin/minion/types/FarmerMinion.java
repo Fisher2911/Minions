@@ -24,13 +24,13 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
     private final Queue<Position> dirtPositions = new LinkedList<>();
     private final LinkedList<Position> farmlandPositions = new LinkedList<>();
 
-    public FarmerMinion(final @NotNull JavaPlugin plugin,
-                        final @NotNull LocalDateTime lastActionTime,
+    public FarmerMinion(final JavaPlugin plugin,
+                        final LocalDateTime lastActionTime,
                         final long id, final UUID owner,
-                        final @NotNull Region region,
-                        final @NotNull MinionData minionData,
-                        final @NotNull Material cropType,
-                        final @NotNull Upgrades upgrades) {
+                        final Region region,
+                        final MinionData minionData,
+                        final Material cropType,
+                        final Upgrades upgrades) {
         super(plugin, lastActionTime, id, owner, region, minionData, upgrades);
         this.cropType = cropType;
         this.checkDirtPositions();
@@ -81,7 +81,7 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
     }
 
     @Override
-    public boolean performAction(final @NotNull BlockChangedInWorldEvent event) {
+    public boolean performAction(final BlockChangedInWorldEvent event) {
         final Block block = event.getBlock();
         final Position position = Position.fromBukkitLocation(block.getLocation());
 

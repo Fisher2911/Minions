@@ -1,16 +1,17 @@
 package io.github.fisher2911.minionsplugin.upgrade;
 
-import org.jetbrains.annotations.NotNull;
-
+/**
+ * All upgrades that a minion can have, the default level is 1
+ */
 public class Upgrades {
 
     private final UpgradeData<SpeedUpgrade> speedUpgrade;
 
-    public Upgrades(final @NotNull UpgradeData<SpeedUpgrade> speedUpgrade) {
+    public Upgrades(final UpgradeData<SpeedUpgrade> speedUpgrade) {
         this.speedUpgrade = speedUpgrade;
     }
 
-    public @NotNull UpgradeData<SpeedUpgrade> getSpeedUpgrade() {
+    public UpgradeData<SpeedUpgrade> getSpeedUpgrade() {
         return this.speedUpgrade;
     }
 }

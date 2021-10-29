@@ -18,11 +18,11 @@ public class MinionScheduler<T extends BaseMinion<R>, R> {
     private boolean active = false;
     private BukkitTask task;
 
-    public MinionScheduler(final @NotNull MinionsPlugin plugin) {
+    public MinionScheduler(final MinionsPlugin plugin) {
         this.plugin = plugin;
     }
 
-    public void addMinionTaskData(final @NotNull MinionTaskData<T, R> taskData) {
+    public void addMinionTaskData(final MinionTaskData<T, R> taskData) {
         this.minionQueue.add(taskData);
 
 

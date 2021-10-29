@@ -12,13 +12,13 @@ import java.util.UUID;
 
 public abstract class EntityMinion extends BaseMinion<Entity> {
 
-    public EntityMinion(final @NotNull JavaPlugin plugin,
-                        final @NotNull LocalDateTime lastActionTime,
+    public EntityMinion(final JavaPlugin plugin,
+                        final LocalDateTime lastActionTime,
                         final long id,
-                        final @NotNull UUID owner,
-                        final @NotNull Region region,
-                        final @NotNull MinionData minionData,
-                        final @NotNull Upgrades upgrades) {
+                        final UUID owner,
+                        final Region region,
+                        final MinionData minionData,
+                        final Upgrades upgrades) {
         super(plugin, lastActionTime, id, owner, region, minionData, upgrades);
     }
 }

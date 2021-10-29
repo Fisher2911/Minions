@@ -47,11 +47,11 @@ public class MinionsPlugin extends FishCore {
                 forEach(this::registerListener);
     }
 
-    public @NotNull UserManager<MinionUser> getUserManager() {
+    public UserManager<MinionUser> getUserManager() {
         return this.userManager;
     }
 
-    public @NotNull MinionManager getMinionManager() {
+    public MinionManager getMinionManager() {
         return this.minionManager;
     }
 

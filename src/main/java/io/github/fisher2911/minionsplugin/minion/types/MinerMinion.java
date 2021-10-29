@@ -17,18 +17,18 @@ import java.util.UUID;
 
 public class MinerMinion extends BlockMinion {
 
-    public MinerMinion(final @NotNull JavaPlugin plugin,
-                       final @NotNull LocalDateTime lastActionTime,
+    public MinerMinion(final JavaPlugin plugin,
+                       final LocalDateTime lastActionTime,
                        final long id,
-                       final @NotNull UUID owner,
-                       final @NotNull Region region,
-                       final @NotNull MinionData minionData,
-                       final @NotNull Upgrades upgrades) {
+                       final UUID owner,
+                       final Region region,
+                       final MinionData minionData,
+                       final Upgrades upgrades) {
         super(plugin, lastActionTime, id, owner, region, minionData, upgrades);
     }
 
     @Override
-    public boolean performAction(final @NotNull BlockChangedInWorldEvent event) {
+    public boolean performAction(final BlockChangedInWorldEvent event) {
         if (!this.isPlaced()) {
             return true;
         }

@@ -8,16 +8,16 @@ public class MinionTaskData<T extends BaseMinion<R>, R> {
     private final T minion;
     private final R data;
 
-    public MinionTaskData(final @NotNull T minion, final @NotNull R data) {
+    public MinionTaskData(final T minion, final R data) {
         this.minion = minion;
         this.data = data;
     }
 
-    public @NotNull T getMinion() {
+    public T getMinion() {
         return this.minion;
     }
 
-    public @NotNull R getData() {
+    public R getData() {
         return this.data;
     }
 }

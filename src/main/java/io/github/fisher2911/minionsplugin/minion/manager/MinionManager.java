@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,52 +28,52 @@ public class MinionManager {
 
     private BukkitTask schedulerMinionTask;
 
-    public MinionManager(final @NotNull MinionsPlugin plugin) {
+    public MinionManager(final MinionsPlugin plugin) {
         this.plugin = plugin;
         this.startSchedulerMinionTask();
     }
 
-    public void addBlockMinion(final @NotNull BlockMinion blockMinion) {
+    public void addBlockMinion(final BlockMinion blockMinion) {
         this.addMinion(blockMinion, this.blockMinionsWorldPositions);
     }
 
-    public void addEntityMinion(final @NotNull EntityMinion entityMinion) {
+    public void addEntityMinion(final EntityMinion entityMinion) {
         this.addMinion(entityMinion, this.entityMinionsWorldPositions);
     }
 
-    public Optional<BlockMinion> getBlockMinion(final @NotNull ArmorStand armorStand) {
+    public Optional<BlockMinion> getBlockMinion(final ArmorStand armorStand) {
         return this.getBlockMinionWithId(Position.fromBukkitLocation(armorStand.getLocation()),
                 MinionUtil.getId(armorStand));
     }
 
-    public Optional<BlockMinion> getBlockMinionWithId(final @NotNull Position position, final long id) {
+    public Optional<BlockMinion> getBlockMinionWithId(final Position position, final long id) {
         return this.getMinionWithId(position, id, this.blockMinionsWorldPositions);
     }
 
-    public Optional<EntityMinion> getEntityMinion(final @NotNull ArmorStand armorStand) {
+    public Optional<EntityMinion> getEntityMinion(final ArmorStand armorStand) {
         return this.getEntityMinionWithId(Position.fromBukkitLocation(armorStand.getLocation()),
                 MinionUtil.getId(armorStand));
     }
 
-    public Optional<EntityMinion> getEntityMinionWithId(final @NotNull Position position, final long id) {
+    public Optional<EntityMinion> getEntityMinionWithId(final Position position, final long id) {
         return this.getMinionWithId(position, id, this.entityMinionsWorldPositions);
     }
 
-    public Optional<MinionStorage<EntityMinion>> getEntityMinionsInChunk(final @NotNull World world,
+    public Optional<MinionStorage<EntityMinion>> getEntityMinionsInChunk(final World world,
                                                                          final long chunkKey) {
         return this.getMinionsInChunk(world, chunkKey, this.entityMinionsWorldPositions);
     }
 
-    public Optional<MinionStorage<BlockMinion>> getBlockMinionsInChunk(final @NotNull World world,
+    public Optional<MinionStorage<BlockMinion>> getBlockMinionsInChunk(final World world,
                                                                        final long chunkKey) {
         return this.getMinionsInChunk(world, chunkKey, this.blockMinionsWorldPositions);
     }
 
-    public Optional<BlockMinion> removeBlockMinion(final @NotNull BlockMinion blockMinion) {
+    public Optional<BlockMinion> removeBlockMinion(final BlockMinion blockMinion) {
         return this.removeMinion(blockMinion, this.blockMinionsWorldPositions);
     }
 
-    public Optional<EntityMinion> removeEntityMinion(final @NotNull EntityMinion entityMinion) {
+    public Optional<EntityMinion> removeEntityMinion(final EntityMinion entityMinion) {
         return this.removeMinion(entityMinion, this.entityMinionsWorldPositions);
     }
 
@@ -83,8 +82,8 @@ public class MinionManager {
     }
 
     private <T extends BaseMinion<?>> Optional<MinionChunkPositions<T>> getMinionChunksPosition(
-            final @NotNull Position position,
-            final @NotNull MinionWorldPositions<T> minionWorldPositions) {
+            final Position position,
+            final MinionWorldPositions<T> minionWorldPositions) {
         final Optional<World> worldOptional = position.getWorld();
 
         if (worldOptional.isEmpty()) {
@@ -95,8 +94,8 @@ public class MinionManager {
     }
 
     private <T extends BaseMinion<?>> void addMinion(
-            final @NotNull T minion,
-            final @NotNull MinionWorldPositions<T> worldPositions) {
+            final T minion,
+            final MinionWorldPositions<T> worldPositions) {
         worldPositions.set(minion);
         if (minion instanceof final Scheduleable scheduleable) {
             this.schedulerMinionMap.put(minion.getId(), scheduleable);
@@ -104,9 +103,9 @@ public class MinionManager {
     }
 
     private <T extends BaseMinion<?>> Optional<T> getMinionWithId(
-            final @NotNull Position position,
+            final Position position,
             final long id,
-            final @NotNull MinionWorldPositions<T> minionWorldPositions) {
+            final MinionWorldPositions<T> minionWorldPositions) {
         final Optional<MinionChunkPositions<T>> chunkPositionsOptional =
                 this.getMinionChunksPosition(position, minionWorldPositions);
 
@@ -118,9 +117,9 @@ public class MinionManager {
     }
 
     public <T extends BaseMinion<?>> Optional<MinionStorage<T>> getMinionsInChunk(
-            final @NotNull World world,
+            final World world,
             final long chunkKey,
-            final @NotNull MinionWorldPositions<T> minionWorldPositions) {
+            final MinionWorldPositions<T> minionWorldPositions) {
 
         final Optional<MinionChunkPositions<T>> optionalMinionChunkPositions =
                 minionWorldPositions.get(world);
@@ -133,8 +132,8 @@ public class MinionManager {
     }
 
     private <T extends BaseMinion<?>> Optional<T> removeMinion(
-            final @NotNull T minion,
-            final @NotNull MinionWorldPositions<T> worldPositions) {
+            final T minion,
+            final MinionWorldPositions<T> worldPositions) {
         final Optional<MinionChunkPositions<T>> chunkPositionsOptional =
                 this.getMinionChunksPosition(minion.getPosition(), worldPositions);
 
@@ -155,7 +154,7 @@ public class MinionManager {
         return removed;
     }
 
-    public Optional<? extends BaseMinion<?>> getBaseMinion(final @NotNull ArmorStand armorStand) {
+    public Optional<? extends BaseMinion<?>> getBaseMinion(final ArmorStand armorStand) {
 
         final MinionType type = MinionUtil.getMinionType(armorStand);
 

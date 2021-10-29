@@ -30,13 +30,13 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
     private final MinionData minionData;
     private final Upgrades upgrades;
 
-    public BaseMinion(final @NotNull JavaPlugin plugin,
-                      final @NotNull LocalDateTime lastActionTime,
+    public BaseMinion(final JavaPlugin plugin,
+                      final LocalDateTime lastActionTime,
                       final long id,
-                      final @NotNull UUID owner,
-                      final @NotNull Region region,
-                      final @NotNull MinionData minionData,
-                      final @NotNull Upgrades upgrades) {
+                      final UUID owner,
+                      final Region region,
+                      final MinionData minionData,
+                      final Upgrades upgrades) {
         this.plugin = plugin;
         this.lastActionTime = lastActionTime;
         this.id = id;
@@ -79,7 +79,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         return this.id;
     }
 
-    public @NotNull ArmorStand getMinion() {
+    public ArmorStand getMinion() {
         return this.minion;
     }
 
@@ -92,19 +92,19 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
     }
 
     @Override
-    public @NotNull Inventory getInventory() {
+    public Inventory getInventory() {
         return this.minionData.getInventory().getInventory();
     }
 
-    public @NotNull Position getPosition() {
+    public Position getPosition() {
         return this.region.getOrigin();
     }
 
-    public void setLastActionTime(final @NotNull LocalDateTime lastActionTime) {
+    public void setLastActionTime(final LocalDateTime lastActionTime) {
         this.lastActionTime = lastActionTime;
     }
 
-    public @NotNull LocalDateTime getLastActionTime() {
+    public LocalDateTime getLastActionTime() {
         return this.lastActionTime;
     }
 
@@ -115,7 +115,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speedInSeconds;
     }
 
-    public @NotNull Upgrades getUpgrades() {
+    public Upgrades getUpgrades() {
         return this.upgrades;
     }
 }

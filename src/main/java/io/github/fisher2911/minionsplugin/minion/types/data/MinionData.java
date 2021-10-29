@@ -9,17 +9,17 @@ public class MinionData {
     private String name;
     private int foodLevel;
 
-    public MinionData(final @NotNull MinionInventory inventory, final @NotNull String name, final int foodLevel) {
+    public MinionData(final MinionInventory inventory, final String name, final int foodLevel) {
         this.inventory = inventory;
         this.name = name;
         this.foodLevel = foodLevel;
     }
 
-    public @NotNull MinionInventory getInventory() {
+    public MinionInventory getInventory() {
         return this.inventory;
     }
 
-    public @NotNull String getName() {
+    public String getName() {
         return this.name;
     }
 
@@ -27,7 +27,7 @@ public class MinionData {
         return this.foodLevel;
     }
 
-    public void setName(final @NotNull String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 

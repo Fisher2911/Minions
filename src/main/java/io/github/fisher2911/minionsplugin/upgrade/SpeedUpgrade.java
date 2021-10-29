@@ -8,22 +8,21 @@ import io.github.fisher2911.minionsplugin.lang.MinionMessages;
 import io.github.fisher2911.minionsplugin.lang.Placeholder;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class SpeedUpgrade extends MinionUpgrade<Float> {
 
-    public SpeedUpgrade(final @NotNull String id,
-                        final @NotNull String displayName,
-                        final @NotNull Map<Integer, Float> levelDataMap,
-                        final @NotNull Map<Integer, Cost> levelCostMap,
-                        final @NotNull ItemStack guiItemStack) {
+    public SpeedUpgrade(final String id,
+                        final String displayName,
+                        final Map<Integer, Float> levelDataMap,
+                        final Map<Integer, Cost> levelCostMap,
+                        final ItemStack guiItemStack) {
         super(id, displayName, levelDataMap, levelCostMap, guiItemStack);
     }
 
     @Override
-    public ItemStack getGuiItemStack(final @NotNull BaseMinion<?> minion) {
+    public ItemStack getGuiItemStack(final BaseMinion<?> minion) {
         final UpgradeData<SpeedUpgrade> speedUpgrade = minion.getUpgrades().getSpeedUpgrade();
         final int level = speedUpgrade.getLevel();
 

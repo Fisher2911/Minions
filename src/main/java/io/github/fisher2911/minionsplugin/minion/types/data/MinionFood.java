@@ -8,12 +8,12 @@ public class MinionFood {
     private final ItemStack itemStack;
     private final float foodValue;
 
-    public MinionFood(final @NotNull ItemStack itemStack, final float foodValue) {
+    public MinionFood(final ItemStack itemStack, final float foodValue) {
         this.itemStack = itemStack;
         this.foodValue = foodValue;
     }
 
-    public @NotNull ItemStack getItemStack() {
+    public ItemStack getItemStack() {
         return this.itemStack;
     }
 
@@ -21,7 +21,7 @@ public class MinionFood {
         return this.foodValue;
     }
 
-    public boolean isFood(final @NotNull ItemStack check) {
+    public boolean isFood(final ItemStack check) {
         return check.isSimilar(this.itemStack);
     }
 }

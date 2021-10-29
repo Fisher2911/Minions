@@ -1,13 +1,18 @@
 package io.github.fisher2911.minionsplugin.upgrade;
 
-import org.jetbrains.annotations.NotNull;
-
 public class UpgradeData<T extends MinionUpgrade> {
 
+    /**
+     * Level of the upgrade
+     */
     final int level;
+
+    /**
+     * The {@link io.github.fisher2911.minionsplugin.upgrade.MinionUpgrade}
+     */
     final T upgrade;
 
-    public UpgradeData(final int level, final @NotNull T upgrade) {
+    public UpgradeData(final int level, final T upgrade) {
         this.level = level;
         this.upgrade = upgrade;
     }
@@ -16,7 +21,7 @@ public class UpgradeData<T extends MinionUpgrade> {
         return this.level;
     }
 
-    public @NotNull T getUpgrade() {
+    public T getUpgrade() {
         return this.upgrade;
     }
 }

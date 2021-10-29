@@ -3,7 +3,6 @@ package io.github.fisher2911.minionsplugin.minion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 public class Armor {
 
@@ -18,12 +17,12 @@ public class Armor {
         return new Builder();
     }
 
-    public Armor(final @NotNull ItemStack mainHand,
-                 final @NotNull ItemStack offHand,
-                 final @NotNull ItemStack boots,
-                 final @NotNull ItemStack pants,
-                 final @NotNull ItemStack chestPlate,
-                 final @NotNull ItemStack helmet) {
+    public Armor(final ItemStack mainHand,
+                 final ItemStack offHand,
+                 final ItemStack boots,
+                 final ItemStack pants,
+                 final ItemStack chestPlate,
+                 final ItemStack helmet) {
         this.mainHand = mainHand;
         this.offHand = offHand;
         this.boots = boots;
@@ -32,51 +31,51 @@ public class Armor {
         this.helmet = helmet;
     }
 
-    public @NotNull ItemStack getMainHand() {
+    public ItemStack getMainHand() {
         return this.mainHand;
     }
 
-    public void setMainHand(final @NotNull ItemStack mainHand) {
+    public void setMainHand(final ItemStack mainHand) {
         this.mainHand = mainHand;
     }
 
-    public @NotNull ItemStack getOffHand() {
+    public ItemStack getOffHand() {
         return this.offHand;
     }
 
-    public void setOffHand(final @NotNull ItemStack offHand) {
+    public void setOffHand(final ItemStack offHand) {
         this.offHand = offHand;
     }
 
-    public @NotNull ItemStack getBoots() {
+    public ItemStack getBoots() {
         return this.boots;
     }
 
-    public void setBoots(final @NotNull ItemStack boots) {
+    public void setBoots(final ItemStack boots) {
         this.boots = boots;
     }
 
-    public @NotNull ItemStack getPants() {
+    public ItemStack getPants() {
         return this.pants;
     }
 
-    public void setPants(final @NotNull ItemStack pants) {
+    public void setPants(final ItemStack pants) {
         this.pants = pants;
     }
 
-    public @NotNull ItemStack getChestPlate() {
+    public ItemStack getChestPlate() {
         return this.chestPlate;
     }
 
-    public void setChestPlate(final @NotNull ItemStack chestPlate) {
+    public void setChestPlate(final ItemStack chestPlate) {
         this.chestPlate = chestPlate;
     }
 
-    public @NotNull ItemStack getHelmet() {
+    public ItemStack getHelmet() {
         return this.helmet;
     }
 
-    public void setHelmet(final @NotNull ItemStack helmet) {
+    public void setHelmet(final ItemStack helmet) {
         this.helmet = helmet;
     }
 
@@ -84,18 +83,16 @@ public class Armor {
      *
      * @return converts ItemStacks to array for use with EntityEquipment
      */
-
-    public @NotNull ItemStack[] toArray() {
+    public ItemStack[] toArray() {
         return new ItemStack[]{this.boots, this.pants, this.chestPlate, this.helmet};
     }
 
     /**
-     *
+     * Sets the armor an entity is wearing
      * @param entity Entity whose armor is being set
      */
 
-
-    public void setArmor(final @NotNull LivingEntity entity) {
+    public void setArmor(final LivingEntity entity) {
         final EntityEquipment equipment = entity.getEquipment();
         if (equipment == null) {
             return;
@@ -122,41 +119,41 @@ public class Armor {
         private Builder() {
         }
 
-        public static @NotNull Builder create() {
+        public static Builder create() {
             return new Builder();
         }
 
-        public @NotNull Builder mainHand(final @NotNull ItemStack mainHand) {
+        public Builder mainHand(final ItemStack mainHand) {
             this.mainHand = mainHand;
             return this;
         }
 
-        public @NotNull Builder offHand(final @NotNull ItemStack offHand) {
+        public Builder offHand(final ItemStack offHand) {
             this.offHand = offHand;
             return this;
         }
 
-        public @NotNull Builder boots(final @NotNull ItemStack boots) {
+        public Builder boots(final ItemStack boots) {
             this.boots = boots;
             return this;
         }
 
-        public @NotNull Builder pants(final @NotNull ItemStack pants) {
+        public Builder pants(final ItemStack pants) {
             this.pants = pants;
             return this;
         }
 
-        public @NotNull Builder chestPlate(final @NotNull ItemStack chestPlate) {
+        public Builder chestPlate(final ItemStack chestPlate) {
             this.chestPlate = chestPlate;
             return this;
         }
 
-        public @NotNull Builder helmet(final @NotNull ItemStack helmet) {
+        public Builder helmet(final ItemStack helmet) {
             this.helmet = helmet;
             return this;
         }
 
-        public @NotNull Armor build() {
+        public Armor build() {
             return new Armor(
                     this.mainHand,
                     this.offHand,
