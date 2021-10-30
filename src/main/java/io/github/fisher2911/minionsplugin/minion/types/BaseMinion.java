@@ -3,6 +3,7 @@ package io.github.fisher2911.minionsplugin.minion.types;
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.keys.Keys;
+import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.world.Region;
@@ -11,15 +12,16 @@ import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
-public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
+public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     protected final JavaPlugin plugin;
     private LocalDateTime lastActionTime;
@@ -91,9 +93,8 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         this.minion.remove();
     }
 
-    @Override
-    public Inventory getInventory() {
-        return this.minionData.getInventory().getInventory();
+    public MinionInventory getInventory() {
+        return this.minionData.getInventory();
     }
 
     public Position getPosition() {

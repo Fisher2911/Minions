@@ -10,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -74,7 +73,7 @@ public class WoodcutterMinion extends BlockMinion {
                 this.region,
                 1,
                 allowedMaterials,
-                brokenBlock -> this.getInventory().addItem(
+                brokenBlock -> this.getInventory().addStoredItemStack(
                         brokenBlock.getDrops().toArray(new ItemStack[0])),
                 () -> {
                     this.isPerformingTask.set(false);

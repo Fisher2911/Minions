@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
 
 public class BlockAddedToWorldListener implements Listener {
@@ -88,7 +89,7 @@ public class BlockAddedToWorldListener implements Listener {
                                 ),
                                 new MinionData(
                                         new MinionInventory(
-                                                Bukkit.createInventory(null, 9, name + "'s Inventory"),
+                                                new HashSet<>(),
                                                 Armor.builder().
                                                         boots(builder.build()).
                                                         pants(LeatherArmorBuilder.

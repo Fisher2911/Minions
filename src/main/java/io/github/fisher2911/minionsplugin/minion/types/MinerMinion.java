@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -49,7 +48,7 @@ public class MinerMinion extends BlockMinion {
 
         blockInFront.setType(Material.AIR);
 
-        this.getInventory().addItem(drops.toArray(new ItemStack[0]));
+        this.getInventory().addStoredItemStack(drops.toArray(new ItemStack[0]));
         this.setLastActionTime(LocalDateTime.now());
         return true;
     }

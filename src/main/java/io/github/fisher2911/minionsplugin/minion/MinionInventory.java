@@ -3,6 +3,7 @@ package io.github.fisher2911.minionsplugin.minion;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Set;
 
 public class MinionInventory {
@@ -26,6 +27,14 @@ public class MinionInventory {
 
     public Set<ItemStack> getStoredItemStacks() {
         return this.storedItemStacks;
+    }
+
+    /**
+     *
+     * @param itemStack {@link org.bukkit.inventory.ItemStack} to be added to stored items
+     */
+    public void addStoredItemStack(final ItemStack... itemStack) {
+        this.storedItemStacks.addAll(List.of(itemStack));
     }
 
     public Armor getArmor() {
