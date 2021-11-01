@@ -9,6 +9,7 @@ import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.Armor;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionStorage;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
@@ -82,6 +83,7 @@ public class BlockAddedToWorldListener implements Listener {
                                 LocalDateTime.now(),
                                 id++,
                                 event.getPlayer().getUniqueId(),
+                                MinionType.BLOCK,
                                 new RectangularRegion(
                                         origin,
                                         origin.subtract(5, 1, 5),

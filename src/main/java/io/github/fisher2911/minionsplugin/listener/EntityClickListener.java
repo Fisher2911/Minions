@@ -1,10 +1,12 @@
 package io.github.fisher2911.minionsplugin.listener;
 
+import io.github.fisher2911.fishcore.user.UserManager;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.gui.BaseMinionGui;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import io.github.fisher2911.minionsplugin.user.MinionUser;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,10 +20,14 @@ public class EntityClickListener implements Listener {
 
     private final MinionsPlugin plugin;
     private final MinionManager minionManager;
+    private final UserManager<MinionUser> userManager;
+    private final GuiManager guiManager;
 
     public EntityClickListener(final MinionsPlugin plugin) {
         this.plugin = plugin;
         this.minionManager = this.plugin.getMinionManager();
+        this.userManager = this.plugin.getUserManager();
+        this.guiManager = this.plugin.getGuiManager();
     }
 
     @EventHandler
@@ -32,15 +38,26 @@ public class EntityClickListener implements Listener {
 
             final Optional<? extends BaseMinion<?>> minionOptional = this.minionManager.getBaseMinion(armorStand);
 
-            GuiManager.getGui(BaseMinionGui.MAIN).create().open(event.getPlayer());
-            event.getPlayer().sendMessage("Opened");
 
             event.setCancelled(true);
 
             final Player player = event.getPlayer();
 
+            final Optional<MinionUser> optionalMinionUser =
+                    this.userManager.get(player.getUniqueId());
+
+            if (optionalMinionUser.isEmpty()) {
+                return;
+            }
+
             minionOptional.ifPresentOrElse(minion -> {
-                    player.sendMessage("Found Minion");
+                event.getPlayer().sendMessage("Opened");
+
+                this.guiManager.
+                        openMinionGui(BaseMinionGui.MAIN,
+                                optionalMinionUser.get(),
+                                minion
+                        );
 //                event.getPlayer().openInventory(minion.getInventory());
 //                        event.setCancelled(true);
             }, () -> {

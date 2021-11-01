@@ -23,7 +23,7 @@ repositories {
 
 dependencies {
     compileOnly 'org.spigotmc:spigot-api:1.16.5-R0.1-SNAPSHOT'
-    compileOnly 'io.github.fisher2911:fish-core:0.2.8-SNAPSHOT'
+    compileOnly 'io.github.fisher2911:fish-core:0.3.1-SNAPSHOT'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation 'dev.triumphteam:triumph-gui:3.0.3'

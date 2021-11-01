@@ -1,32 +1,29 @@
 package io.github.fisher2911.minionsplugin.config;
 
-import dev.triumphteam.gui.guis.GuiItem;
+import io.github.fisher2911.fishcore.config.serializer.ItemSerializer;
+import io.github.fisher2911.fishcore.configurate.ConfigurateException;
+import io.github.fisher2911.fishcore.configurate.yaml.YamlConfigurationLoader;
 import io.github.fisher2911.fishcore.message.MessageHandler;
 import io.github.fisher2911.fishcore.message.MessageHandlerRegistry;
-import io.github.fisher2911.fishcore.util.helper.StringUtils;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
-import io.github.fisher2911.minionsplugin.config.serializer.GuiItemSerializer;
+import io.github.fisher2911.minionsplugin.config.serializer.GuiDataSerializer;
+import io.github.fisher2911.minionsplugin.gui.GuiData;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
-import io.github.fisher2911.minionsplugin.gui.SimpleMinionGui;
-import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class GuiLoader {
 
     private final MinionsPlugin plugin;
     private final MessageHandler messageHandler;
+    private final GuiManager guiManager;
 
     public GuiLoader(final MinionsPlugin plugin) {
         this.plugin = plugin;
         this.messageHandler = MessageHandlerRegistry.REGISTRY.get(MinionsPlugin.class);
+        this.guiManager = this.plugin.getGuiManager();
     }
 
     // Loads a minion gui and registers it
@@ -51,47 +48,18 @@ public class GuiLoader {
                 builder().
                 path(Path.of(this.plugin.getDataFolder().getPath(), path)).
                  defaultOptions(opts ->
-                         opts.serializers(build -> build.register(GuiItem.class, GuiItemSerializer.INSTANCE)))
+                         opts.serializers(build -> {
+                             build.register(GuiData.class, GuiDataSerializer.INSTANCE);
+                             build.register(ItemStack.class, ItemSerializer.INSTANCE);
+
+                         }))
                 .build();
         try {
-            final ConfigurationNode root = loader.load();
-            final ConfigurationNode titleNode = root.node("title");
-            final ConfigurationNode rowsNode = root.node("rows");
-            final ConfigurationNode borderNode = root.node("border-items");
-            final ConfigurationNode guiItemsNode = root.node("items");
 
-            final String title = titleNode.getString();
-            final int rows = rowsNode.getInt();
-            final List<GuiItem> borderItems = new ArrayList<>();
+            final var source = loader.load();
 
-            final Map<Object, ? extends ConfigurationNode> borderItemsNodeMap = borderNode.childrenMap();
-
-            if (!borderItemsNodeMap.isEmpty()) {
-                for (ConfigurationNode configurationNode : borderItemsNodeMap.values()) {
-                    borderItems.add(configurationNode.get(GuiItem.class));
-                }
-            }
-
-            final Map<Object, ? extends ConfigurationNode> map = guiItemsNode.childrenMap();
-
-            final Map<Integer, GuiItem> guiItemMap = new HashMap<>();
-
-            for (final Object key : map.keySet()) {
-                final ConfigurationNode itemNode = guiItemsNode.node(key);
-                final GuiItem guiItem = itemNode.get(GuiItem.class);
-
-                try {
-                    guiItemMap.put(Integer.parseInt(key.toString()), guiItem);
-                } catch (final NumberFormatException exception) {
-                    exception.printStackTrace();
-                }
-            }
-
-            final SimpleMinionGui gui = new SimpleMinionGui(
-                    StringUtils.parseStringToString(title),
-                    rows, borderItems, guiItemMap);
-
-            GuiManager.registerGui(file.getName().replace(".yml", ""), gui);
+            final GuiData guiData = source.get(GuiData.class);
+            this.guiManager.registerGui(file.getName().replace(".yml", ""), guiData);
         } catch (ConfigurateException e) {
             e.printStackTrace();
         }

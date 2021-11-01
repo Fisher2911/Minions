@@ -65,11 +65,12 @@ public class MinionChunkPositions<T extends BaseMinion<?>> {
 
     /**
      *
+     * @param position position of the minion being retrieved
      * @param id The id of the minion being retrieved
      * @return returns the minion with the id specified
      */
-    public Optional<T> getMinionWithId(final Long id) {
-        final Optional<MinionStorage<T>> optional = this.get(id);
+    public Optional<T> getMinionWithId(final Position position, final long id) {
+        final Optional<MinionStorage<T>> optional = this.get(position.getChunkKey());
 
         if (optional.isEmpty()) {
             return Optional.empty();

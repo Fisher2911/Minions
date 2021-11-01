@@ -42,6 +42,8 @@ public class MinionManager {
     }
 
     public Optional<BlockMinion> getBlockMinion(final ArmorStand armorStand) {
+        // todo
+        Bukkit.broadcastMessage("Found Block Minion with id: " + MinionUtil.getId(armorStand));
         return this.getBlockMinionWithId(Position.fromBukkitLocation(armorStand.getLocation()),
                 MinionUtil.getId(armorStand));
     }
@@ -113,7 +115,7 @@ public class MinionManager {
             return Optional.empty();
         }
 
-        return chunkPositionsOptional.get().getMinionWithId(id);
+        return chunkPositionsOptional.get().getMinionWithId(position, id);
     }
 
     public <T extends BaseMinion<?>> Optional<MinionStorage<T>> getMinionsInChunk(

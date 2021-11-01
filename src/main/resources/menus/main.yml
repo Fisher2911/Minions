@@ -2,43 +2,54 @@ title: "<green>Minion Menu</green>"
 rows: 3
 border-items:
   1:
-    item:
-      material: WHITE_STAINED_GLASS_PANE
-      name: " "
-      glow: true
+    material: WHITE_STAINED_GLASS_PANE
+    name: " "
+    glow: true
   2:
-    item:
-      material: BLACK_STAINED_GLASS_PANE
-      name: " "
-      glow: true
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+    glow: true
 items:
   10:
-    item:
-      material: CHEST
-      amount: 1
-      name: "<green>Upgrades</green>"
-      lore:
-        - ""
-        - "<green>Click here to open the upgrades menu</green>"
-    actions:
-      open: "upgrades"
+    material: CHEST
+    amount: 1
+    name: "<green>Upgrades</green>"
+    lore:
+      - ""
+      - "<green>Click here to open the upgrades menu</green>"
   11:
-    item:
-      material: ARMOR_STAND
-      amount: 1
-      name: "<green>Cosmetics</green>"
-      lore:
-        - ""
-        - "<green>Click here to open the cosmetics menu</green>"
-    actions:
-      open: "cosmetics"
+    material: ARMOR_STAND
+    amount: 1
+    name: "<green>Cosmetics</green>"
+    lore:
+      - ""
+      - "<green>Click here to open the cosmetics menu</green>"
   12:
-    item:
-      material: CHEST
-      amount: 1
-      name: "<green>Permissions</green>"
-      lore:
-        - ""
-        - "<green>Click here to open the permissions menu</green>"
-    actions:
-      open: "permissions"
+    material: CHEST
+    amount: 1
+    name: "<green>Permissions</green>"
+    lore:
+      - ""
+      - "<green>Click here to open the permissions menu</green>"
+actions:
+  10:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      open:
+        - "upgrades"
+  11:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      open:
+        - "cosmetics"
+  12:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      open:
+        - "permissions"

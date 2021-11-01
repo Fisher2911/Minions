@@ -2,6 +2,7 @@ package io.github.fisher2911.minionsplugin.minion.types;
 
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
+import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.task.BlockBreakTask;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
@@ -37,10 +38,11 @@ public class WoodcutterMinion extends BlockMinion {
                             final LocalDateTime lastActionTime,
                             final long id,
                             final UUID owner,
+                            final MinionType minionType,
                             final Region region,
                             final MinionData minionData,
                             final Upgrades upgrades) {
-        super(plugin, lastActionTime, id, owner, region, minionData, upgrades);
+        super(plugin, lastActionTime, id, owner, minionType, region, minionData, upgrades);
     }
 
 

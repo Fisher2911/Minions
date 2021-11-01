@@ -2,31 +2,33 @@ title: "<green>Cosmetics Menu</green>"
 rows: 3
 border-items:
   1:
-    item:
-      material: WHITE_STAINED_GLASS_PANE
-      name: " "
-      glow: true
+    material: WHITE_STAINED_GLASS_PANE
+    name: " "
+    glow: true
   2:
-    item:
-      material: BLACK_STAINED_GLASS_PANE
-      name: " "
-      glow: true
+    material: BLACK_STAINED_GLASS_PANE
+    name: " "
+    glow: true
 items:
   4:
-    item:
-      material: FEATHER
-      amount: 1
-      name: "<green>Example Permissions</green>"
-      lore:
-        - ""
-        - "<green>Example Permissions</green>"
+    material: FEATHER
+    amount: 1
+    name: "<green>Example Permissions</green>"
+    lore:
+      - ""
+      - "<green>Example Permissions</green>"
   13:
-    item:
-      material: ARROW
-      amount: 1
-      name: "<green>Go Back</green>"
-      lore:
-        - ""
-        - "<green>Go Back</green>"
-    actions:
-      open: "main"
+    material: ARROW
+    amount: 1
+    name: "<green>Go Back</green>"
+    lore:
+      - ""
+      - "<green>Go Back</green>"
+actions:
+  13:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      open:
+        - "main"
