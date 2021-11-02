@@ -6,7 +6,6 @@ import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.lang.MinionMessages;
 import io.github.fisher2911.minionsplugin.lang.Placeholder;
-import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -22,10 +21,7 @@ public class SpeedUpgrade extends MinionUpgrade<Float> {
     }
 
     @Override
-    public ItemStack getGuiItemStack(final BaseMinion<?> minion) {
-        final UpgradeData<SpeedUpgrade> speedUpgrade = minion.getUpgrades().getSpeedUpgrade();
-        final int level = speedUpgrade.getLevel();
-
+    public ItemStack getGuiItemStack(final int level, final Float value) {
         final Cost cost = this.getCostAtLevel(level);
 
         final String moneyPrice;

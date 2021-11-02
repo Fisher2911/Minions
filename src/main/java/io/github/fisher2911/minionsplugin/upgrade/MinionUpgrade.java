@@ -2,7 +2,6 @@ package io.github.fisher2911.minionsplugin.upgrade;
 
 import io.github.fisher2911.fishcore.economy.Cost;
 import io.github.fisher2911.fishcore.upgrade.Upgrade;
-import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -25,5 +24,5 @@ public abstract class MinionUpgrade<T> extends Upgrade<T> {
         this.guiItemStack = guiItemStack;
     }
 
-    public abstract ItemStack getGuiItemStack(final BaseMinion<?> minion);
+    public abstract ItemStack getGuiItemStack(final int level, final T value);
 }

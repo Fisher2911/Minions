@@ -5,13 +5,17 @@ package io.github.fisher2911.minionsplugin.upgrade;
  */
 public class Upgrades {
 
-    private final UpgradeData<SpeedUpgrade> speedUpgrade;
+    private final UpgradeData<SpeedUpgrade, Float> speedUpgrade;
 
-    public Upgrades(final UpgradeData<SpeedUpgrade> speedUpgrade) {
+    public Upgrades(final UpgradeData<SpeedUpgrade, Float> speedUpgrade) {
         this.speedUpgrade = speedUpgrade;
     }
 
-    public UpgradeData<SpeedUpgrade> getSpeedUpgrade() {
+    public UpgradeData<SpeedUpgrade, Float> getSpeedUpgrade() {
         return this.speedUpgrade;
+    }
+
+    public float getSpeed() {
+        return this.speedUpgrade.getValue();
     }
 }

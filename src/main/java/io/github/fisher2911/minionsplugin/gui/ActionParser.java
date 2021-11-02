@@ -2,14 +2,13 @@ package io.github.fisher2911.minionsplugin.gui;
 
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
-import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-public class ActionCreator {
+public class ActionParser {
 
     private static final MinionsPlugin plugin;
 

@@ -8,10 +8,9 @@ import io.github.fisher2911.fishcore.configurate.serialize.SerializationExceptio
 import io.github.fisher2911.fishcore.configurate.serialize.TypeSerializer;
 import io.github.fisher2911.fishcore.util.helper.StringUtils;
 import io.github.fisher2911.fishcore.util.helper.Utils;
-import io.github.fisher2911.minionsplugin.gui.ActionCreator;
+import io.github.fisher2911.minionsplugin.gui.ActionParser;
 import io.github.fisher2911.minionsplugin.gui.ClickAction;
 import io.github.fisher2911.minionsplugin.gui.GuiData;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -154,7 +153,7 @@ public class GuiDataSerializer<T extends BaseGui> implements TypeSerializer<GuiD
                         new ArrayList<>()
                 );
 
-                final ClickAction clickAction = ActionCreator.create(action, instructions, clickTypes);
+                final ClickAction clickAction = ActionParser.create(action, instructions, clickTypes);
                 clickActionMap.put(slot, clickAction);
             }
 

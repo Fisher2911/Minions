@@ -32,7 +32,6 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
 
         for (final Map.Entry<Integer, GuiItem> entry : this.guiData.getItemStackSlots().entrySet()) {
             gui.setItem(entry.getKey(), entry.getValue());
-            guiOwner.getPlayer().sendMessage("Item: " + entry.getValue().getItemStack());
         }
 
         gui.setDefaultClickAction(event -> {

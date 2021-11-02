@@ -1,5 +1,6 @@
 package io.github.fisher2911.minionsplugin.listener;
 
+import io.github.fisher2911.fishcore.economy.Cost;
 import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
 import io.github.fisher2911.fishcore.util.builder.LeatherArmorBuilder;
 import io.github.fisher2911.fishcore.util.builder.SkullBuilder;
@@ -29,8 +30,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
 
 public class MinionPlaceListener implements Listener {
 
@@ -107,9 +109,10 @@ public class MinionPlaceListener implements Listener {
                                         build()
                         ),
                         name,
-                        0), Material.WHEAT, new Upgrades(new UpgradeData<>(0,
-                new SpeedUpgrade("test", "test", new HashMap<>(),
-                        new HashMap<>(), new ItemStack(Material.ITEM_FRAME)))));
+                        0), Material.WHEAT, new Upgrades(new UpgradeData<>(1,
+                new SpeedUpgrade("test", "test", Map.of(1, 5f),
+                        Map.of(1, new Cost(0, new ArrayList<>())),
+                        new ItemStack(Material.ITEM_FRAME)))));
         baseMinion.place();
         this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);

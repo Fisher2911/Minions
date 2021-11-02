@@ -119,10 +119,11 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     }
 
     public boolean canPerformAction() {
-        // todo remove hard coded speed
-        final int speedInSeconds = 1;
+        final float speed = this.upgrades.getSpeed();
 
-        return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speedInSeconds;
+        this.plugin.getLogger().info("Minion Speed is: " + speed);
+
+        return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speed;
     }
 
     public Upgrades getUpgrades() {

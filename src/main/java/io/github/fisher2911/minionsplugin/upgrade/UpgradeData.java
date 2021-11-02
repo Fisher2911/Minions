@@ -1,6 +1,6 @@
 package io.github.fisher2911.minionsplugin.upgrade;
 
-public class UpgradeData<T extends MinionUpgrade> {
+public class UpgradeData<T extends MinionUpgrade<R>, R> {
 
     /**
      * Level of the upgrade
@@ -23,5 +23,9 @@ public class UpgradeData<T extends MinionUpgrade> {
 
     public T getUpgrade() {
         return this.upgrade;
+    }
+
+    public R getValue() {
+        return this.upgrade.getDataAtLevel(this.level);
     }
 }
