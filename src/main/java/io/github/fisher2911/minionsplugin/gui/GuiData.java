@@ -1,6 +1,8 @@
 package io.github.fisher2911.minionsplugin.gui;
 
 import dev.triumphteam.gui.guis.GuiItem;
+import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -10,15 +12,15 @@ public class GuiData {
     private final String title;
     private final int rows;
     private final List<GuiItem> borderItemStacks;
-    private final Map<Integer, GuiItem> itemStackSlots;
-    private final Map<Integer, ClickAction> clickActionSlots;
+    private final Map<Integer, TypeItem> itemStackSlots;
+    private final Map<Integer, ClickActions> clickActionSlots;
 
     public GuiData(
             final String title,
             final int rows,
             final List<GuiItem> borderItemStacks,
-            final Map<Integer, GuiItem> itemStackSlots,
-            final Map<Integer, ClickAction> clickActionSlots) {
+            final Map<Integer, TypeItem> itemStackSlots,
+            final Map<Integer, ClickActions> clickActionSlots) {
         this.title = title;
         this.rows = rows;
         this.borderItemStacks = borderItemStacks;
@@ -38,12 +40,16 @@ public class GuiData {
         return this.borderItemStacks;
     }
 
-    public Map<Integer, GuiItem> getItemStackSlots() {
+    public Map<Integer, TypeItem> getItemStackSlots() {
         return this.itemStackSlots;
     }
 
-    public Map<Integer, ClickAction> getClickActionSlots() {
+    public Map<Integer, ClickActions> getClickActionSlots() {
         return this.clickActionSlots;
+    }
+
+    public @Nullable TypeItem getTypeItem(final int slot) {
+        return this.itemStackSlots.get(slot);
     }
 
     @Override

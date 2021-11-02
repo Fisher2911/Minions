@@ -2,7 +2,9 @@ package io.github.fisher2911.minionsplugin.gui;
 
 import dev.triumphteam.gui.guis.Gui;
 import dev.triumphteam.gui.guis.GuiItem;
+import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import net.kyori.adventure.text.Component;
 
@@ -30,21 +32,35 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
             gui.getFiller().fillBorder(borderItemStacks);
         }
 
-        for (final Map.Entry<Integer, GuiItem> entry : this.guiData.getItemStackSlots().entrySet()) {
-            gui.setItem(entry.getKey(), entry.getValue());
+        final Upgrades upgrades = this.minion.getUpgrades();
+
+        for (final Map.Entry<Integer, TypeItem> entry : this.guiData.getItemStackSlots().entrySet()) {
+            final int slot = entry.getKey();
+
+            final TypeItem typeItem = entry.getValue();
+
+            final GuiItem setItem;
+
+            if (typeItem.getType() == null) {
+                setItem = typeItem.getGuiItem();
+            } else {
+                setItem = new GuiItem(upgrades.getSpeedUpgrade().getGuiItemStack());
+            }
+
+            gui.setItem(slot, setItem);
         }
 
         gui.setDefaultClickAction(event -> {
             event.setCancelled(true);
             final int clickedSlot = event.getSlot();
 
-            final ClickAction clickAction = this.guiData.getClickActionSlots().get(clickedSlot);
+            final ClickActions clickActions = this.guiData.getClickActionSlots().get(clickedSlot);
 
-            if (clickAction == null) {
+            if (clickActions == null) {
                 return;
             }
 
-            clickAction.act(this, event.getClick());
+            clickActions.runAll(this, event.getClick());
         });
 
         return gui;

@@ -11,6 +11,7 @@ import io.github.fisher2911.minionsplugin.listener.EntityKillListener;
 import io.github.fisher2911.minionsplugin.listener.MinionPlaceListener;
 import io.github.fisher2911.minionsplugin.listener.PlayerJoinListener;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
+import io.github.fisher2911.minionsplugin.permission.PermissionManager;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 public class MinionsPlugin extends FishCore {
 
     private UserManager<MinionUser> userManager;
+    private PermissionManager permissionManager;
     private GuiManager guiManager;
     private MinionManager minionManager;
 
@@ -35,6 +37,7 @@ public class MinionsPlugin extends FishCore {
     }
 
     private void initializeClasses() {
+        this.permissionManager = new PermissionManager();
         this.userManager = new UserManager<>();
         this.minionManager = new MinionManager(this);
         this.guiManager = new GuiManager();
@@ -48,6 +51,10 @@ public class MinionsPlugin extends FishCore {
                         new ChunkListener(this),
                         new PlayerJoinListener(this)).
                 forEach(this::registerListener);
+    }
+
+    public PermissionManager getPermissionManager() {
+        return this.permissionManager;
     }
 
     public UserManager<MinionUser> getUserManager() {

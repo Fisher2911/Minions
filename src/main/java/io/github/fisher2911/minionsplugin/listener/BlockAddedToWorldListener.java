@@ -114,8 +114,13 @@ public class BlockAddedToWorldListener implements Listener {
                                         ),
                                         name,
                                         0), Material.WHEAT, new Upgrades(new UpgradeData<>(0,
-                                new SpeedUpgrade("test", "test", new HashMap<>(),
-                                        new HashMap<>(), new ItemStack(Material.ITEM_FRAME)))));
+                                new SpeedUpgrade("test",
+                                        "test",
+                                        new HashMap<>(),
+                                        new HashMap<>(),
+                                        new ItemStack(Material.ITEM_FRAME),
+                                        "SPEED_UPGRADE")
+                                )));
 
                         this.minionManager.addBlockMinion(baseMinion);
                         totalMinions++;

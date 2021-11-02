@@ -7,6 +7,7 @@ import io.github.fisher2911.fishcore.util.builder.SkullBuilder;
 import io.github.fisher2911.fishcore.util.helper.StringUtils;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
+import io.github.fisher2911.minionsplugin.lang.Placeholder;
 import io.github.fisher2911.minionsplugin.minion.Armor;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
@@ -16,6 +17,7 @@ import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.upgrade.SpeedUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
+import io.github.fisher2911.minionsplugin.upgrade.UpgradeType;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.world.RectangularRegion;
 import org.bukkit.Bukkit;
@@ -32,6 +34,7 @@ import org.bukkit.inventory.ItemStack;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 public class MinionPlaceListener implements Listener {
@@ -110,9 +113,19 @@ public class MinionPlaceListener implements Listener {
                         ),
                         name,
                         0), Material.WHEAT, new Upgrades(new UpgradeData<>(1,
-                new SpeedUpgrade("test", "test", Map.of(1, 5f),
-                        Map.of(1, new Cost(0, new ArrayList<>())),
-                        new ItemStack(Material.ITEM_FRAME)))));
+                new SpeedUpgrade("test",
+                        "test",
+                        Map.of(1, 5f, 2, 1f),
+                        Map.of(1, new Cost(0, new ArrayList<>()),
+                                2, new Cost(5, new ArrayList<>())),
+                        ItemBuilder.from(Material.ITEM_FRAME).
+                                name(StringUtils.parseStringToString(
+                                        "<blue>" + "Level: " + Placeholder.LEVEL)).
+                                lore(List.of("",
+                                        StringUtils.parseStringToString(
+                                                "<green>" + "Cost: " + Placeholder.MONEY_COST))).
+                                build(),
+                        UpgradeType.SPEED_UPGRADE))));
         baseMinion.place();
         this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);

@@ -8,15 +8,15 @@ public abstract class BaseMinionGui<G extends BaseGui> {
 
     public static final String MAIN = "main";
 
-    protected final BaseMinion<?> baseMinion;
+    protected final BaseMinion<?> minion;
     protected final MinionUser guiOwner;
     protected final GuiData guiData;
 
     public BaseMinionGui(
-            final BaseMinion<?> baseMinion,
+            final BaseMinion<?> minion,
             final MinionUser guiOwner,
             final GuiData guiData) {
-        this.baseMinion = baseMinion;
+        this.minion = minion;
         this.guiOwner = guiOwner;
         this.guiData = guiData;
     }
@@ -28,7 +28,7 @@ public abstract class BaseMinionGui<G extends BaseGui> {
     }
 
     public BaseMinion<?> getMinion() {
-        return this.baseMinion;
+        return this.minion;
     }
 
     public MinionUser getGuiOwner() {

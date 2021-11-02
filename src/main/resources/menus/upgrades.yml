@@ -17,6 +17,7 @@ items:
     lore:
       - ""
       - "<green>Example Speed Upgrade</green>"
+    type: "SPEED_UPGRADE"
   13:
     material: ARROW
     amount: 1
@@ -25,6 +26,13 @@ items:
       - ""
       - "<green>Go Back</green>"
 actions:
+  4:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      attempt-upgrade:
+        - "SPEED_UPGRADE"
   13:
     click-types:
       - RIGHT

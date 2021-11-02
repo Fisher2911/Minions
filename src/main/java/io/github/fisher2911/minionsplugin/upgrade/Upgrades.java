@@ -1,5 +1,7 @@
 package io.github.fisher2911.minionsplugin.upgrade;
 
+import io.github.fisher2911.minionsplugin.user.MinionUser;
+
 /**
  * All upgrades that a minion can have, the default level is 1
  */
@@ -17,5 +19,13 @@ public class Upgrades {
 
     public float getSpeed() {
         return this.speedUpgrade.getValue();
+    }
+
+    public void attemptUpgrade(final String type, final MinionUser user) {
+        switch (type) {
+            case UpgradeType.SPEED_UPGRADE -> {
+                this.speedUpgrade.attemptUpgrade(user);
+            }
+        }
     }
 }

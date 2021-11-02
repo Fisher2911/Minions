@@ -13,16 +13,23 @@ public abstract class MinionUpgrade<T> extends Upgrade<T> {
      */
 
     protected final ItemStack guiItemStack;
+    protected final String type;
 
     public MinionUpgrade(
             final String id,
             final String displayName,
             final Map<Integer, T> levelDataMap,
             final Map<Integer, Cost> levelCostMap,
-            final ItemStack guiItemStack) {
+            final ItemStack guiItemStack,
+            final String type) {
         super(id, displayName, levelDataMap, levelCostMap);
         this.guiItemStack = guiItemStack;
+        this.type = type;
     }
 
     public abstract ItemStack getGuiItemStack(final int level, final T value);
+
+    public String getType() {
+        return this.type;
+    }
 }

@@ -16,8 +16,9 @@ public class SpeedUpgrade extends MinionUpgrade<Float> {
                         final String displayName,
                         final Map<Integer, Float> levelDataMap,
                         final Map<Integer, Cost> levelCostMap,
-                        final ItemStack guiItemStack) {
-        super(id, displayName, levelDataMap, levelCostMap, guiItemStack);
+                        final ItemStack guiItemStack,
+                        final String type) {
+        super(id, displayName, levelDataMap, levelCostMap, guiItemStack, type);
     }
 
     @Override
@@ -40,6 +41,7 @@ public class SpeedUpgrade extends MinionUpgrade<Float> {
 
         return ItemBuilder.from(this.guiItemStack).
                 namePlaceholders(placeHolders).
-                lorePlaceholders(placeHolders).build();
+                lorePlaceholders(placeHolders).
+                build();
     }
 }

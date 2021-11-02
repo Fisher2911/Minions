@@ -8,9 +8,10 @@ import io.github.fisher2911.fishcore.configurate.serialize.SerializationExceptio
 import io.github.fisher2911.fishcore.configurate.serialize.TypeSerializer;
 import io.github.fisher2911.fishcore.util.helper.StringUtils;
 import io.github.fisher2911.fishcore.util.helper.Utils;
-import io.github.fisher2911.minionsplugin.gui.ActionParser;
-import io.github.fisher2911.minionsplugin.gui.ClickAction;
+import io.github.fisher2911.minionsplugin.gui.ClickActions;
 import io.github.fisher2911.minionsplugin.gui.GuiData;
+import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
+import io.github.fisher2911.minionsplugin.gui.parser.ActionParser;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -82,7 +83,7 @@ public class GuiDataSerializer<T extends BaseGui> implements TypeSerializer<GuiD
                 }).
                 collect(Collectors.toList());
 
-        final Map<Integer, GuiItem> items =
+        final Map<Integer, TypeItem> items =
                 itemsNode.
                         childrenMap().
                         entrySet().
@@ -93,6 +94,9 @@ public class GuiDataSerializer<T extends BaseGui> implements TypeSerializer<GuiD
                             }
                             return 0;
                         }, entry -> {
+
+                            final String itemType = entry.getValue().node("type").getString();
+
                             try {
                                 ItemStack itemStack = ItemSerializer.
                                         INSTANCE.
@@ -102,15 +106,15 @@ public class GuiDataSerializer<T extends BaseGui> implements TypeSerializer<GuiD
                                     itemStack = new ItemStack(Material.AIR);
                                 }
 
-                                return new GuiItem(itemStack);
+                                return new TypeItem(itemType, new GuiItem(itemStack));
                             } catch (final SerializationException exception) {
                                 exception.printStackTrace();
-                                return new GuiItem(new ItemStack(Material.AIR));
+                                return new TypeItem(itemType, new GuiItem(Material.AIR));
                             }
                         }));
 
 
-        final Map<Integer, ClickAction> clickActionMap = new HashMap<>();
+        final Map<Integer, ClickActions> clickActionMap = new HashMap<>();
 
         final var childrenMap = actionsNode.childrenMap();
 
@@ -143,6 +147,8 @@ public class GuiDataSerializer<T extends BaseGui> implements TypeSerializer<GuiD
 
             final var actionChildrenMap = instructionsNode.childrenMap();
 
+            final ClickActions clickActions = new ClickActions(new ArrayList<>());
+
             for (final var actionEntry : actionChildrenMap.entrySet()) {
                 if (!(actionEntry.getKey() instanceof final String action)) {
                     continue;
@@ -153,10 +159,15 @@ public class GuiDataSerializer<T extends BaseGui> implements TypeSerializer<GuiD
                         new ArrayList<>()
                 );
 
-                final ClickAction clickAction = ActionParser.create(action, instructions, clickTypes);
-                clickActionMap.put(slot, clickAction);
+                final ClickActions parsed = ActionParser.create(
+                        action,
+                        instructions,
+                        clickTypes,
+                        slot);
+                clickActions.addAll(parsed);
             }
 
+            clickActionMap.put(slot, clickActions);
         }
         return new GuiData(title, rows, borderItems, items, clickActionMap);
     }
