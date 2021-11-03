@@ -78,6 +78,14 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
         }
 
         final Block block = dirt.getBlock();
+
+        if (block.getType() != Material.DIRT) {
+            if (this.dirtPositions.peek() != null) {
+                this.run();
+            }
+            return;
+        }
+
         block.setType(Material.FARMLAND);
         this.farmlandPositions.addFirst(dirt);
         this.setLastActionTime(LocalDateTime.now());
@@ -87,6 +95,10 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
     public boolean performAction(final BlockChangedInWorldEvent event) {
         final Block block = event.getBlock();
         final Position position = Position.fromBukkitLocation(block.getLocation());
+
+        if (!this.getRegion().contains(position)) {
+            return false;
+        }
 
         if (event.getType() == BlockChangedInWorldEvent.Type.REMOVED) {
             switch (block.getType()) {

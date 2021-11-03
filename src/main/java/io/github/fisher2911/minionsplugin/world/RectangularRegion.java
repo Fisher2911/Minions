@@ -134,6 +134,11 @@ public class RectangularRegion implements Region {
     }
 
     @Override
+    public Set<Position> getAllPositions() {
+        return this.getAllPositionsInY((int) this.getMinY(), (int) this.getMaxY());
+    }
+
+    @Override
     public String toString() {
         return "RectangularRegion{" +
                 "origin=" + this.origin +

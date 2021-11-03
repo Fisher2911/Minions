@@ -121,9 +121,6 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     public boolean canPerformAction() {
         final float speed = this.upgrades.getSpeed();
-
-        this.plugin.getLogger().info("Minion Speed is: " + speed);
-
         return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speed;
     }
 
@@ -133,8 +130,6 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     public Region getRegion() {
         final Region region = this.getUpgrades().getRange().toRegion(this.position);
-        Bukkit.getLogger().info("Region: " + region);
-        Bukkit.getLogger().info("Range: " + this.getUpgrades().getRange());
         return region;
     }
 }

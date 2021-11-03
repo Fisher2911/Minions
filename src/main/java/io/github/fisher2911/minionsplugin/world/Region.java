@@ -40,4 +40,10 @@ public interface Region {
      * @return
      */
     Set<Position> getAllPositionsInY(final int minY, final int maxY);
+
+    /**
+     *
+     * @return
+     */
+    Set<Position> getAllPositions();
 }
