@@ -39,12 +39,14 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
 
             final TypeItem typeItem = entry.getValue();
 
+            final String type = typeItem.getType();
+
             final GuiItem setItem;
 
-            if (typeItem.getType() == null) {
+            if (type == null) {
                 setItem = typeItem.getGuiItem();
             } else {
-                setItem = new GuiItem(upgrades.getSpeedUpgrade().getGuiItemStack());
+                setItem = new GuiItem(upgrades.getUpgradeData(type).getGuiItemStack());
             }
 
             gui.setItem(slot, setItem);

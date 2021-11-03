@@ -6,7 +6,6 @@ import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.task.BlockBreakTask;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
-import io.github.fisher2911.minionsplugin.world.Region;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -39,10 +38,10 @@ public class WoodcutterMinion extends BlockMinion {
                             final long id,
                             final UUID owner,
                             final MinionType minionType,
-                            final Region region,
+                            final Position position,
                             final MinionData minionData,
                             final Upgrades upgrades) {
-        super(plugin, lastActionTime, id, owner, minionType, region, minionData, upgrades);
+        super(plugin, lastActionTime, id, owner, minionType, position, minionData, upgrades);
     }
 
 
@@ -72,7 +71,7 @@ public class WoodcutterMinion extends BlockMinion {
         final BlockBreakTask task = new BlockBreakTask(
                 this.plugin,
                 position,
-                this.region,
+                this.getRegion(),
                 1,
                 allowedMaterials,
                 brokenBlock -> this.getInventory().addStoredItemStack(

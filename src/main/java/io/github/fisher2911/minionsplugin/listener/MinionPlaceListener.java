@@ -15,11 +15,12 @@ import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.upgrade.RangeUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.SpeedUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeType;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
-import io.github.fisher2911.minionsplugin.world.RectangularRegion;
+import io.github.fisher2911.minionsplugin.world.Range;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -83,11 +84,7 @@ public class MinionPlaceListener implements Listener {
                 id++,
                 player.getUniqueId(),
                 MinionType.BLOCK,
-                new RectangularRegion(
-                        origin,
-                        origin.subtract(5, 1, 5),
-                        origin.add(5, 5, 5)
-                ),
+                origin,
                 new MinionData(
                         new MinionInventory(
                                 new HashSet<>(),
@@ -125,7 +122,25 @@ public class MinionPlaceListener implements Listener {
                                         StringUtils.parseStringToString(
                                                 "<green>" + "Cost: " + Placeholder.MONEY_COST))).
                                 build(),
-                        UpgradeType.SPEED_UPGRADE))));
+                        UpgradeType.SPEED_UPGRADE)),
+                new UpgradeData<>(1,
+                        new RangeUpgrade("test",
+                                "test",
+                                Map.of(1, new Range(
+                                        2, 2, 2, 2, 2, 2),
+                                        2, new Range(
+                                                5, 5, 5, 5, 5, 5
+                                        )),
+                                Map.of(1, new Cost(0, new ArrayList<>()),
+                                        2, new Cost(5, new ArrayList<>())),
+                                ItemBuilder.from(Material.BOW).
+                                        name(StringUtils.parseStringToString(
+                                                "<blue>" + "Level: " + Placeholder.LEVEL)).
+                                        lore(List.of("",
+                                                StringUtils.parseStringToString(
+                                                        "<green>" + "Cost: " + Placeholder.MONEY_COST))).
+                                        build(),
+                                UpgradeType.RANGE_UPGRADE))));
         baseMinion.place();
         this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);

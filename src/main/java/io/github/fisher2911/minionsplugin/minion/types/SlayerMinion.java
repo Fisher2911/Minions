@@ -5,7 +5,6 @@ import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
-import io.github.fisher2911.minionsplugin.world.Region;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -28,10 +27,10 @@ public class SlayerMinion extends EntityMinion {
                         final long id,
                         final UUID owner,
                         final MinionType minionType,
-                        final Region region,
+                        final Position position,
                         final MinionData minionData,
                         final Upgrades upgrades) {
-        super(plugin, lastActionTime, id, owner, minionType, region, minionData, upgrades);
+        super(plugin, lastActionTime, id, owner, minionType, position, minionData, upgrades);
     }
 
     final Set<EntityType> allowedEntities =

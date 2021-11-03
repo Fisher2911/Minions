@@ -5,7 +5,7 @@ import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
-import io.github.fisher2911.minionsplugin.world.Region;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -29,20 +29,21 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
                         final long id,
                         final UUID owner,
                         final MinionType minionType,
-                        final Region region,
+                        final Position position,
                         final MinionData minionData,
                         final Material cropType,
                         final Upgrades upgrades) {
-        super(plugin, lastActionTime, id, owner, minionType, region, minionData, upgrades);
+        super(plugin, lastActionTime, id, owner, minionType, position, minionData, upgrades);
         this.cropType = cropType;
         this.checkDirtPositions();
     }
 
     private void checkDirtPositions() {
-        final int y = (int) this.region.getMinY();
-        for (Position position : this.region.getAllPositionsInY(
+        final int y = (int) this.position.getY();
+        for (Position position : this.getRegion().getAllPositionsInY(
                 y, y
         )) {
+            Bukkit.broadcastMessage("Location is " + position.toBukkitLocation().toString());
             final Block block = position.getBlock();
             switch (block.getType()) {
                 case DIRT -> this.dirtPositions.add(position);

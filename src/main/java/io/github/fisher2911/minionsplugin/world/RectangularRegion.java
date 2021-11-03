@@ -132,4 +132,13 @@ public class RectangularRegion implements Region {
 
         return positions;
     }
+
+    @Override
+    public String toString() {
+        return "RectangularRegion{" +
+                "origin=" + this.origin +
+                ", min=" + this.min +
+                ", max=" + this.max +
+                '}';
+    }
 }

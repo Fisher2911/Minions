@@ -8,6 +8,7 @@ import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.world.Region;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -27,7 +28,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     protected final long id;
     protected final UUID owner;
     protected MinionType minionType;
-    protected final Region region;
+    protected final Position position;
     private final MinionData minionData;
     private final Upgrades upgrades;
 
@@ -37,7 +38,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
             final long id,
             final UUID owner,
             final MinionType minionType,
-            final Region region,
+            final Position position,
             final MinionData minionData,
             final Upgrades upgrades) {
         this.plugin = plugin;
@@ -45,7 +46,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
         this.id = id;
         this.minionType = minionType;
         this.owner = owner;
-        this.region = region;
+        this.position = position;
         this.minionData = minionData;
         this.upgrades = upgrades;
     }
@@ -107,7 +108,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     }
 
     public Position getPosition() {
-        return this.region.getOrigin();
+        return this.position;
     }
 
     public void setLastActionTime(final LocalDateTime lastActionTime) {
@@ -128,5 +129,12 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     public Upgrades getUpgrades() {
         return this.upgrades;
+    }
+
+    public Region getRegion() {
+        final Region region = this.getUpgrades().getRange().toRegion(this.position);
+        Bukkit.getLogger().info("Region: " + region);
+        Bukkit.getLogger().info("Range: " + this.getUpgrades().getRange());
+        return region;
     }
 }
