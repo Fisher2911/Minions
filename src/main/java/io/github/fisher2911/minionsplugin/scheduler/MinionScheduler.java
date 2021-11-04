@@ -1,15 +1,16 @@
 package io.github.fisher2911.minionsplugin.scheduler;
 
+import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
+import io.github.fisher2911.minionsplugin.event.PositionEvent;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
-public class MinionScheduler<T extends BaseMinion<R>, R> {
+public class MinionScheduler<T extends BaseMinion<R>, R extends PositionEvent> {
 
     private final Queue<MinionTaskData<T, R>> minionQueue = new LinkedList<>();
 
@@ -49,7 +50,15 @@ public class MinionScheduler<T extends BaseMinion<R>, R> {
 
                 final T minion = taskData.getMinion();
 
-                if (minion.performAction(taskData.getData())) {
+                final R data = taskData.getData();
+
+                final Position position = data.getPosition();
+
+                if (!minion.isInRegion(position)) {
+                    continue;
+                }
+
+                if (minion.attemptAction(data, position)) {
                     continue;
                 }
 

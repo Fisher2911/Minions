@@ -11,10 +11,13 @@ import io.github.fisher2911.minionsplugin.lang.Placeholder;
 import io.github.fisher2911.minionsplugin.minion.Armor;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
+import io.github.fisher2911.minionsplugin.minion.food.FoodData;
+import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.minion.data.MinionData;
+import io.github.fisher2911.minionsplugin.upgrade.FoodPerActionUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.RangeUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.SpeedUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
@@ -32,7 +35,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -80,7 +83,7 @@ public class MinionPlaceListener implements Listener {
 
         final BlockMinion baseMinion = new FarmerMinion(
                 this.plugin,
-                LocalDateTime.now(),
+                Instant.now(),
                 id++,
                 player.getUniqueId(),
                 MinionType.BLOCK,
@@ -108,8 +111,14 @@ public class MinionPlaceListener implements Listener {
                                                 glow(true).build()).
                                         build()
                         ),
-                        name,
-                        0), Material.WHEAT, new Upgrades(new UpgradeData<>(1,
+                        new FoodData(
+                                new FoodGroup(
+                                     Map.of(Material.COOKED_CHICKEN, 1f)
+                                ),
+                                50
+                        ),
+                        name
+                ), Material.WHEAT, new Upgrades(new UpgradeData<>(1,
                 new SpeedUpgrade("test",
                         "test",
                         Map.of(1, 5f, 2, 1f),
@@ -140,7 +149,23 @@ public class MinionPlaceListener implements Listener {
                                                 StringUtils.parseStringToString(
                                                         "<green>" + "Cost: " + Placeholder.MONEY_COST))).
                                         build(),
-                                UpgradeType.RANGE_UPGRADE))));
+                                UpgradeType.RANGE_UPGRADE)),
+                new UpgradeData<>(1, new FoodPerActionUpgrade(
+                        "test",
+                        "test",
+                        Map.of(1, 2f,
+                                2, 1f),
+                        Map.of(1, new Cost(0, new ArrayList<>()),
+                                2, new Cost(5, new ArrayList<>())),
+                        ItemBuilder.from(Material.COOKED_CHICKEN).
+                                name(StringUtils.parseStringToString(
+                                        "<blue>" + "Level: " + Placeholder.LEVEL)).
+                                lore(List.of("",
+                                        StringUtils.parseStringToString(
+                                                "<green>" + "Cost: " + Placeholder.MONEY_COST))).
+                                build(),
+                        UpgradeType.FOOD_PER_ACTION)
+                )));
         baseMinion.place();
         this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);

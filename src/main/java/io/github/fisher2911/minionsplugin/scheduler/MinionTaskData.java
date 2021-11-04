@@ -1,9 +1,9 @@
 package io.github.fisher2911.minionsplugin.scheduler;
 
+import io.github.fisher2911.minionsplugin.event.PositionEvent;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
-import org.jetbrains.annotations.NotNull;
 
-public class MinionTaskData<T extends BaseMinion<R>, R> {
+public class MinionTaskData<T extends BaseMinion<R>, R extends PositionEvent> {
 
     private final T minion;
     private final R data;

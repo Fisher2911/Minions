@@ -26,6 +26,14 @@ items:
       - ""
       - "<green>Example Range Upgrade</green>"
     type: "RANGE_UPGRADE"
+  6:
+    material: COOKED_CHICKEN
+    amount: 1
+    name: "<green>Example Food Per Action Upgrade</green>"
+    lore:
+      - ""
+      - "<green>Example Food Per Action Upgrade</green>"
+    type: "FOOD_PER_ACTION_UPGRADE"
   13:
     material: ARROW
     amount: 1
@@ -48,6 +56,13 @@ actions:
     instructions:
       attempt-upgrade:
         - "RANGE_UPGRADE"
+  6:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      attempt-upgrade:
+        - "FOOD_PER_ACTION_UPGRADE"
   13:
     click-types:
       - RIGHT

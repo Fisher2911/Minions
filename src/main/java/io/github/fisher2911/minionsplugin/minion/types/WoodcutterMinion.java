@@ -3,7 +3,7 @@ package io.github.fisher2911.minionsplugin.minion.types;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.minion.data.MinionData;
 import io.github.fisher2911.minionsplugin.task.BlockBreakTask;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.Material;
@@ -11,7 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
@@ -34,7 +34,7 @@ public class WoodcutterMinion extends BlockMinion {
     }
 
     public WoodcutterMinion(final JavaPlugin plugin,
-                            final LocalDateTime lastActionTime,
+                            final Instant lastActionTime,
                             final long id,
                             final UUID owner,
                             final MinionType minionType,
@@ -46,18 +46,13 @@ public class WoodcutterMinion extends BlockMinion {
 
 
     @Override
-    public boolean performAction(final BlockChangedInWorldEvent event) {
-        if (!this.isPlaced() ||
-                this.isPerformingTask.get()) {
-            return true;
-        }
-
-        if (!this.canPerformAction()) {
-            return false;
+    public ActionResult performAction(final BlockChangedInWorldEvent event) {
+        if (this.isPerformingTask.get()) {
+            return ActionResult.FAIL;
         }
 
         if (event.getType() == BlockChangedInWorldEvent.Type.REMOVED) {
-            return true;
+            return ActionResult.NOT_POSSIBLE;
         }
 
         final Block block = event.getBlock();
@@ -65,7 +60,7 @@ public class WoodcutterMinion extends BlockMinion {
         final Position position = Position.fromBukkitLocation(block.getLocation());
 
         if (!allowedMaterials.contains(block.getType())) {
-            return true;
+            return ActionResult.NOT_POSSIBLE;
         }
 
         final BlockBreakTask task = new BlockBreakTask(
@@ -78,11 +73,11 @@ public class WoodcutterMinion extends BlockMinion {
                         brokenBlock.getDrops().toArray(new ItemStack[0])),
                 () -> {
                     this.isPerformingTask.set(false);
-                    this.setLastActionTime(LocalDateTime.now());
+                    this.setLastActionTime(Instant.now());
                 }
         );
         task.start();
         this.isPerformingTask.set(true);
-        return true;
+        return ActionResult.SUCCESS;
     }
 }

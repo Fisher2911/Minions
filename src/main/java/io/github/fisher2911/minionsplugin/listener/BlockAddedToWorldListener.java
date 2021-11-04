@@ -36,7 +36,10 @@ public class BlockAddedToWorldListener implements Listener {
 
         final Position position = Position.fromBukkitLocation(block.getLocation());
 
-        final BlockChangedInWorldEvent blockChangedInWorldEvent = new BlockChangedInWorldEvent(block, BlockChangedInWorldEvent.Type.ADDED);
+        final BlockChangedInWorldEvent blockChangedInWorldEvent = new BlockChangedInWorldEvent(
+                position,
+                block,
+                BlockChangedInWorldEvent.Type.ADDED);
 
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
@@ -51,13 +54,13 @@ public class BlockAddedToWorldListener implements Listener {
                 optionalBlockMinionMinionPositions.ifPresent(chunkPositions ->
                         chunkPositions.getMinionMap().values().forEach(
                                 minion -> {
-
-                                    if (minion.canPerformAction()) {
-                                        minion.performAction(blockChangedInWorldEvent);
+                                    if (!minion.isInRegion(position)) {
                                         return;
                                     }
 
-                                    if (!minion.getRegion().contains(position)) {
+                                    if (minion.attemptAction(
+                                            blockChangedInWorldEvent, position
+                                    )) {
                                         return;
                                     }
 

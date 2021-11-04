@@ -10,10 +10,15 @@ public class Upgrades {
 
     private final UpgradeData<SpeedUpgrade, Float> speedUpgrade;
     private final UpgradeData<RangeUpgrade, Range> rangeUpgrade;
+    private final UpgradeData<FoodPerActionUpgrade, Float> foodPerActionUpgrade;
 
-    public Upgrades(final UpgradeData<SpeedUpgrade, Float> speedUpgrade, final UpgradeData<RangeUpgrade, Range> rangeUpgrade) {
+    public Upgrades(
+            final UpgradeData<SpeedUpgrade, Float> speedUpgrade,
+            final UpgradeData<RangeUpgrade, Range> rangeUpgrade,
+            final UpgradeData<FoodPerActionUpgrade, Float> foodPerActionUpgrade) {
         this.speedUpgrade = speedUpgrade;
         this.rangeUpgrade = rangeUpgrade;
+        this.foodPerActionUpgrade = foodPerActionUpgrade;
     }
 
     public UpgradeData<SpeedUpgrade, Float> getSpeedUpgrade() {
@@ -24,6 +29,10 @@ public class Upgrades {
         return this.rangeUpgrade;
     }
 
+    public UpgradeData<FoodPerActionUpgrade, Float> getFoodPerActionUpgrade() {
+        return this.foodPerActionUpgrade;
+    }
+
     public float getSpeed() {
         return this.speedUpgrade.getValue();
     }
@@ -32,10 +41,15 @@ public class Upgrades {
         return this.rangeUpgrade.getValue();
     }
 
+    public float getFoodPerAction() {
+        return this.foodPerActionUpgrade.getValue();
+    }
+
     public UpgradeData<?, ?> getUpgradeData(final String type) {
         return switch (type) {
             case UpgradeType.SPEED_UPGRADE -> this.speedUpgrade;
             case UpgradeType.RANGE_UPGRADE -> this.rangeUpgrade;
+            case UpgradeType.FOOD_PER_ACTION -> this.foodPerActionUpgrade;
             default -> null;
         };
     }

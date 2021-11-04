@@ -5,25 +5,29 @@ import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.keys.Keys;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.minion.data.MinionData;
+import io.github.fisher2911.minionsplugin.minion.food.FoodData;
+import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
+import io.github.fisher2911.minionsplugin.user.MinionUser;
 import io.github.fisher2911.minionsplugin.world.Region;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
 public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     protected final JavaPlugin plugin;
-    private LocalDateTime lastActionTime;
+    private Instant lastActionTime;
     protected ArmorStand minion;
     protected final long id;
     protected final UUID owner;
@@ -34,7 +38,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     public BaseMinion(
             final JavaPlugin plugin,
-            final LocalDateTime lastActionTime,
+            final Instant lastActionTime,
             final long id,
             final UUID owner,
             final MinionType minionType,
@@ -51,7 +55,35 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
         this.upgrades = upgrades;
     }
 
-    public abstract boolean performAction(final T t);
+    // Performs action even if still on cooldown
+    protected abstract ActionResult performAction(final T t);
+
+    // Takes into account things like food, time passed, in region
+    public boolean attemptAction(final T t, final Position position) {
+        final FoodData foodData = this.minionData.getFoodData();
+
+        if (!this.isPlaced()) {
+            return false;
+        }
+
+        if (!foodData.hasFood()) {
+            return false;
+        }
+
+        if (!this.enoughTimePassed()) {
+            return false;
+        }
+
+        if (!this.isInRegion(position)) {
+            return false;
+        }
+
+        foodData.decreaseFood(this.upgrades.getFoodPerAction());
+        this.performAction(t);
+        Bukkit.broadcastMessage("Decreased food by: " + this.upgrades.getFoodPerAction());
+        this.setLastActionTime(Instant.now());
+        return true;
+    }
 
     public boolean isPlaced() {
         return this.minion != null && this.minion.isValid();
@@ -111,17 +143,21 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
         return this.position;
     }
 
-    public void setLastActionTime(final LocalDateTime lastActionTime) {
+    public void setLastActionTime(final Instant lastActionTime) {
         this.lastActionTime = lastActionTime;
     }
 
-    public LocalDateTime getLastActionTime() {
+    public Instant getLastActionTime() {
         return this.lastActionTime;
     }
 
-    public boolean canPerformAction() {
+    public boolean isInRegion(final Position position) {
+        return this.getRegion().contains(position);
+    }
+
+    public boolean enoughTimePassed() {
         final float speed = this.upgrades.getSpeed();
-        return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speed;
+        return Duration.between(this.lastActionTime, Instant.now()).getSeconds() >= speed;
     }
 
     public Upgrades getUpgrades() {
@@ -129,7 +165,14 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     }
 
     public Region getRegion() {
-        final Region region = this.getUpgrades().getRange().toRegion(this.position);
-        return region;
+        return this.getUpgrades().getRange().toRegion(this.position);
+    }
+
+    // todo - change message
+    public FeedResponse feed(final MinionUser feeder, final ItemStack fedItem) {
+        final FoodData foodData = this.minionData.getFoodData();
+        final FeedResponse feedResponse = foodData.feed(fedItem.getType());
+        feeder.ifOnline(player -> player.sendMessage(feedResponse.toString()));
+        return feedResponse;
     }
 }
