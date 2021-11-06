@@ -7,6 +7,7 @@ import io.github.fisher2911.minionsplugin.gui.ClickAction;
 import io.github.fisher2911.minionsplugin.gui.ClickActions;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
+import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import org.bukkit.Bukkit;
@@ -109,9 +110,18 @@ public class ActionParser {
                 case ATTEMPT_UPGRADE -> addAllClickActions(
                         clickActions,
                         instructions,
-                        instruction -> createAttemptUpgradeAction(
-                                instruction, clickTypes, slot
-                        )
+                        instruction -> {
+
+                            try {
+                                final UpgradeType upgradeType = UpgradeType.valueOf(instruction);
+
+                                return createAttemptUpgradeAction(
+                                        upgradeType, clickTypes, slot
+                                );
+                            } catch (final IllegalArgumentException ignored) {
+                                return ClickAction.none();
+                            }
+                        }
                 );
             }
         }
@@ -167,7 +177,7 @@ public class ActionParser {
     }
 
     private static ClickAction createAttemptUpgradeAction(
-            final String upgradeType,
+            final UpgradeType upgradeType,
             final Set<ClickType> clickTypes,
             final int slot) {
 
@@ -181,17 +191,26 @@ public class ActionParser {
                 return;
             }
 
-            final String type = typeItem.getType();
 
-            if (!upgradeType.equals(type)) {
-                user.ifOnline(player -> player.sendMessage(upgradeType + " " + type));
-                return;
-            }
+            try {
+                final String stringType = typeItem.getType();
 
-            final Upgrades upgrades = menu.getMinion().getUpgrades();
+                if (stringType == null) {
+                    return;
+                }
 
-            upgrades.attemptUpgrade(type, menu.getGuiOwner());
-            menu.getGuiOwner().ifOnline(player -> player.sendMessage("Attempted Upgrade"));
+                final UpgradeType type = UpgradeType.valueOf(stringType);
+
+                if (!upgradeType.equals(type)) {
+                    user.ifOnline(player -> player.sendMessage(upgradeType + " " + type));
+                    return;
+                }
+
+                final Upgrades upgrades = menu.getMinion().getUpgrades();
+
+                upgrades.attemptUpgrade(type, menu.getGuiOwner());
+                menu.getGuiOwner().ifOnline(player -> player.sendMessage("Attempted Upgrade"));
+            } catch (final IllegalArgumentException ignored) {}
         });
     }
 

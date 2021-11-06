@@ -4,7 +4,6 @@ import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
-import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -31,9 +30,8 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
                         final MinionType minionType,
                         final Position position,
                         final MinionData minionData,
-                        final Material cropType,
-                        final Upgrades upgrades) {
-        super(plugin, lastActionTime, id, owner, minionType, position, minionData, upgrades);
+                        final Material cropType) {
+        super(plugin, lastActionTime, id, owner, minionType, position, minionData);
         this.cropType = cropType;
         this.checkDirtPositions();
     }

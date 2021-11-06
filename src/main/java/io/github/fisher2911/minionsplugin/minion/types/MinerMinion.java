@@ -4,7 +4,6 @@ import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
-import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -23,9 +22,8 @@ public class MinerMinion extends BlockMinion {
                        final UUID owner,
                        final MinionType minionType,
                        final Position position,
-                       final MinionData minionData,
-                       final Upgrades upgrades) {
-        super(plugin, lastActionTime, id, owner, minionType, position, minionData, upgrades);
+                       final MinionData minionData) {
+        super(plugin, lastActionTime, id, owner, minionType, position, minionData);
     }
 
     @Override

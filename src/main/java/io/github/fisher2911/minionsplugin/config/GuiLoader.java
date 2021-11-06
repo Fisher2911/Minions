@@ -32,16 +32,17 @@ public class GuiLoader {
         final File file = Path.of(this.plugin.getDataFolder().getPath(), path).toFile();
 
         if (!file.exists()) {
-            file.getParentFile().mkdirs();
-            final String first = path[0];
-
-            if (path.length <= 1) {
-                this.plugin.saveResource(first, false);
-            } else {
-                final String[] rest = new String[path.length - 1];
-                System.arraycopy(path, 1, rest, 0, path.length - 1);
-                this.plugin.saveResource(Path.of(first, rest).toString(), false);
-            }
+//            file.getParentFile().mkdirs();
+//            final String first = path[0];
+//
+//            if (path.length <= 1) {
+//                this.plugin.saveResource(first, false);
+//            } else {
+//                final String[] rest = new String[path.length - 1];
+//                System.arraycopy(path, 1, rest, 0, path.length - 1);
+//                this.plugin.saveResource(Path.of(first, rest).toString(), false);
+//            }
+            return;
         }
 
         final YamlConfigurationLoader loader = YamlConfigurationLoader.

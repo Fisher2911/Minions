@@ -1,5 +1,8 @@
 package io.github.fisher2911.minionsplugin.upgrade;
 
+import io.github.fisher2911.minionsplugin.upgrade.type.FloatUpgrade;
+import io.github.fisher2911.minionsplugin.upgrade.type.RangeUpgrade;
+import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import io.github.fisher2911.minionsplugin.world.Range;
 
@@ -8,20 +11,26 @@ import io.github.fisher2911.minionsplugin.world.Range;
  */
 public class Upgrades {
 
-    private final UpgradeData<SpeedUpgrade, Float> speedUpgrade;
+    private final String id;
+    private final UpgradeData<FloatUpgrade, Float> speedUpgrade;
     private final UpgradeData<RangeUpgrade, Range> rangeUpgrade;
-    private final UpgradeData<FoodPerActionUpgrade, Float> foodPerActionUpgrade;
+    private final UpgradeData<FloatUpgrade, Float> foodPerActionUpgrade;
+    private final UpgradeData<FloatUpgrade, Float> maxFoodUpgrade;
 
     public Upgrades(
-            final UpgradeData<SpeedUpgrade, Float> speedUpgrade,
+            final String id,
+            final UpgradeData<FloatUpgrade, Float> speedUpgrade,
             final UpgradeData<RangeUpgrade, Range> rangeUpgrade,
-            final UpgradeData<FoodPerActionUpgrade, Float> foodPerActionUpgrade) {
+            final UpgradeData<FloatUpgrade, Float> foodPerActionUpgrade,
+            final UpgradeData<FloatUpgrade, Float> maxFoodUpgrade) {
+        this.id = id;
         this.speedUpgrade = speedUpgrade;
         this.rangeUpgrade = rangeUpgrade;
         this.foodPerActionUpgrade = foodPerActionUpgrade;
+        this.maxFoodUpgrade = maxFoodUpgrade;
     }
 
-    public UpgradeData<SpeedUpgrade, Float> getSpeedUpgrade() {
+    public UpgradeData<FloatUpgrade, Float> getSpeedUpgrade() {
         return this.speedUpgrade;
     }
 
@@ -29,8 +38,12 @@ public class Upgrades {
         return this.rangeUpgrade;
     }
 
-    public UpgradeData<FoodPerActionUpgrade, Float> getFoodPerActionUpgrade() {
+    public UpgradeData<FloatUpgrade, Float> getFoodPerActionUpgrade() {
         return this.foodPerActionUpgrade;
+    }
+
+    public UpgradeData<FloatUpgrade, Float> getMaxFoodUpgrade() {
+        return this.maxFoodUpgrade;
     }
 
     public float getSpeed() {
@@ -45,16 +58,24 @@ public class Upgrades {
         return this.foodPerActionUpgrade.getValue();
     }
 
-    public UpgradeData<?, ?> getUpgradeData(final String type) {
+    public float getMaxFood() {
+        return this.maxFoodUpgrade.getValue();
+    }
+
+    public UpgradeData<?, ?> getUpgradeData(final UpgradeType type) {
         return switch (type) {
-            case UpgradeType.SPEED_UPGRADE -> this.speedUpgrade;
-            case UpgradeType.RANGE_UPGRADE -> this.rangeUpgrade;
-            case UpgradeType.FOOD_PER_ACTION -> this.foodPerActionUpgrade;
-            default -> null;
+            case SPEED_UPGRADE -> this.speedUpgrade;
+            case RANGE_UPGRADE -> this.rangeUpgrade;
+            case FOOD_PER_ACTION_UPGRADE -> this.foodPerActionUpgrade;
+            case MAX_FOOD_UPGRADE -> this.maxFoodUpgrade;
         };
     }
 
-    public void attemptUpgrade(final String type, final MinionUser user) {
+    public void attemptUpgrade(final UpgradeType type, final MinionUser user) {
         this.getUpgradeData(type).attemptUpgrade(user);
+    }
+
+    public String getId() {
+        return this.id;
     }
 }

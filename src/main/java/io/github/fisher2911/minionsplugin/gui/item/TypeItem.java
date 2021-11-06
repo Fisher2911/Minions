@@ -1,7 +1,10 @@
 package io.github.fisher2911.minionsplugin.gui.item;
 
 import dev.triumphteam.gui.guis.GuiItem;
+import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 public class TypeItem {
 
@@ -19,5 +22,14 @@ public class TypeItem {
 
     public GuiItem getGuiItem() {
         return this.guiItem;
+    }
+
+    public GuiItem getGuiItemWithPlaceholders(final Map<String, String> placeholders) {
+        return new GuiItem(
+                ItemBuilder.from(this.guiItem.getItemStack()).
+                        namePlaceholders(placeholders).
+                        lorePlaceholders(placeholders).
+                        build()
+        );
     }
 }

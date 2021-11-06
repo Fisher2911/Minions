@@ -22,18 +22,8 @@ public class FoodData {
         return this.foodGroup.getFoodValue(material);
     }
 
-    /**
-     *
-     * @param material Material being fed
-     * @return the worth of the food
-     */
-    public FeedResponse feed(final Material material) {
-        final float foodValue = this.getFoodWorth(material);
-        if (foodValue == 0) {
-            return FeedResponse.CANNOT_FEED;
-        }
-        this.foodLevel += foodValue;
-        return FeedResponse.FED;
+    public void setFood(final float foodLevel) {
+        this.foodLevel = foodLevel;
     }
 
     public void decreaseFood(final float amount) {

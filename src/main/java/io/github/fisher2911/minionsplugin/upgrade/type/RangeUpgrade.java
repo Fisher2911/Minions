@@ -1,6 +1,7 @@
-package io.github.fisher2911.minionsplugin.upgrade;
+package io.github.fisher2911.minionsplugin.upgrade.type;
 
 import io.github.fisher2911.fishcore.economy.Cost;
+import io.github.fisher2911.minionsplugin.upgrade.MinionUpgrade;
 import io.github.fisher2911.minionsplugin.world.Range;
 import org.bukkit.inventory.ItemStack;
 
@@ -14,7 +15,7 @@ public class RangeUpgrade extends MinionUpgrade<Range> {
             final Map<Integer, Range> levelDataMap,
             final Map<Integer, Cost> levelCostMap,
             final ItemStack guiItemStack,
-            final String type) {
+            final UpgradeType type) {
         super(id, displayName, levelDataMap, levelCostMap, guiItemStack, type);
     }
 }

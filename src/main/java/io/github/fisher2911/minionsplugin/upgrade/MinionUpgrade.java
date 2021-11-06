@@ -7,6 +7,7 @@ import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.lang.MinionMessages;
 import io.github.fisher2911.minionsplugin.lang.Placeholder;
+import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -16,9 +17,8 @@ public abstract class MinionUpgrade<T> extends Upgrade<T> {
     /**
      * Used to represent the upgrade in a GUI
      */
-
     protected final ItemStack guiItemStack;
-    protected final String type;
+    protected final UpgradeType type;
 
     public MinionUpgrade(
             final String id,
@@ -26,7 +26,7 @@ public abstract class MinionUpgrade<T> extends Upgrade<T> {
             final Map<Integer, T> levelDataMap,
             final Map<Integer, Cost> levelCostMap,
             final ItemStack guiItemStack,
-            final String type) {
+            final UpgradeType type) {
         super(id, displayName, levelDataMap, levelCostMap);
         this.guiItemStack = guiItemStack;
         this.type = type;
@@ -55,7 +55,7 @@ public abstract class MinionUpgrade<T> extends Upgrade<T> {
                 build();
     }
 
-    public String getType() {
+    public UpgradeType getType() {
         return this.type;
     }
 }

@@ -6,12 +6,11 @@ import io.github.fisher2911.minionsplugin.keys.Keys;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
-import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
+import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import io.github.fisher2911.minionsplugin.world.Region;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
@@ -34,7 +33,6 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     protected MinionType minionType;
     protected final Position position;
     private final MinionData minionData;
-    private final Upgrades upgrades;
 
     public BaseMinion(
             final JavaPlugin plugin,
@@ -43,8 +41,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
             final UUID owner,
             final MinionType minionType,
             final Position position,
-            final MinionData minionData,
-            final Upgrades upgrades) {
+            final MinionData minionData) {
         this.plugin = plugin;
         this.lastActionTime = lastActionTime;
         this.id = id;
@@ -52,7 +49,6 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
         this.owner = owner;
         this.position = position;
         this.minionData = minionData;
-        this.upgrades = upgrades;
     }
 
     // Performs action even if still on cooldown
@@ -78,9 +74,8 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
             return false;
         }
 
-        foodData.decreaseFood(this.upgrades.getFoodPerAction());
+        foodData.decreaseFood(this.getUpgrades().getFoodPerAction());
         this.performAction(t);
-        Bukkit.broadcastMessage("Decreased food by: " + this.upgrades.getFoodPerAction());
         this.setLastActionTime(Instant.now());
         return true;
     }
@@ -110,7 +105,6 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
             entity.setGravity(false);
             entity.setInvulnerable(true);
             this.minionData.getInventory().setArmor(entity);
-
         });
     }
 
@@ -156,12 +150,8 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     }
 
     public boolean enoughTimePassed() {
-        final float speed = this.upgrades.getSpeed();
+        final float speed = this.getUpgrades().getSpeed();
         return Duration.between(this.lastActionTime, Instant.now()).getSeconds() >= speed;
-    }
-
-    public Upgrades getUpgrades() {
-        return this.upgrades;
     }
 
     public Region getRegion() {
@@ -170,9 +160,20 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     // todo - change message
     public FeedResponse feed(final MinionUser feeder, final ItemStack fedItem) {
-        final FoodData foodData = this.minionData.getFoodData();
-        final FeedResponse feedResponse = foodData.feed(fedItem.getType());
+        final FeedResponse feedResponse = this.minionData.feed(fedItem);
         feeder.ifOnline(player -> player.sendMessage(feedResponse.toString()));
         return feedResponse;
+    }
+
+    public Upgrades getUpgrades() {
+        return this.minionData.getUpgrades();
+    }
+
+    public UUID getOwner() {
+        return this.owner;
+    }
+
+    public MinionData getMinionData() {
+        return this.minionData;
     }
 }
