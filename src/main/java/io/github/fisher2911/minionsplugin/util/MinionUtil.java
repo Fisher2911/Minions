@@ -5,11 +5,10 @@ import io.github.fisher2911.minionsplugin.minion.MinionType;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.jetbrains.annotations.NotNull;
 
 public class MinionUtil {
 
-    public static long getId(final @NotNull ArmorStand armorStand) {
+    public static long getId(final ArmorStand armorStand) {
         final PersistentDataContainer container = armorStand.getPersistentDataContainer();
 
         final Long id = container.get(Keys.MINION_KEY, PersistentDataType.LONG);
@@ -17,7 +16,7 @@ public class MinionUtil {
         return id == null ? -1 : id;
     }
 
-    public static @NotNull MinionType getMinionType(final @NotNull ArmorStand armorStand) {
+    public static MinionType getMinionType(final ArmorStand armorStand) {
         final PersistentDataContainer container = armorStand.getPersistentDataContainer();
 
         try {

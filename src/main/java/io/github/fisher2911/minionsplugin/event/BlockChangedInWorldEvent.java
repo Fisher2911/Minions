@@ -1,11 +1,12 @@
 package io.github.fisher2911.minionsplugin.event;
 
+import io.github.fisher2911.fishcore.world.Position;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 // Used for block minions actions
-public class BlockChangedInWorldEvent extends Event {
+public class BlockChangedInWorldEvent extends PositionEvent {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
@@ -24,7 +25,11 @@ public class BlockChangedInWorldEvent extends Event {
     // Whether it is added or removed from the world
     private final Type type;
 
-    public BlockChangedInWorldEvent(final Block block, final Type type) {
+    public BlockChangedInWorldEvent(
+            final Position position,
+            final Block block,
+            final Type type) {
+        super(position);
         this.block = block;
         this.type = type;
     }

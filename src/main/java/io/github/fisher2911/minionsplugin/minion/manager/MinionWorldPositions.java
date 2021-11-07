@@ -3,7 +3,6 @@ package io.github.fisher2911.minionsplugin.minion.manager;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,9 +11,12 @@ import java.util.UUID;
 
 public class MinionWorldPositions<T extends BaseMinion<?>> {
 
+    /**
+     * Map of world UUID to {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions}
+     */
     private final Map<UUID, MinionChunkPositions<T>> positionsMap;
 
-    public MinionWorldPositions(final @NotNull Map<UUID, MinionChunkPositions<T>> positionsMap) {
+    public MinionWorldPositions(final Map<UUID, MinionChunkPositions<T>> positionsMap) {
         this.positionsMap = positionsMap;
     }
 
@@ -22,7 +24,11 @@ public class MinionWorldPositions<T extends BaseMinion<?>> {
         this(new HashMap<>());
     }
 
-    public void set(final @NotNull T minion) {
+    /**
+     *
+     * @param minion Sets the minion in a {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions}
+     */
+    public void set(final T minion) {
         final Position position = minion.getPosition();
 
         final Optional<World> optional = position.getWorld();
@@ -54,19 +60,40 @@ public class MinionWorldPositions<T extends BaseMinion<?>> {
         optionalChunkPositions.get().set(position, minion);
     }
 
-    public Optional<MinionChunkPositions<T>> get(final @NotNull World world) {
+    /**
+     *
+     * @param world the world the {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} is in
+     * @return The {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} in the world
+     */
+    public Optional<MinionChunkPositions<T>> get(final World world) {
         return this.get(world.getUID());
     }
 
-    public Optional<MinionChunkPositions<T>> get(final @NotNull UUID worldUUID) {
+    /**
+     *
+     * @param worldUUID the world uuid the {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} is in
+     * @return The {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} in the world
+     */
+    public Optional<MinionChunkPositions<T>> get(final UUID worldUUID) {
         return Optional.ofNullable(this.positionsMap.get(worldUUID));
     }
 
-    public Optional<MinionChunkPositions<T>> remove(final @NotNull World world) {
+    /**
+     *
+     * @param world world {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} are being removed from
+     * @return the {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} removed
+     */
+    public Optional<MinionChunkPositions<T>> remove(final World world) {
         return this.remove(world.getUID());
     }
 
-    public Optional<MinionChunkPositions<T>> remove(final @NotNull UUID worldUUID) {
+
+    /**
+     *
+     * @param worldUUID {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} are being removed from
+     * @return the {@link io.github.fisher2911.minionsplugin.minion.manager.MinionChunkPositions} removed
+     */
+    public Optional<MinionChunkPositions<T>> remove(final UUID worldUUID) {
         return Optional.ofNullable(this.positionsMap.remove(worldUUID));
     }
 

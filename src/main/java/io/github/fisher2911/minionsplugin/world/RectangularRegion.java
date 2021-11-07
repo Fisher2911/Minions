@@ -2,7 +2,6 @@ package io.github.fisher2911.minionsplugin.world;
 
 import io.github.fisher2911.fishcore.world.Position;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -10,42 +9,53 @@ import java.util.Set;
 
 public class RectangularRegion implements Region {
 
+    /**
+     * The original point of the region, not necessarily the center
+     */
     private final Position origin;
+
+    /**
+     * The minimum point of the region
+     */
     private final Position min;
+
+    /**
+     * The maximum point of the region
+     */
     private final Position max;
 
-    public RectangularRegion(final @NotNull Position origin, final @NotNull Position min, final @NotNull Position max) {
+    public RectangularRegion(final Position origin, final Position min, final Position max) {
         this.origin = origin;
         this.min = min;
         this.max = max;
     }
 
-    public RectangularRegion(final @NotNull World world, final @NotNull Position origin,
+    public RectangularRegion(final World world, final Position origin,
                              final double minX, final double minY, final double minZ,
                              final double maxX, final double maxY, final double maxZ) {
         this(origin, new Position(world, minX, minY, minZ), new Position(world, maxX, maxY, maxZ));
     }
 
     @Override
-    public boolean contains(final @NotNull Position position) {
+    public boolean contains(final Position position) {
         return this.contains(position,
                 this.getMinX(), this.getMinY(), this.getMinZ(),
                 this.getMaxX(), this.getMaxY(), this.getMaxZ());
     }
 
     @Override
-    public boolean onBorder(final @NotNull Position position) {
+    public boolean onBorder(final Position position) {
         return false;
     }
 
     @Override
-    public boolean within(final @NotNull Position position) {
+    public boolean within(final Position position) {
         return this.contains(position,
                 this.getMinX() + 1, this.getMinY() + 1, this.getMinZ() + 1,
                 this.getMaxX() - 1, this.getMaxY() - 1, this.getMaxZ() - 1);
     }
 
-    private boolean contains(final @NotNull Position position,
+    private boolean contains(final Position position,
                              final double minX,
                              final double minY,
                              final double minZ,
@@ -63,7 +73,7 @@ public class RectangularRegion implements Region {
     }
 
     @Override
-    public @NotNull Position getOrigin() {
+    public Position getOrigin() {
         return this.origin;
     }
 
@@ -91,8 +101,16 @@ public class RectangularRegion implements Region {
         return this.max.getZ();
     }
 
+
+    /**
+     *
+     * @param minY start y level the lowest y level blocks are counted in
+     * @param maxY end y level the highest y level blocks are counted in
+     * @return a Set of all {@link io.github.fisher2911.fishcore.world.Position}s in the region,
+     * taking into account the minY and maxY
+     */
     @Override
-    public @NotNull Set<Position> getAllPositionsInY(final int minY, final int maxY) {
+    public Set<Position> getAllPositionsInY(final int minY, final int maxY) {
         final Set<Position> positions = new HashSet<>();
 
         final Optional<World> worldOptional = this.origin.getWorld();
@@ -113,5 +131,19 @@ public class RectangularRegion implements Region {
         }
 
         return positions;
+    }
+
+    @Override
+    public Set<Position> getAllPositions() {
+        return this.getAllPositionsInY((int) this.getMinY(), (int) this.getMaxY());
+    }
+
+    @Override
+    public String toString() {
+        return "RectangularRegion{" +
+                "origin=" + this.origin +
+                ", min=" + this.min +
+                ", max=" + this.max +
+                '}';
     }
 }

@@ -2,18 +2,17 @@ package io.github.fisher2911.minionsplugin.minion.types;
 
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
-import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
-import io.github.fisher2911.minionsplugin.world.Region;
+import io.github.fisher2911.minionsplugin.minion.MinionType;
+import io.github.fisher2911.minionsplugin.minion.data.MinionData;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.UUID;
@@ -24,23 +23,25 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
     private final Queue<Position> dirtPositions = new LinkedList<>();
     private final LinkedList<Position> farmlandPositions = new LinkedList<>();
 
-    public FarmerMinion(final @NotNull JavaPlugin plugin,
-                        final @NotNull LocalDateTime lastActionTime,
-                        final long id, final UUID owner,
-                        final @NotNull Region region,
-                        final @NotNull MinionData minionData,
-                        final @NotNull Material cropType,
-                        final @NotNull Upgrades upgrades) {
-        super(plugin, lastActionTime, id, owner, region, minionData, upgrades);
+    public FarmerMinion(final JavaPlugin plugin,
+                        final Instant lastActionTime,
+                        final long id,
+                        final UUID owner,
+                        final MinionType minionType,
+                        final Position position,
+                        final MinionData minionData,
+                        final Material cropType) {
+        super(plugin, lastActionTime, id, owner, minionType, position, minionData);
         this.cropType = cropType;
         this.checkDirtPositions();
     }
 
     private void checkDirtPositions() {
-        final int y = (int) this.region.getMinY();
-        for (Position position : this.region.getAllPositionsInY(
+        final int y = (int) this.position.getY();
+        for (Position position : this.getRegion().getAllPositionsInY(
                 y, y
         )) {
+            Bukkit.broadcastMessage("Location is " + position.toBukkitLocation().toString());
             final Block block = position.getBlock();
             switch (block.getType()) {
                 case DIRT -> this.dirtPositions.add(position);
@@ -51,10 +52,6 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
 
     @Override
     public void run() {
-        if (!this.canPerformAction()) {
-            return;
-        }
-
         final Position dirt = this.dirtPositions.poll();
 
         if (dirt == null) {
@@ -65,54 +62,71 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
             }
 
             final Block block = farmland.getBlock();
-            if (!this.performAction(new BlockChangedInWorldEvent(
-                    block, BlockChangedInWorldEvent.Type.ADDED
-            ))) {
-             return;
+            final ActionResult result = this.performAction(
+                    new BlockChangedInWorldEvent(
+                            this.position,
+                            block,
+                            BlockChangedInWorldEvent.Type.ADDED
+                    ));
+            if (result == ActionResult.NOT_POSSIBLE ||
+                    result == ActionResult.FAIL) {
+                return;
             }
             this.farmlandPositions.add(this.farmlandPositions.poll());
             return;
         }
 
         final Block block = dirt.getBlock();
+
+        if (block.getType() != Material.DIRT) {
+            if (this.dirtPositions.peek() != null) {
+                this.run();
+            }
+            return;
+        }
+
         block.setType(Material.FARMLAND);
         this.farmlandPositions.addFirst(dirt);
-        this.setLastActionTime(LocalDateTime.now());
+        this.setLastActionTime(Instant.now());
     }
 
     @Override
-    public boolean performAction(final @NotNull BlockChangedInWorldEvent event) {
+    public ActionResult performAction(final BlockChangedInWorldEvent event) {
         final Block block = event.getBlock();
         final Position position = Position.fromBukkitLocation(block.getLocation());
+
+        if (!this.getRegion().contains(position)) {
+            return ActionResult.NOT_POSSIBLE;
+        }
 
         if (event.getType() == BlockChangedInWorldEvent.Type.REMOVED) {
             switch (block.getType()) {
                 case DIRT -> this.dirtPositions.remove(position);
                 case FARMLAND -> this.farmlandPositions.remove(position);
             }
-            return true;
+            return ActionResult.FAIL;
         }
 
         if (block.getType() != Material.FARMLAND) {
             if (block.getType() != Material.DIRT) {
-                return true;
+                return ActionResult.NOT_POSSIBLE;
             }
 
             this.dirtPositions.add(position);
             this.run();
-            return true;
+            return ActionResult.FAIL;
         }
 
-        if (!this.canPerformAction()) {
-            return false;
+        if (!this.enoughTimePassed()) {
+            return ActionResult.FAIL;
         }
 
         final Block above = block.getRelative(BlockFace.UP);
 
         if (above.getType().isAir()) {
             above.setType(this.cropType);
-            this.setLastActionTime(LocalDateTime.now());
-            return true;
+            this.setLastActionTime(Instant.now());
+            return ActionResult.SUCCESS;
         }
 
         final BlockData blockData = above.getBlockData();
@@ -121,13 +135,15 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
             final int maxAge = ageable.getMaximumAge();
             final int age = ageable.getAge();
             if (age == maxAge) {
-                return true;
+                return ActionResult.NOT_POSSIBLE;
             }
 
             ageable.setAge(age + 1);
             above.setBlockData(ageable);
-            this.setLastActionTime(LocalDateTime.now());
+            this.setLastActionTime(Instant.now());
+            return ActionResult.SUCCESS;
         }
-        return true;
+
+        return ActionResult.NOT_POSSIBLE;
     }
 }

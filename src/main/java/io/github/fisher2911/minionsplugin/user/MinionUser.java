@@ -8,6 +8,9 @@ import java.util.UUID;
 
 public class MinionUser extends BaseUser {
 
+    /**
+     * A set of all minions the user owns
+     */
     private final Set<Long> ownedMinions;
 
     public MinionUser(final UUID uuid, final String name, final Set<Long> ownedMinions) {

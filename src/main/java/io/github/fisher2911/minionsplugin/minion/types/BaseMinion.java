@@ -3,56 +3,88 @@ package io.github.fisher2911.minionsplugin.minion.types;
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.keys.Keys;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
+import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import io.github.fisher2911.minionsplugin.minion.MinionType;
+import io.github.fisher2911.minionsplugin.minion.data.MinionData;
+import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
+import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
+import io.github.fisher2911.minionsplugin.user.MinionUser;
 import io.github.fisher2911.minionsplugin.world.Region;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ArmorStand;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.UUID;
 
-public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
+public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     protected final JavaPlugin plugin;
-    private LocalDateTime lastActionTime;
+    private Instant lastActionTime;
     protected ArmorStand minion;
     protected final long id;
     protected final UUID owner;
-    protected final Region region;
+    protected MinionType minionType;
+    protected final Position position;
     private final MinionData minionData;
-    private final Upgrades upgrades;
 
-    public BaseMinion(final @NotNull JavaPlugin plugin,
-                      final @NotNull LocalDateTime lastActionTime,
-                      final long id,
-                      final @NotNull UUID owner,
-                      final @NotNull Region region,
-                      final @NotNull MinionData minionData,
-                      final @NotNull Upgrades upgrades) {
+    public BaseMinion(
+            final JavaPlugin plugin,
+            final Instant lastActionTime,
+            final long id,
+            final UUID owner,
+            final MinionType minionType,
+            final Position position,
+            final MinionData minionData) {
         this.plugin = plugin;
         this.lastActionTime = lastActionTime;
         this.id = id;
+        this.minionType = minionType;
         this.owner = owner;
-        this.region = region;
+        this.position = position;
         this.minionData = minionData;
-        this.upgrades = upgrades;
     }
 
-    public abstract boolean performAction(final T t);
+    // Performs action even if still on cooldown
+    protected abstract ActionResult performAction(final T t);
+
+    // Takes into account things like food, time passed, in region
+    public boolean attemptAction(final T t, final Position position) {
+        final FoodData foodData = this.minionData.getFoodData();
+
+        if (!this.isPlaced()) {
+            return false;
+        }
+
+        if (!foodData.hasFood()) {
+            return false;
+        }
+
+        if (!this.enoughTimePassed()) {
+            return false;
+        }
+
+        if (!this.isInRegion(position)) {
+            return false;
+        }
+
+        foodData.decreaseFood(this.getUpgrades().getFoodPerAction());
+        this.performAction(t);
+        this.setLastActionTime(Instant.now());
+        return true;
+    }
 
     public boolean isPlaced() {
         return this.minion != null && this.minion.isValid();
     }
 
-    public void place()  {
+    public void place() {
         final Location location = this.getPosition().toBukkitLocation();
 
         final World world = location.getWorld();
@@ -62,15 +94,17 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         }
 
         this.minion = world.spawn(location, ArmorStand.class, entity -> {
-           entity.getPersistentDataContainer().set(Keys.MINION_KEY, PersistentDataType.LONG, this.id);
-           entity.setCustomName(this.minionData.getName());
-           entity.setCustomNameVisible(true);
-           entity.setSmall(true);
-           entity.setArms(true);
-           entity.setGravity(false);
-           entity.setInvulnerable(true);
-           this.minionData.getInventory().setArmor(entity);
+            final PersistentDataContainer container = entity.getPersistentDataContainer();
+            container.set(Keys.MINION_KEY, PersistentDataType.LONG, this.id);
+            container.set(Keys.MINION_TYPE_KEY, PersistentDataType.STRING, this.minionType.toString());
 
+            entity.setCustomName(this.minionData.getName());
+            entity.setCustomNameVisible(true);
+            entity.setSmall(true);
+            entity.setArms(true);
+            entity.setGravity(false);
+            entity.setInvulnerable(true);
+            this.minionData.getInventory().setArmor(entity);
         });
     }
 
@@ -79,7 +113,11 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         return this.id;
     }
 
-    public @NotNull ArmorStand getMinion() {
+    public MinionType getMinionType() {
+        return this.minionType;
+    }
+
+    public ArmorStand getMinion() {
         return this.minion;
     }
 
@@ -91,31 +129,51 @@ public abstract class BaseMinion<T> implements IdHolder<Long>, InventoryHolder {
         this.minion.remove();
     }
 
-    @Override
-    public @NotNull Inventory getInventory() {
-        return this.minionData.getInventory().getInventory();
+    public MinionInventory getInventory() {
+        return this.minionData.getInventory();
     }
 
-    public @NotNull Position getPosition() {
-        return this.region.getOrigin();
+    public Position getPosition() {
+        return this.position;
     }
 
-    public void setLastActionTime(final @NotNull LocalDateTime lastActionTime) {
+    public void setLastActionTime(final Instant lastActionTime) {
         this.lastActionTime = lastActionTime;
     }
 
-    public @NotNull LocalDateTime getLastActionTime() {
+    public Instant getLastActionTime() {
         return this.lastActionTime;
     }
 
-    public boolean canPerformAction() {
-        // todo remove hard coded speed
-        final int speedInSeconds = 1;
-
-        return Duration.between(this.lastActionTime, LocalDateTime.now()).getSeconds() >= speedInSeconds;
+    public boolean isInRegion(final Position position) {
+        return this.getRegion().contains(position);
     }
 
-    public @NotNull Upgrades getUpgrades() {
-        return this.upgrades;
+    public boolean enoughTimePassed() {
+        final float speed = this.getUpgrades().getSpeed();
+        return Duration.between(this.lastActionTime, Instant.now()).getSeconds() >= speed;
+    }
+
+    public Region getRegion() {
+        return this.getUpgrades().getRange().toRegion(this.position);
+    }
+
+    // todo - change message
+    public FeedResponse feed(final MinionUser feeder, final ItemStack fedItem) {
+        final FeedResponse feedResponse = this.minionData.feed(fedItem);
+        feeder.ifOnline(player -> player.sendMessage(feedResponse.toString()));
+        return feedResponse;
+    }
+
+    public Upgrades getUpgrades() {
+        return this.minionData.getUpgrades();
+    }
+
+    public UUID getOwner() {
+        return this.owner;
+    }
+
+    public MinionData getMinionData() {
+        return this.minionData;
     }
 }

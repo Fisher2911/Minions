@@ -1,24 +1,29 @@
 package io.github.fisher2911.minionsplugin;
 
-
 import io.github.fisher2911.fishcore.FishCore;
 import io.github.fisher2911.fishcore.user.UserManager;
 import io.github.fisher2911.minionsplugin.config.GuiLoader;
+import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.listener.BlockAddedToWorldListener;
 import io.github.fisher2911.minionsplugin.listener.ChunkListener;
 import io.github.fisher2911.minionsplugin.listener.EntityClickListener;
 import io.github.fisher2911.minionsplugin.listener.EntityKillListener;
 import io.github.fisher2911.minionsplugin.listener.MinionPlaceListener;
+import io.github.fisher2911.minionsplugin.listener.PlayerJoinListener;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
+import io.github.fisher2911.minionsplugin.permission.PermissionManager;
+import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class MinionsPlugin extends FishCore {
 
     private UserManager<MinionUser> userManager;
+    private PermissionManager permissionManager;
+    private GuiManager guiManager;
     private MinionManager minionManager;
+    private UpgradeGroupManager upgradeGroupManager;
 
     @Override
     public void onEnable() {
@@ -34,8 +39,11 @@ public class MinionsPlugin extends FishCore {
     }
 
     private void initializeClasses() {
+        this.upgradeGroupManager = new UpgradeGroupManager(this);
+        this.permissionManager = new PermissionManager();
         this.userManager = new UserManager<>();
         this.minionManager = new MinionManager(this);
+        this.guiManager = new GuiManager();
     }
 
     private void registerListeners() {
@@ -43,15 +51,24 @@ public class MinionsPlugin extends FishCore {
                         new BlockAddedToWorldListener(this),
                         new EntityKillListener(this),
                         new EntityClickListener(this),
-                        new ChunkListener(this)).
+                        new ChunkListener(this),
+                        new PlayerJoinListener(this)).
                 forEach(this::registerListener);
     }
 
-    public @NotNull UserManager<MinionUser> getUserManager() {
+    public UpgradeGroupManager getUpgradeGroupManager() {
+        return this.upgradeGroupManager;
+    }
+
+    public PermissionManager getPermissionManager() {
+        return this.permissionManager;
+    }
+
+    public UserManager<MinionUser> getUserManager() {
         return this.userManager;
     }
 
-    public @NotNull MinionManager getMinionManager() {
+    public MinionManager getMinionManager() {
         return this.minionManager;
     }
 
@@ -62,5 +79,10 @@ public class MinionsPlugin extends FishCore {
         guiLoader.load("menus", "upgrades.yml");
         guiLoader.load("menus", "cosmetics.yml");
 
+        this.upgradeGroupManager.load("upgrades", "cobble-miner-upgrades.yml");
+    }
+
+    public GuiManager getGuiManager() {
+        return this.guiManager;
     }
 }

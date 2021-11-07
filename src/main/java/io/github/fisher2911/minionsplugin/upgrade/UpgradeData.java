@@ -1,13 +1,22 @@
 package io.github.fisher2911.minionsplugin.upgrade;
 
-import org.jetbrains.annotations.NotNull;
+import io.github.fisher2911.fishcore.economy.Cost;
+import io.github.fisher2911.minionsplugin.user.MinionUser;
+import org.bukkit.inventory.ItemStack;
 
-public class UpgradeData<T extends MinionUpgrade> {
+public class UpgradeData<T extends MinionUpgrade<R>, R> {
 
-    final int level;
-    final T upgrade;
+    /**
+     * Level of the upgrade
+     */
+    private int level;
 
-    public UpgradeData(final int level, final @NotNull T upgrade) {
+    /**
+     * The {@link io.github.fisher2911.minionsplugin.upgrade.MinionUpgrade}
+     */
+    private final T upgrade;
+
+    public UpgradeData(final int level, final T upgrade) {
         this.level = level;
         this.upgrade = upgrade;
     }
@@ -16,7 +25,39 @@ public class UpgradeData<T extends MinionUpgrade> {
         return this.level;
     }
 
-    public @NotNull T getUpgrade() {
+    public T getUpgrade() {
         return this.upgrade;
+    }
+
+    public R getValue() {
+        return this.upgrade.getDataAtLevel(this.level);
+    }
+
+    public ItemStack getGuiItemStack() {
+        return this.upgrade.getGuiItemStack(this.level, this.upgrade.getDataAtLevel(this.level));
+    }
+
+    public void attemptUpgrade(final MinionUser user) {
+        final double balance = user.getMoney();
+
+        user.ifOnline(player -> player.sendMessage("Your money is " + balance));
+
+        final Cost cost = this.upgrade.getCostAtLevel(this.level);
+
+        if (cost == null) {
+            return;
+        }
+
+        final double moneyCost = cost.getMoneyCost();
+
+        user.ifOnline(player -> player.sendMessage("Upgrade cost: " + moneyCost));
+
+        if (balance >= moneyCost) {
+            user.ifOnline(player -> player.sendMessage("Upgrade successful"));
+            this.level++;
+        } else {
+            user.ifOnline(player -> player.sendMessage("Upgrade not successful"));
+        }
+
     }
 }

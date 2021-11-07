@@ -28,13 +28,13 @@ public class BlockBreakTask implements BlockTask {
     private BukkitTask task;
     private final Queue<Position> blocks;
 
-    public BlockBreakTask(final @NotNull JavaPlugin plugin,
-                          final @NotNull Position start,
-                          final @NotNull Region region,
+    public BlockBreakTask(final JavaPlugin plugin,
+                          final Position start,
+                          final Region region,
                           final int blocksPerTick,
-                          final @NotNull Set<Material> acceptedBlocks,
-                          final @NotNull Consumer<Block> onBreak,
-                          final @NotNull Runnable onComplete) {
+                          final Set<Material> acceptedBlocks,
+                          final Consumer<Block> onBreak,
+                          final Runnable onComplete) {
         this.plugin = plugin;
         this.start = start;
         this.region = region;
@@ -73,10 +73,10 @@ public class BlockBreakTask implements BlockTask {
         this.task.cancel();
     }
 
-    private @NotNull Queue<Position> recursiveCollect(final @NotNull Block block,
-                                          final @NotNull AtomicInteger total,
+    private Queue<Position> recursiveCollect(final Block block,
+                                          final AtomicInteger total,
                                           int allowedBlocks,
-                                          final @NotNull Queue<Position> collected) {
+                                          final Queue<Position> collected) {
         final Position position = Position.fromBukkitLocation(
                 block.getLocation()
         );

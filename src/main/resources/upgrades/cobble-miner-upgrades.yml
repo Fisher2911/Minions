@@ -1,15 +1,29 @@
 upgrades:
-  allowed-blocks:
-    levels:
+  id: "cobble-miner"
+  speed-upgrade:
+    id: "cobble-speed-upgrade"
+    display-name: "<blue>Speed Upgrade"
+    display-item:
+      material: SUGAR
+      amount: 1
+      glowing: true
+      lore:
+        - " "
+        - "<blue>Level: %SPEED_UPGRADE_LEVEL%"
+        - "<blue>Id: %SPEED_UPGRADE_ID%"
+        - "<blue>Name: %SPEED_UPGRADE_NAME%"
+        - "<blue>Level: %MONEY_COST%"
+    level-data:
+      1: 5
+      2: 3
+    level-costs:
       1:
-        money-cost: 0
+        money-cost: -5
         item-cost:
           1:
             item:
               material: GOLD_BLOCK
               amount: 1
-        allowed-blocks:
-          - COBBLESTONE
       2:
         money-cost: 0
         item-cost:
@@ -17,11 +31,35 @@ upgrades:
             item:
               material: GOLD_BLOCK
               amount: 1
-        allowed-blocks:
-          - COBBLESTONE
-          - STONE
-  speed:
-    levels:
+  range-upgrade:
+    id: "cobble-range-upgrade"
+    display-name: "<blue>Range Upgrade"
+    display-item:
+      material: BOW
+      amount: 1
+      glowing: true
+      lore:
+        - " "
+        - "<blue>Level: %RANGE_UPGRADE_LEVEL%"
+        - "<blue>Id: %RANGE_UPGRADE_ID%"
+        - "<blue>Name: %RANGE_UPGRADE_NAME%"
+        - "<blue>Level: %MONEY_COST%"
+    level-data:
+      1:
+        min-x: 3
+        min-y: 3
+        min-z: 3
+        max-x: 3
+        max-y: 3
+        max-z: 3
+      2:
+        min-x: 5
+        min-y: 5
+        min-z: 5
+        max-x: 5
+        max-y: 5
+        max-z: 5
+    level-costs:
       1:
         money-cost: 0
         item-cost:
@@ -29,7 +67,6 @@ upgrades:
             item:
               material: GOLD_BLOCK
               amount: 1
-        speed: 5
       2:
         money-cost: 0
         item-cost:
@@ -37,9 +74,23 @@ upgrades:
             item:
               material: GOLD_BLOCK
               amount: 1
-        speed: 3
-  total-food:
-    levels:
+  food-per-action-upgrade:
+    id: "cobble-food-per-action-upgrade"
+    display-name: "<blue>Food Per Action Upgrade"
+    display-item:
+      material: COOKED_CHICKEN
+      amount: 1
+      glowing: true
+      lore:
+        - " "
+        - "<blue>Level: %FOOD_PER_ACTION_UPGRADE_LEVEL%"
+        - "<blue>Id: %FOOD_PER_ACTION_UPGRADE_ID%"
+        - "<blue>Name: %FOOD_PER_ACTION_UPGRADE_NAME%"
+        - "<blue>Level: %MONEY_COST%"
+    level-data:
+      1: 2
+      2: 1
+    level-costs:
       1:
         money-cost: 0
         item-cost:
@@ -47,7 +98,6 @@ upgrades:
             item:
               material: GOLD_BLOCK
               amount: 1
-        total-food: 100
       2:
         money-cost: 0
         item-cost:
@@ -55,9 +105,23 @@ upgrades:
             item:
               material: GOLD_BLOCK
               amount: 1
-        total-food: 200
-  food-loss:
-    levels:
+  max-food-upgrade:
+    id: "cobble-max-food-upgrade"
+    display-name: "<blue>Max Food Upgrade"
+    display-item:
+      material: GOLDEN_APPLE
+      amount: 1
+      glowing: true
+      lore:
+        - " "
+        - "<blue>Level: %RANGE_UPGRADE_LEVEL%"
+        - "<blue>Id: %RANGE_UPGRADE_ID%"
+        - "<blue>Name: %RANGE_UPGRADE_NAME%"
+        - "<blue>Level: %MONEY_COST%"
+    level-data:
+      1: 50
+      2: 100
+    level-costs:
       1:
         money-cost: 0
         item-cost:
@@ -65,7 +129,6 @@ upgrades:
             item:
               material: GOLD_BLOCK
               amount: 1
-        food-loss: 1
       2:
         money-cost: 0
         item-cost:
@@ -73,40 +136,3 @@ upgrades:
             item:
               material: GOLD_BLOCK
               amount: 1
-        food-loss: 0.5
-  range:
-    levels:
-      1:
-        money-cost: 0
-        item-cost:
-          1:
-            item:
-              material: GOLD_BLOCK
-              amount: 1
-        range: 3
-      2:
-        money-cost: 0
-        item-cost:
-          1:
-            item:
-              material: GOLD_BLOCK
-              amount: 1
-        range: 5
-  fortune:
-    levels:
-      1:
-        money-cost: 0
-        item-cost:
-          1:
-            item:
-              material: GOLD_BLOCK
-              amount: 1
-        level: 1
-      2:
-        money-cost: 0
-        item-cost:
-          1:
-            item:
-              material: GOLD_BLOCK
-              amount: 1
-        level: 2

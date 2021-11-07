@@ -8,14 +8,14 @@ import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.Armor;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import io.github.fisher2911.minionsplugin.minion.MinionType;
+import io.github.fisher2911.minionsplugin.minion.data.MinionData;
+import io.github.fisher2911.minionsplugin.minion.food.FoodData;
+import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
-import io.github.fisher2911.minionsplugin.minion.types.data.MinionData;
-import io.github.fisher2911.minionsplugin.upgrade.SpeedUpgrade;
-import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
-import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
-import io.github.fisher2911.minionsplugin.world.RectangularRegion;
+import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -27,19 +27,22 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.time.Instant;
+import java.util.HashSet;
+import java.util.Map;
 
 public class MinionPlaceListener implements Listener {
 
     private final MinionsPlugin plugin;
     private final MinionManager minionManager;
+    private final UpgradeGroupManager upgradeGroupManager;
 
     private static int id = 0;
 
     public MinionPlaceListener(final MinionsPlugin plugin) {
         this.plugin = plugin;
         this.minionManager = this.plugin.getMinionManager();
+        this.upgradeGroupManager = this.plugin.getUpgradeGroupManager();
     }
 
     @EventHandler
@@ -72,18 +75,14 @@ public class MinionPlaceListener implements Listener {
 
         final BlockMinion baseMinion = new FarmerMinion(
                 this.plugin,
-                LocalDateTime.now(),
+                Instant.now(),
                 id++,
                 player.getUniqueId(),
-                new RectangularRegion(
-                        origin,
-                        origin.subtract(5, 1, 5),
-                        origin.add(5, 5, 5)
-                ),
-                new MinionData(
-                        new MinionInventory(
-                                Bukkit.createInventory(null, 9, name + "'s Inventory"),
-                                Armor.builder().
+                MinionType.BLOCK,
+                origin,
+                new MinionData(new MinionInventory(
+                        new HashSet<>(),
+                        Armor.builder().
                                         boots(builder.build()).
                                         pants(LeatherArmorBuilder.
                                                 from(Material.LEATHER_LEGGINGS).
@@ -103,10 +102,115 @@ public class MinionPlaceListener implements Listener {
                                                 glow(true).build()).
                                         build()
                         ),
-                        name,
-                        0), Material.WHEAT, new Upgrades(new UpgradeData<>(0,
-                new SpeedUpgrade("test", "test", new HashMap<>(),
-                        new HashMap<>(), new ItemStack(Material.ITEM_FRAME)))));
+                        new FoodData(
+                                new FoodGroup(
+                                     Map.of(Material.COOKED_CHICKEN, 1f)
+                                ),
+                                50
+                        ),
+                        this.upgradeGroupManager.get("cobble-miner").get().toUpgrades(),
+                        name
+                ),
+                Material.WHEAT);
+//                new MinionData(
+//                        new MinionInventory(
+//                                new HashSet<>(),
+//                                Armor.builder().
+//                                        boots(builder.build()).
+//                                        pants(LeatherArmorBuilder.
+//                                                from(Material.LEATHER_LEGGINGS).
+//                                                color(Color.BLUE).
+//                                                build()).
+//                                        chestPlate(LeatherArmorBuilder.
+//                                                from(Material.LEATHER_CHESTPLATE).
+//                                                color(Color.GREEN).
+//                                                build()).
+//                                        helmet(SkullBuilder.
+//                                                create().
+//                                                owner(Bukkit.getOfflinePlayer("NOTCH")).
+//                                                build()).
+//                                        mainHand(ItemBuilder.from(Material.DIAMOND_HOE).
+//                                                glow(true).build()).
+//                                        offHand(ItemBuilder.from(Material.WHEAT_SEEDS).
+//                                                glow(true).build()).
+//                                        build()
+//                        ),
+//                        new FoodData(
+//                                new FoodGroup(
+//                                     Map.of(Material.COOKED_CHICKEN, 1f)
+//                                ),
+//                                50
+//                        ),
+//                        new Upgrades("id",
+//                                new UpgradeData<>(1,
+//                                new FloatUpgrade("test",
+//                                        "test",
+//                                        Map.of(1, 5f, 2, 1f),
+//                                        Map.of(1, new Cost(0, new ArrayList<>()),
+//                                                2, new Cost(5, new ArrayList<>())),
+//                                        ItemBuilder.from(Material.ITEM_FRAME).
+//                                                name(StringUtils.parseStringToString(
+//                                                        "<blue>" + "Level: " + Placeholder.LEVEL)).
+//                                                lore(List.of("",
+//                                                        StringUtils.parseStringToString(
+//                                                                "<green>" + "Cost: " + Placeholder.MONEY_COST))).
+//                                                build(),
+//                                        UpgradeType.SPEED_UPGRADE)),
+//                                new UpgradeData<>(1,
+//                                        new RangeUpgrade("test",
+//                                                "test",
+//                                                Map.of(1, new Range(
+//                                                                2, 2, 2, 2, 2, 2),
+//                                                        2, new Range(
+//                                                                5, 5, 5, 5, 5, 5
+//                                                        )),
+//                                                Map.of(1, new Cost(0, new ArrayList<>()),
+//                                                        2, new Cost(5, new ArrayList<>())),
+//                                                ItemBuilder.from(Material.BOW).
+//                                                        name(StringUtils.parseStringToString(
+//                                                                "<blue>" + "Level: " + Placeholder.LEVEL)).
+//                                                        lore(List.of("",
+//                                                                StringUtils.parseStringToString(
+//                                                                        "<green>" + "Cost: " + Placeholder.MONEY_COST))).
+//                                                        build(),
+//                                                UpgradeType.RANGE_UPGRADE)),
+//                                new UpgradeData<>(1, new FloatUpgrade(
+//                                        "test",
+//                                        "test",
+//                                        Map.of(1, 2f,
+//                                                2, 1f),
+//                                        Map.of(1, new Cost(0, new ArrayList<>()),
+//                                                2, new Cost(5, new ArrayList<>())),
+//                                        ItemBuilder.from(Material.COOKED_CHICKEN).
+//                                                name(StringUtils.parseStringToString(
+//                                                        "<blue>" + "Level: " + Placeholder.LEVEL)).
+//                                                lore(List.of("",
+//                                                        StringUtils.parseStringToString(
+//                                                                "Food per action: %FOOD_PER_ACTION_UPGRADE_ID%"
+//                                                        ),
+//                                                        StringUtils.parseStringToString(
+//                                                                "<green>" + "Cost: " + Placeholder.MONEY_COST))).
+//                                                build(),
+//                                        UpgradeType.FOOD_PER_ACTION_UPGRADE)
+//                                ),
+//                                new UpgradeData<>(1, new FloatUpgrade(
+//                                        "test",
+//                                        "test",
+//                                        Map.of(1, 2f,
+//                                                2, 1f),
+//                                        Map.of(1, new Cost(0, new ArrayList<>()),
+//                                                2, new Cost(5, new ArrayList<>())),
+//                                        ItemBuilder.from(Material.COOKED_CHICKEN).
+//                                                name(StringUtils.parseStringToString(
+//                                                        "<blue>" + "Level: " + Placeholder.LEVEL)).
+//                                                lore(List.of("",
+//                                                        StringUtils.parseStringToString(
+//                                                                "<green>" + "Cost: " + Placeholder.MONEY_COST))).
+//                                                build(),
+//                                        UpgradeType.MAX_FOOD_UPGRADE)
+//                                )),
+//                        name
+//                ), Material.GOLDEN_APPLE);
         baseMinion.place();
         this.minionManager.addBlockMinion(baseMinion);
         event.setCancelled(true);
