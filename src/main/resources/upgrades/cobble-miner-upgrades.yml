@@ -2,17 +2,17 @@ upgrades:
   id: "cobble-miner"
   speed-upgrade:
     id: "cobble-speed-upgrade"
-    display-name: "<blue>Speed Upgrade"
+    display-name: "<blue>Speed Upgrade</blue>"
     display-item:
       material: SUGAR
       amount: 1
       glowing: true
       lore:
         - " "
-        - "<blue>Level: %SPEED_UPGRADE_LEVEL%"
-        - "<blue>Id: %SPEED_UPGRADE_ID%"
-        - "<blue>Name: %SPEED_UPGRADE_NAME%"
-        - "<blue>Level: %MONEY_COST%"
+        - "<blue>Level: %SPEED_UPGRADE_level%</blue>"
+        - "<blue>Id: %SPEED_UPGRADE_id%</blue>"
+        - "<blue>Name: %SPEED_UPGRADE_name%</blue>"
+        - "<blue>Money Cost: %SPEED_UPGRADE_money_cost%</blue>"
     level-data:
       1: 5
       2: 3
@@ -33,17 +33,17 @@ upgrades:
               amount: 1
   range-upgrade:
     id: "cobble-range-upgrade"
-    display-name: "<blue>Range Upgrade"
+    display-name: "<blue>Range Upgrade</blue>"
     display-item:
       material: BOW
       amount: 1
       glowing: true
       lore:
         - " "
-        - "<blue>Level: %RANGE_UPGRADE_LEVEL%"
-        - "<blue>Id: %RANGE_UPGRADE_ID%"
-        - "<blue>Name: %RANGE_UPGRADE_NAME%"
-        - "<blue>Level: %MONEY_COST%"
+        - "<blue>Level: %RANGE_UPGRADE_level%</blue>"
+        - "<blue>Id: %RANGE_UPGRADE_id%</blue>"
+        - "<blue>Name: %RANGE_UPGRADE_name%</blue>"
+        - "<blue>Money Cost: %RANGE_UPGRADE_money_cost%</blue>"
     level-data:
       1:
         min-x: 3
@@ -76,17 +76,17 @@ upgrades:
               amount: 1
   food-per-action-upgrade:
     id: "cobble-food-per-action-upgrade"
-    display-name: "<blue>Food Per Action Upgrade"
+    display-name: "<blue>Food Per Action Upgrade</blue>"
     display-item:
       material: COOKED_CHICKEN
       amount: 1
       glowing: true
       lore:
         - " "
-        - "<blue>Level: %FOOD_PER_ACTION_UPGRADE_LEVEL%"
-        - "<blue>Id: %FOOD_PER_ACTION_UPGRADE_ID%"
-        - "<blue>Name: %FOOD_PER_ACTION_UPGRADE_NAME%"
-        - "<blue>Level: %MONEY_COST%"
+        - "<blue>Level: %FOOD_PER_ACTION_UPGRADE_level%</blue>"
+        - "<blue>Id: %FOOD_PER_ACTION_UPGRADE_id%</blue>"
+        - "<blue>Name: %FOOD_PER_ACTION_UPGRADE_name%</blue>"
+        - "<blue>Money Cost: %FOOD_PER_ACTION_UPGRADE_money_cost%</blue>"
     level-data:
       1: 2
       2: 1
@@ -107,17 +107,17 @@ upgrades:
               amount: 1
   max-food-upgrade:
     id: "cobble-max-food-upgrade"
-    display-name: "<blue>Max Food Upgrade"
+    display-name: "<blue>Max Food Upgrade</blue>"
     display-item:
       material: GOLDEN_APPLE
       amount: 1
       glowing: true
       lore:
         - " "
-        - "<blue>Level: %RANGE_UPGRADE_LEVEL%"
-        - "<blue>Id: %RANGE_UPGRADE_ID%"
-        - "<blue>Name: %RANGE_UPGRADE_NAME%"
-        - "<blue>Level: %MONEY_COST%"
+        - "<blue>Level: %RANGE_UPGRADE_level%</blue>"
+        - "<blue>Id: %RANGE_UPGRADE_id%</blue>"
+        - "<blue>Name: %RANGE_UPGRADE_name%</blue>"
+        - "<blue>Money Cost: %RANGE_UPGRADE_money_cost%</blue>"
     level-data:
       1: 50
       2: 100

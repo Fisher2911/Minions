@@ -41,7 +41,6 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
         for (Position position : this.getRegion().getAllPositionsInY(
                 y, y
         )) {
-            Bukkit.broadcastMessage("Location is " + position.toBukkitLocation().toString());
             final Block block = position.getBlock();
             switch (block.getType()) {
                 case DIRT -> this.dirtPositions.add(position);

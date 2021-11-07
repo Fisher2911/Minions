@@ -42,7 +42,7 @@ public class GuiManager {
             return;
         }
 
-        minionUser.ifOnline(gui.create()::open);
+        minionUser.ifOnline(gui.get()::open);
     }
 
 }

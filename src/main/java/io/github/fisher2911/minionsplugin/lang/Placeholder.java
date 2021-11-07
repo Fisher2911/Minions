@@ -1,13 +1,14 @@
 package io.github.fisher2911.minionsplugin.lang;
 
+import io.github.fisher2911.fishcore.economy.Cost;
 import io.github.fisher2911.fishcore.upgrade.Upgrade;
 import io.github.fisher2911.fishcore.util.helper.Utils;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
-import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
+import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.world.Range;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -29,18 +30,17 @@ public class Placeholder {
     public static final String RANGE_Y = "%y_range";
     public static final String RANGE_Z = "%z_range%";
     public static final String FOOD_LEVEL = "%food_level%";
-    public static final String MAX_FOOD = "%max_food&";
+    public static final String MAX_FOOD = "%max_food%";
     public static final String FOOD_COST_PER_ACTION = "%food_cost_per_action%";
     public static final String POSITION_X = "%position_x%";
     public static final String POSITION_Y = "%position_y%";
     public static final String POSITION_Z = "%position_z%";
     public static final String POSITION_WORLD = "%position_world%";
-    public static final String LEVEL = "%level%";
-    public static final String MONEY_COST = "%money_cost%";
     public static final String UPGRADE_TYPE = "%upgrade_type%";
-    public static final String UPGRADE_LEVEL = "%" + UPGRADE_TYPE + "_LEVEL%";
-    public static final String UPGRADE_NAME = "%" + UPGRADE_TYPE + "_NAME%";
-    public static final String UPGRADE_ID = "%" + UPGRADE_TYPE + "_ID%";
+    public static final String UPGRADE_MONEY_COST = "%" + UPGRADE_TYPE + "_money_cost%";
+    public static final String UPGRADE_LEVEL = "%" + UPGRADE_TYPE + "_level%";
+    public static final String UPGRADE_NAME = "%" + UPGRADE_TYPE + "_name%";
+    public static final String UPGRADE_ID = "%" + UPGRADE_TYPE + "_id%";
 
     public static Map<String, String> getMinionPlaceholders(
             final BaseMinion<?> minion) {
@@ -101,11 +101,24 @@ public class Placeholder {
                     UPGRADE_TYPE, upgradeTypeString
             );
 
+            final String replaceMoneyCostString = UPGRADE_MONEY_COST.replace(
+                    UPGRADE_TYPE, upgradeTypeString
+            );
+
             final Upgrade<?> upgrade = upgradeData.getUpgrade();
 
-            placeholders.put(replaceLevelString, String.valueOf(upgradeData.getLevel()));
+            final Cost cost = upgradeData.getNextLevelCost();
+
+            final String moneyCost = cost == null ? "Max Level" :
+                    String.valueOf(cost.getMoneyCost());
+
+            final String level = cost == null ? "Max Level" :
+                    String.valueOf(upgradeData.getLevel());
+
+            placeholders.put(replaceLevelString, level);
             placeholders.put(replaceNameString, upgrade.getDisplayName());
             placeholders.put(replaceIdString, upgrade.getId());
+            placeholders.put(replaceMoneyCostString, moneyCost);
         }
 
         return placeholders;

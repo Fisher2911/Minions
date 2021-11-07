@@ -26,7 +26,7 @@ public class TypeItem {
 
     public GuiItem getGuiItemWithPlaceholders(final Map<String, String> placeholders) {
         return new GuiItem(
-                ItemBuilder.from(this.guiItem.getItemStack()).
+                ItemBuilder.from(this.guiItem.getItemStack().clone()).
                         namePlaceholders(placeholders).
                         lorePlaceholders(placeholders).
                         build()

@@ -21,7 +21,9 @@ public abstract class BaseMinionGui<G extends BaseGui> {
         this.guiData = guiData;
     }
 
-    public abstract G create();
+    public abstract G get();
+
+    public abstract void updateItems();
 
     public GuiData getGuiData() {
         return this.guiData;

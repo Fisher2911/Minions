@@ -47,19 +47,19 @@ public class Upgrades {
     }
 
     public float getSpeed() {
-        return this.speedUpgrade.getValue();
+        return this.speedUpgrade.getValue(-1f);
     }
 
     public Range getRange() {
-        return this.rangeUpgrade.getValue();
+        return this.rangeUpgrade.getValue(new Range(0, 0, 0, 0, 0, 0));
     }
 
     public float getFoodPerAction() {
-        return this.foodPerActionUpgrade.getValue();
+        return this.foodPerActionUpgrade.getValue(0f);
     }
 
     public float getMaxFood() {
-        return this.maxFoodUpgrade.getValue();
+        return this.maxFoodUpgrade.getValue(-1f);
     }
 
     public UpgradeData<?, ?> getUpgradeData(final UpgradeType type) {

@@ -52,7 +52,6 @@ public class GuiLoader {
                          opts.serializers(build -> {
                              build.register(GuiData.class, GuiDataSerializer.INSTANCE);
                              build.register(ItemStack.class, ItemSerializer.INSTANCE);
-
                          }))
                 .build();
         try {

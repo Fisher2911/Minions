@@ -202,14 +202,14 @@ public class ActionParser {
                 final UpgradeType type = UpgradeType.valueOf(stringType);
 
                 if (!upgradeType.equals(type)) {
-                    user.ifOnline(player -> player.sendMessage(upgradeType + " " + type));
                     return;
                 }
 
                 final Upgrades upgrades = menu.getMinion().getUpgrades();
 
                 upgrades.attemptUpgrade(type, menu.getGuiOwner());
-                menu.getGuiOwner().ifOnline(player -> player.sendMessage("Attempted Upgrade"));
+                menu.updateItems();
+                menu.get().update();
             } catch (final IllegalArgumentException ignored) {}
         });
     }

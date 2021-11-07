@@ -14,7 +14,7 @@ import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
-import io.github.fisher2911.minionsplugin.minion.types.FarmerMinion;
+import io.github.fisher2911.minionsplugin.minion.types.MinerMinion;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -69,11 +69,11 @@ public class MinionPlaceListener implements Listener {
                         color(Color.RED);
 
         final String name = StringUtils.
-                parseStringToString("<gradient:blue:green>Farmer Minion</gradient>");
+                parseStringToString("<gradient:blue:green>Miner Minion</gradient>");
 
         final Position origin = Position.fromBukkitLocation(event.getClickedBlock().getLocation().add(0.5, 1, 0.5));
 
-        final BlockMinion baseMinion = new FarmerMinion(
+        final BlockMinion baseMinion = new MinerMinion(
                 this.plugin,
                 Instant.now(),
                 id++,
@@ -110,8 +110,7 @@ public class MinionPlaceListener implements Listener {
                         ),
                         this.upgradeGroupManager.get("cobble-miner").get().toUpgrades(),
                         name
-                ),
-                Material.WHEAT);
+                ));
 //                new MinionData(
 //                        new MinionInventory(
 //                                new HashSet<>(),

@@ -62,6 +62,7 @@ public class EntityClickListener implements Listener {
 
                 if (clickedWith.getType() != Material.AIR &&
                         minion.feed(user, clickedWith) != FeedResponse.CANNOT_FEED) {
+                    player.sendMessage("Fed");
                     return;
                 }
 

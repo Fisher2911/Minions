@@ -10,6 +10,7 @@ import io.github.fisher2911.minionsplugin.upgrade.type.FloatUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.type.RangeUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.world.Range;
+import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -112,6 +113,8 @@ public class UpgradeGroupSerializer implements TypeSerializer<UpgradeGroup> {
         }
 
         final var costMap = this.loadUpgradeCost(source);
+
+        Bukkit.getLogger().info("[MinionsPlugin] Loaded Upgrade: " + upgradeType);
 
         return new FloatUpgrade(id, displayName, levelDataMap, costMap, displayItem, upgradeType);
     }

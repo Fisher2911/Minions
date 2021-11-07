@@ -31,6 +31,14 @@ items:
     lore:
       - ""
       - "<green>Click here to open the permissions menu</green>"
+  13:
+    material: COOKED_CHICKEN
+    amount: 1
+    name: "Food Information"
+    lore:
+      - ""
+      - "Food Level: %food_level%"
+      - "Max Food: %max_food%"
 actions:
   10:
     click-types:

@@ -14,7 +14,7 @@ public class FoodGroup {
     }
 
     public float getFoodValue(final Material material) {
-        return this.foodValueMap.get(material);
+        return this.foodValueMap.getOrDefault(material, 0f);
     }
 
     public Set<Material> getAllFoods() {
