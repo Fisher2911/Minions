@@ -11,19 +11,20 @@ import io.github.fisher2911.minionsplugin.listener.EntityKillListener;
 import io.github.fisher2911.minionsplugin.listener.MinionPlaceListener;
 import io.github.fisher2911.minionsplugin.listener.PlayerJoinListener;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
-import io.github.fisher2911.minionsplugin.permission.PermissionManager;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
+import io.github.fisher2911.minionsplugin.world.MinionConverter;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MinionsPlugin extends FishCore {
 
     private UserManager<MinionUser> userManager;
-    private PermissionManager permissionManager;
     private GuiManager guiManager;
     private MinionManager minionManager;
     private UpgradeGroupManager upgradeGroupManager;
+    private MinionConverter minionConverter;
 
     @Override
     public void onEnable() {
@@ -40,10 +41,13 @@ public class MinionsPlugin extends FishCore {
 
     private void initializeClasses() {
         this.upgradeGroupManager = new UpgradeGroupManager(this);
-        this.permissionManager = new PermissionManager();
         this.userManager = new UserManager<>();
         this.minionManager = new MinionManager(this);
         this.guiManager = new GuiManager();
+        this.minionConverter = new MinionConverter(
+                new HashMap<>(),
+                this
+        );
     }
 
     private void registerListeners() {
@@ -60,16 +64,16 @@ public class MinionsPlugin extends FishCore {
         return this.upgradeGroupManager;
     }
 
-    public PermissionManager getPermissionManager() {
-        return this.permissionManager;
-    }
-
     public UserManager<MinionUser> getUserManager() {
         return this.userManager;
     }
 
     public MinionManager getMinionManager() {
         return this.minionManager;
+    }
+
+    public MinionConverter getMinionConverter() {
+        return this.minionConverter;
     }
 
     private void test() {

@@ -104,6 +104,15 @@ public class MinionManager {
         }
     }
 
+    public <T extends BaseMinion<?>> void addMinion(final T minion) {
+        final MinionType minionType = minion.getMinionType();
+
+        switch (minionType) {
+            case BLOCK -> this.addBlockMinion((BlockMinion) minion);
+            case ENTITY -> this.addEntityMinion((EntityMinion) minion);
+        }
+    }
+
     private <T extends BaseMinion<?>> Optional<T> getMinionWithId(
             final Position position,
             final long id,

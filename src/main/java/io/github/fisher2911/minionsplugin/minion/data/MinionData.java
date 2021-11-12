@@ -8,11 +8,13 @@ import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.inventory.ItemStack;
 
+import java.time.Instant;
 import java.util.UUID;
 
 public class MinionData {
 
     protected final long id;
+    private final MinionClass minionClass;
     protected final UUID owner;
     protected MinionType minionType;
     private final MinionPermissionsGroup minionPermissionsGroup;
@@ -20,17 +22,21 @@ public class MinionData {
     private final FoodData foodData;
     private final Upgrades upgrades;
     private String name;
+    private final Instant lastActionTime;
 
     public MinionData(
             final long id,
             final UUID owner,
+            final MinionClass minionClass,
             final MinionType minionType,
             final MinionPermissionsGroup minionPermissionsGroup,
             final MinionInventory inventory,
             final FoodData foodData,
             final Upgrades upgrades,
-            final String name) {
+            final String name,
+            final Instant lastActionTime) {
         this.id = id;
+        this.minionClass = minionClass;
         this.owner = owner;
         this.minionType = minionType;
         this.minionPermissionsGroup = minionPermissionsGroup;
@@ -38,6 +44,7 @@ public class MinionData {
         this.foodData = foodData;
         this.upgrades = upgrades;
         this.name = name;
+        this.lastActionTime = lastActionTime;
     }
 
     public MinionPermissionsGroup getMinionPermissionsGroup() {
@@ -68,12 +75,20 @@ public class MinionData {
         return this.id;
     }
 
+    public MinionClass getMinionClass() {
+        return this.minionClass;
+    }
+
     public UUID getOwner() {
         return this.owner;
     }
 
     public MinionType getMinionType() {
         return this.minionType;
+    }
+
+    public Instant getLastActionTime() {
+        return this.lastActionTime;
     }
 
     public FeedResponse feed(final ItemStack itemStack) {

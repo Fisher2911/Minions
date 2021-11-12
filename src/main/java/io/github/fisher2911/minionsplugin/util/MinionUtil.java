@@ -11,7 +11,7 @@ public class MinionUtil {
     public static long getId(final ArmorStand armorStand) {
         final PersistentDataContainer container = armorStand.getPersistentDataContainer();
 
-        final Long id = container.get(Keys.MINION_KEY, PersistentDataType.LONG);
+        final Long id = container.get(Keys.MINION_ID_KEY, PersistentDataType.LONG);
 
         return id == null ? -1 : id;
     }

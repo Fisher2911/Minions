@@ -21,11 +21,10 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
     private final LinkedList<Position> farmlandPositions = new LinkedList<>();
 
     public FarmerMinion(final JavaPlugin plugin,
-                        final Instant lastActionTime,
                         final Position position,
                         final MinionData minionData,
                         final Material cropType) {
-        super(plugin, lastActionTime, position, minionData);
+        super(plugin, position, minionData);
         this.cropType = cropType;
         this.checkDirtPositions();
     }

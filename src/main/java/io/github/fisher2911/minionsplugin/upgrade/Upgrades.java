@@ -5,6 +5,9 @@ import io.github.fisher2911.minionsplugin.upgrade.type.RangeUpgrade;
 import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import io.github.fisher2911.minionsplugin.world.Range;
+import org.jetbrains.annotations.Unmodifiable;
+
+import java.util.List;
 
 /**
  * All upgrades that a minion can have, the default level is 1
@@ -77,5 +80,15 @@ public class Upgrades {
 
     public String getId() {
         return this.id;
+    }
+
+    @Unmodifiable
+    public List<UpgradeData<?, ?>> getAllUpgrades() {
+        return List.of(
+                this.speedUpgrade,
+                this.rangeUpgrade,
+                this.maxFoodUpgrade,
+                this.speedUpgrade
+        );
     }
 }

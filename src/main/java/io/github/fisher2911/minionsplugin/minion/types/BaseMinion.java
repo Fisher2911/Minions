@@ -33,11 +33,9 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     public BaseMinion(
             final JavaPlugin plugin,
-            final Instant lastActionTime,
             final Position position,
             final MinionData minionData) {
         this.plugin = plugin;
-        this.lastActionTime = lastActionTime;
         this.position = position;
         this.minionData = minionData;
     }
@@ -86,7 +84,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
         this.minion = world.spawn(location, ArmorStand.class, entity -> {
             final PersistentDataContainer container = entity.getPersistentDataContainer();
-            container.set(Keys.MINION_KEY, PersistentDataType.LONG, this.getId());
+            container.set(Keys.MINION_ID_KEY, PersistentDataType.LONG, this.getId());
             container.set(Keys.MINION_TYPE_KEY, PersistentDataType.STRING, this.getMinionType().toString());
 
             entity.setCustomName(this.minionData.getName());

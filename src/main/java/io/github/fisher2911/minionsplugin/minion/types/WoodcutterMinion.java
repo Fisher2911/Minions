@@ -31,10 +31,9 @@ public class WoodcutterMinion extends BlockMinion {
     }
 
     public WoodcutterMinion(final JavaPlugin plugin,
-                            final Instant lastActionTime,
                             final Position position,
                             final MinionData minionData) {
-        super(plugin, lastActionTime, position, minionData);
+        super(plugin, position, minionData);
     }
 
 

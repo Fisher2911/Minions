@@ -15,10 +15,9 @@ import java.util.Collection;
 public class MinerMinion extends BlockMinion {
 
     public MinerMinion(final JavaPlugin plugin,
-                       final Instant lastActionTime,
                        final Position position,
                        final MinionData minionData) {
-        super(plugin, lastActionTime, position, minionData);
+        super(plugin, position, minionData);
     }
 
     @Override
