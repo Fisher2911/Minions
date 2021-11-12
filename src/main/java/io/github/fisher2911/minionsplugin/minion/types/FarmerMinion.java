@@ -2,9 +2,7 @@ package io.github.fisher2911.minionsplugin.minion.types;
 
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
-import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -15,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.time.Instant;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.UUID;
 
 public class FarmerMinion extends BlockMinion implements Scheduleable {
 
@@ -25,13 +22,10 @@ public class FarmerMinion extends BlockMinion implements Scheduleable {
 
     public FarmerMinion(final JavaPlugin plugin,
                         final Instant lastActionTime,
-                        final long id,
-                        final UUID owner,
-                        final MinionType minionType,
                         final Position position,
                         final MinionData minionData,
                         final Material cropType) {
-        super(plugin, lastActionTime, id, owner, minionType, position, minionData);
+        super(plugin, lastActionTime, position, minionData);
         this.cropType = cropType;
         this.checkDirtPositions();
     }

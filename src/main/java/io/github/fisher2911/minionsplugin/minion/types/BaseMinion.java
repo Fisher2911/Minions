@@ -28,25 +28,16 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     protected final JavaPlugin plugin;
     private Instant lastActionTime;
     protected ArmorStand minion;
-    protected final long id;
-    protected final UUID owner;
-    protected MinionType minionType;
     protected final Position position;
     private final MinionData minionData;
 
     public BaseMinion(
             final JavaPlugin plugin,
             final Instant lastActionTime,
-            final long id,
-            final UUID owner,
-            final MinionType minionType,
             final Position position,
             final MinionData minionData) {
         this.plugin = plugin;
         this.lastActionTime = lastActionTime;
-        this.id = id;
-        this.minionType = minionType;
-        this.owner = owner;
         this.position = position;
         this.minionData = minionData;
     }
@@ -95,8 +86,8 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
         this.minion = world.spawn(location, ArmorStand.class, entity -> {
             final PersistentDataContainer container = entity.getPersistentDataContainer();
-            container.set(Keys.MINION_KEY, PersistentDataType.LONG, this.id);
-            container.set(Keys.MINION_TYPE_KEY, PersistentDataType.STRING, this.minionType.toString());
+            container.set(Keys.MINION_KEY, PersistentDataType.LONG, this.getId());
+            container.set(Keys.MINION_TYPE_KEY, PersistentDataType.STRING, this.getMinionType().toString());
 
             entity.setCustomName(this.minionData.getName());
             entity.setCustomNameVisible(true);
@@ -110,11 +101,11 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     @Override
     public Long getId() {
-        return this.id;
+        return this.minionData.getId();
     }
 
     public MinionType getMinionType() {
-        return this.minionType;
+        return this.minionData.getMinionType();
     }
 
     public ArmorStand getMinion() {
@@ -170,7 +161,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     }
 
     public UUID getOwner() {
-        return this.owner;
+        return this.minionData.getOwner();
     }
 
     public MinionData getMinionData() {

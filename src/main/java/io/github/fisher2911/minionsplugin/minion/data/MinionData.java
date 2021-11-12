@@ -1,14 +1,20 @@
 package io.github.fisher2911.minionsplugin.minion.data;
 
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
 import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.UUID;
+
 public class MinionData {
 
+    protected final long id;
+    protected final UUID owner;
+    protected MinionType minionType;
     private final MinionPermissionsGroup minionPermissionsGroup;
     private final MinionInventory inventory;
     private final FoodData foodData;
@@ -16,11 +22,17 @@ public class MinionData {
     private String name;
 
     public MinionData(
+            final long id,
+            final UUID owner,
+            final MinionType minionType,
             final MinionPermissionsGroup minionPermissionsGroup,
             final MinionInventory inventory,
             final FoodData foodData,
             final Upgrades upgrades,
             final String name) {
+        this.id = id;
+        this.owner = owner;
+        this.minionType = minionType;
         this.minionPermissionsGroup = minionPermissionsGroup;
         this.inventory = inventory;
         this.foodData = foodData;
@@ -50,6 +62,18 @@ public class MinionData {
 
     public Upgrades getUpgrades() {
         return this.upgrades;
+    }
+
+    public long getId() {
+        return this.id;
+    }
+
+    public UUID getOwner() {
+        return this.owner;
+    }
+
+    public MinionType getMinionType() {
+        return this.minionType;
     }
 
     public FeedResponse feed(final ItemStack itemStack) {

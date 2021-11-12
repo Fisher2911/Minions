@@ -2,7 +2,6 @@ package io.github.fisher2911.minionsplugin.minion.types;
 
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
-import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
 import io.github.fisher2911.minionsplugin.task.BlockBreakTask;
 import org.bukkit.Material;
@@ -13,7 +12,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
@@ -21,7 +19,7 @@ public class WoodcutterMinion extends BlockMinion {
 
     // todo
     private static final Set<Material> allowedMaterials;
-    private AtomicBoolean isPerformingTask = new AtomicBoolean(false);
+    private final AtomicBoolean isPerformingTask = new AtomicBoolean(false);
 
     static {
         allowedMaterials = Arrays.stream(Material.values()).
@@ -34,12 +32,9 @@ public class WoodcutterMinion extends BlockMinion {
 
     public WoodcutterMinion(final JavaPlugin plugin,
                             final Instant lastActionTime,
-                            final long id,
-                            final UUID owner,
-                            final MinionType minionType,
                             final Position position,
                             final MinionData minionData) {
-        super(plugin, lastActionTime, id, owner, minionType, position, minionData);
+        super(plugin, lastActionTime, position, minionData);
     }
 
 

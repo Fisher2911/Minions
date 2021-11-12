@@ -15,6 +15,8 @@ import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
 import io.github.fisher2911.minionsplugin.minion.types.BlockMinion;
 import io.github.fisher2911.minionsplugin.minion.types.MinerMinion;
+import io.github.fisher2911.minionsplugin.permission.MinionPermissions;
+import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -28,6 +30,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -76,11 +80,20 @@ public class MinionPlaceListener implements Listener {
         final BlockMinion baseMinion = new MinerMinion(
                 this.plugin,
                 Instant.now(),
-                id++,
-                player.getUniqueId(),
-                MinionType.BLOCK,
                 origin,
-                new MinionData(new MinionInventory(
+                new MinionData(
+                        id++,
+                        player.getUniqueId(),
+                        MinionType.BLOCK,
+                        new MinionPermissionsGroup(
+                                1,
+                                "test",
+                                MinionPermissionsGroup.Mode.NOT_SPECIFIED,
+                                new HashSet<>(),
+                                new ArrayList<>(),
+                                new MinionPermissions(new HashMap<>())
+                        ),
+                        new MinionInventory(
                         new HashSet<>(),
                         Armor.builder().
                                         boots(builder.build()).
