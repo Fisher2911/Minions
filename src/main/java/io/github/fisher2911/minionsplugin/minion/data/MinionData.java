@@ -3,25 +3,33 @@ package io.github.fisher2911.minionsplugin.minion.data;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
 import io.github.fisher2911.minionsplugin.minion.food.FoodData;
+import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.inventory.ItemStack;
 
 public class MinionData {
 
+    private final MinionPermissionsGroup minionPermissionsGroup;
     private final MinionInventory inventory;
     private final FoodData foodData;
     private final Upgrades upgrades;
     private String name;
 
     public MinionData(
+            final MinionPermissionsGroup minionPermissionsGroup,
             final MinionInventory inventory,
             final FoodData foodData,
             final Upgrades upgrades,
             final String name) {
+        this.minionPermissionsGroup = minionPermissionsGroup;
         this.inventory = inventory;
         this.foodData = foodData;
         this.upgrades = upgrades;
         this.name = name;
+    }
+
+    public MinionPermissionsGroup getMinionPermissionsGroup() {
+        return this.minionPermissionsGroup;
     }
 
     public MinionInventory getInventory() {
