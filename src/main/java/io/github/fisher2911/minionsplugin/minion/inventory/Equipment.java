@@ -1,11 +1,13 @@
-package io.github.fisher2911.minionsplugin.minion;
+package io.github.fisher2911.minionsplugin.minion.inventory;
 
+import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
-public class Armor {
+public class Equipment implements IdHolder<String> {
 
+    private final String id;
     private ItemStack mainHand;
     private ItemStack offHand;
     private ItemStack boots;
@@ -13,22 +15,29 @@ public class Armor {
     private ItemStack chestPlate;
     private ItemStack helmet;
 
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(final String id) {
+        return new Builder(id);
     }
 
-    public Armor(final ItemStack mainHand,
-                 final ItemStack offHand,
-                 final ItemStack boots,
-                 final ItemStack pants,
-                 final ItemStack chestPlate,
-                 final ItemStack helmet) {
+    public Equipment(final String id,
+                     final ItemStack mainHand,
+                     final ItemStack offHand,
+                     final ItemStack boots,
+                     final ItemStack pants,
+                     final ItemStack chestPlate,
+                     final ItemStack helmet) {
+        this.id = id;
         this.mainHand = mainHand;
         this.offHand = offHand;
         this.boots = boots;
         this.pants = pants;
         this.chestPlate = chestPlate;
         this.helmet = helmet;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 
     public ItemStack getMainHand() {
@@ -80,7 +89,6 @@ public class Armor {
     }
 
     /**
-     *
      * @return converts ItemStacks to array for use with EntityEquipment
      */
     public ItemStack[] toArray() {
@@ -89,6 +97,7 @@ public class Armor {
 
     /**
      * Sets the armor an entity is wearing
+     *
      * @param entity Entity whose armor is being set
      */
 
@@ -109,6 +118,7 @@ public class Armor {
 
     public static class Builder {
 
+        private final String id;
         private ItemStack mainHand;
         private ItemStack offHand;
         private ItemStack boots;
@@ -116,11 +126,12 @@ public class Armor {
         private ItemStack chestPlate;
         private ItemStack helmet;
 
-        private Builder() {
+        private Builder(final String id) {
+            this.id = id;
         }
 
-        public static Builder create() {
-            return new Builder();
+        public static Builder create(final String id) {
+            return new Builder(id);
         }
 
         public Builder mainHand(final ItemStack mainHand) {
@@ -153,8 +164,9 @@ public class Armor {
             return this;
         }
 
-        public Armor build() {
-            return new Armor(
+        public Equipment build() {
+            return new Equipment(
+                    this.id,
                     this.mainHand,
                     this.offHand,
                     this.boots,

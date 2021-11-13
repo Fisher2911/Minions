@@ -1,0 +1,34 @@
+id: miner-equipment
+main-hand:
+  material: DIAMOND_PICKAXE
+  glowing: true
+off-hand:
+  material: COBBLESTONE
+boots:
+  material: LEATHER_BOOTS
+  glowing: true
+  color:
+    red: 0
+    green: 0
+    blue: 255
+pants:
+  material: LEATHER_LEGGINGS
+  glowing: true
+  color:
+    red: 0
+    green: 0
+    blue: 255
+chestplate:
+  material: LEATHER_CHESTPLATE
+  glowing: true
+  color:
+    red: 0
+    green: 0
+    blue: 255
+helmet:
+  material: LEATHER_HELMET
+  glowing: true
+  color:
+    red: 0
+    green: 0
+    blue: 255

@@ -1,7 +1,7 @@
 package io.github.fisher2911.minionsplugin.minion.data;
 
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
-import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
@@ -18,7 +18,7 @@ public class BaseMinionData {
     private final String namedId;
     private final MinionClass minionClass;
     private final String minionPermissionsGroupId;
-    private final MinionInventory inventory;
+    private final String equipmentId;
     private final String foodDataId;
     private final String upgradesId;
     private String name;
@@ -27,14 +27,14 @@ public class BaseMinionData {
             final String namedId,
             final MinionClass minionClass,
             final String minionPermissionsGroupId,
-            final MinionInventory inventory,
+            final String equipmentId,
             final String foodDataId,
             final String upgradesId,
             final String name) {
         this.namedId = namedId;
         this.minionClass = minionClass;
         this.minionPermissionsGroupId = minionPermissionsGroupId;
-        this.inventory = inventory;
+        this.equipmentId = equipmentId;
         this.foodDataId = foodDataId;
         this.upgradesId = upgradesId;
         this.name = name;
@@ -44,8 +44,8 @@ public class BaseMinionData {
         return this.minionPermissionsGroupId;
     }
 
-    public MinionInventory getInventory() {
-        return this.inventory;
+    public String getEquipmentId() {
+        return this.equipmentId;
     }
 
     public String getName() {
@@ -85,10 +85,12 @@ public class BaseMinionData {
 
         final var upgradesGroupManager = plugin.getUpgradeGroupManager();
         final var permissionsManager = plugin.getPermissionManager();
+        final var equipmentManager = plugin.getEquipmentManager();
         final var foodManger = plugin.getFoodManager();
 
         final var upgradeGroupOptional = upgradesGroupManager.get(this.upgradesId);
         final var permissionGroupOptional = permissionsManager.get(this.minionPermissionsGroupId);
+        final var equipmentOptional = equipmentManager.get(this.equipmentId);
         final var foodGroupOptional = foodManger.get(this.foodDataId);
 
         if (upgradeGroupOptional.isEmpty()) {
@@ -104,12 +106,18 @@ public class BaseMinionData {
             permissionsGroup = permissionGroupOptional.get();
         }
 
+        if (equipmentOptional.isEmpty()) {
+            Bukkit.broadcastMessage("Equipment missing");
+            return null;
+        }
+
         if (foodGroupOptional.isEmpty()) {
             Bukkit.broadcastMessage("Food group missing");
             return null;
         }
 
         final Upgrades upgrades = upgradeGroupOptional.get().toUpgrades();
+        final Equipment equipment = equipmentOptional.get();
         final FoodGroup foodGroup = foodGroupOptional.get();
 
         return new MinionData(
@@ -118,7 +126,7 @@ public class BaseMinionData {
                 owner,
                 this.minionClass,
                 permissionsGroup,
-                this.inventory,
+                equipment,
                 new FoodData(
                         foodGroup,
                         foodLevel),

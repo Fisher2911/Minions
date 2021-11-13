@@ -4,7 +4,9 @@ import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
 import io.github.fisher2911.minionsplugin.task.BlockBreakTask;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -61,8 +63,18 @@ public class WoodcutterMinion extends BlockMinion {
                 this.getRegion(),
                 1,
                 allowedMaterials,
-                brokenBlock -> this.getInventory().addStoredItemStack(
-                        brokenBlock.getDrops().toArray(new ItemStack[0])),
+                brokenBlock -> {
+                    final Location location = brokenBlock.getLocation();
+                    final World world = location.getWorld();
+
+                    if (world == null) {
+                        return;
+                    }
+
+                    for (final ItemStack itemStack : brokenBlock.getDrops()) {
+                        world.dropItem(location, itemStack);
+                    }
+                },
                 () -> {
                     this.isPerformingTask.set(false);
                     this.setLastActionTime(Instant.now());

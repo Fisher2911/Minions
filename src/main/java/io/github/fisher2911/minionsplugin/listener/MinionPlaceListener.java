@@ -7,7 +7,6 @@ import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import io.github.fisher2911.minionsplugin.world.MinionConverter;
 import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,8 +24,6 @@ public class MinionPlaceListener implements Listener {
     private final MinionConverter minionConverter;
     private final MinionManager minionManager;
     private final UpgradeGroupManager upgradeGroupManager;
-
-    private static int id = 0;
 
     public MinionPlaceListener(final MinionsPlugin plugin) {
         this.plugin = plugin;
@@ -59,7 +56,7 @@ public class MinionPlaceListener implements Listener {
         final Optional<BaseMinion<?>> minionOptional = this.minionConverter.itemStackToMinion(
                 heldItem,
                 origin
-                );
+        );
 
         minionOptional.ifPresentOrElse(minion -> {
             minion.place();
@@ -67,12 +64,10 @@ public class MinionPlaceListener implements Listener {
             event.setCancelled(true);
             player.sendMessage(ChatColor.GREEN + "Placed minion");
 
-            if (player.getGameMode() == GameMode.CREATIVE) {
-                final PlayerInventory inventory = player.getInventory();
-                final ItemStack itemStack = inventory.getItemInMainHand().clone();
-                itemStack.setAmount(itemStack.getAmount() - 1);
-                inventory.setItemInMainHand(itemStack);
-            }
+            final PlayerInventory inventory = player.getInventory();
+            final ItemStack itemStack = inventory.getItemInMainHand().clone();
+            itemStack.setAmount(itemStack.getAmount() - 1);
+            inventory.setItemInMainHand(itemStack);
 
         }, () -> player.sendMessage("No minion"));
     }

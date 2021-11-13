@@ -3,7 +3,9 @@ package io.github.fisher2911.minionsplugin.minion.types;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.event.BlockChangedInWorldEvent;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +36,14 @@ public class MinerMinion extends BlockMinion {
 
         blockInFront.setType(Material.AIR);
 
-        this.getInventory().addStoredItemStack(drops.toArray(new ItemStack[0]));
+        final World world = blockInFront.getWorld();
+
+        final Location location = blockInFront.getLocation();
+
+        for (final ItemStack itemStack : drops) {
+            world.dropItem(location, itemStack);
+        }
+
         this.setLastActionTime(Instant.now());
         return ActionResult.SUCCESS;
     }

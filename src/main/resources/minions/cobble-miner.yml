@@ -3,4 +3,5 @@ display-name: "Cobblestone Miner"
 upgrades: cobble-miner
 class: MINER
 permnissions: default
+equipment: miner-equipment
 food-group: cobble-miner

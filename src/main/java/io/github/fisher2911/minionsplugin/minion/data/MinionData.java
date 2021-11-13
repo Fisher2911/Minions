@@ -1,12 +1,14 @@
 package io.github.fisher2911.minionsplugin.minion.data;
 
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
-import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
 import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
 import java.time.Instant;
@@ -19,7 +21,7 @@ public class MinionData implements IdHolder<Long> {
     private final MinionClass minionClass;
     private UUID owner;
     private final MinionPermissionsGroup minionPermissionsGroup;
-    private final MinionInventory inventory;
+    private final Equipment equipment;
     private final FoodData foodData;
     private final Upgrades upgrades;
     private String name;
@@ -31,7 +33,7 @@ public class MinionData implements IdHolder<Long> {
             final UUID owner,
             final MinionClass minionClass,
             final MinionPermissionsGroup minionPermissionsGroup,
-            final MinionInventory inventory,
+            final Equipment equipment,
             final FoodData foodData,
             final Upgrades upgrades,
             final String name,
@@ -41,7 +43,7 @@ public class MinionData implements IdHolder<Long> {
         this.minionClass = minionClass;
         this.owner = owner;
         this.minionPermissionsGroup = minionPermissionsGroup;
-        this.inventory = inventory;
+        this.equipment = equipment;
         this.foodData = foodData;
         this.upgrades = upgrades;
         this.name = name;
@@ -52,8 +54,8 @@ public class MinionData implements IdHolder<Long> {
         return this.minionPermissionsGroup;
     }
 
-    public MinionInventory getInventory() {
-        return this.inventory;
+    public Equipment getArmor() {
+        return this.equipment;
     }
 
     public String getName() {
@@ -103,6 +105,21 @@ public class MinionData implements IdHolder<Long> {
 
     public String getNamedId() {
         return this.namedId;
+    }
+
+    public void setArmor(final LivingEntity minion) {
+        final EntityEquipment equipment = minion.getEquipment();
+
+        if (equipment == null) {
+            return;
+        }
+
+        equipment.setItemInMainHand(this.equipment.getMainHand());
+        equipment.setItemInOffHand(this.equipment.getOffHand());
+        equipment.setBoots(this.equipment.getBoots());
+        equipment.setLeggings(this.equipment.getPants());
+        equipment.setChestplate(this.equipment.getChestPlate());
+        equipment.setHelmet(this.equipment.getHelmet());
     }
 
     public FeedResponse feed(final ItemStack itemStack) {

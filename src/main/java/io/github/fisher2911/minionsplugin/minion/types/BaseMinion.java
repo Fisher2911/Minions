@@ -3,7 +3,7 @@ package io.github.fisher2911.minionsplugin.minion.types;
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.keys.Keys;
-import io.github.fisher2911.minionsplugin.minion.MinionInventory;
+import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
 import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
@@ -92,7 +92,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
             entity.setArms(true);
             entity.setGravity(false);
             entity.setInvulnerable(true);
-            this.minionData.getInventory().setArmor(entity);
+            this.minionData.setArmor(entity);
         });
     }
 
@@ -117,8 +117,8 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
         this.minion.remove();
     }
 
-    public MinionInventory getInventory() {
-        return this.minionData.getInventory();
+    public Equipment getArmor() {
+        return this.minionData.getArmor();
     }
 
     public Position getPosition() {
