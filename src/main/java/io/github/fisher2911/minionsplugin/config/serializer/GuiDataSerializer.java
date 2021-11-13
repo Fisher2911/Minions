@@ -14,7 +14,7 @@ import io.github.fisher2911.minionsplugin.gui.parser.ActionParser;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
     private static final String INSTRUCTIONS = "instructions";
     private static final String CLICK_TYPES = "click-types";
     private static final String FILL_ITEMS = "fill-items";
+    private static final String TYPE = "type";
 
     private ConfigurationNode nonVirtualNode(final ConfigurationNode source, final Object... path) throws SerializationException {
         if (!source.hasChild(path)) {
@@ -201,13 +202,26 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
 
         final var childrenMap = fillNode.childrenMap();
 
+        System.out.println("Loading fill types");
+
         for (final var childrenEntry : childrenMap.entrySet()) {
 
-            final ConfigurationNode fillTypeNode = childrenEntry.getValue();
+            final var typeNode = fillNode.node(childrenEntry.getKey()).node(TYPE);
+            final var actionsNode = fillNode.node(childrenEntry.getKey()).node(ACTIONS);
 
-            final String fillType = fillTypeNode.getString();
 
-            final ConfigurationNode actionsNode = fillTypeNode.node(ACTIONS);
+            System.out.println("Node = " + childrenEntry.getValue().node(TYPE).virtual());
+            System.out.println("Test = " + childrenEntry.getValue().virtual());
+            System.out.println("Test 2 = " + childrenEntry.getValue().childrenList());
+            System.out.println("Test 2 = " + childrenEntry.getValue().childrenMap());
+            System.out.println("Test 2 = " + childrenEntry.getValue().node("permissions"));
+            System.out.println("Node = " + childrenEntry.getValue().node(ACTIONS).virtual());
+
+            final String fillType = typeNode.getString();
+
+            System.out.println("Key = " + fillNode.node(childrenEntry.getKey()).getString());
+
+            System.out.println("Loaded fill type: " + fillType);
 
             final List<String> clickTypesStrings = Utils.replaceIfNull(
                     actionsNode.node(CLICK_TYPES).getList(String.class),
@@ -228,6 +242,7 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
             );
 
             if (instructions.isEmpty()) {
+                clickActionsMap.put(fillType, ClickActions.none());
                 continue;
             }
 

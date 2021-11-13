@@ -5,22 +5,24 @@ import org.bukkit.Material;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RegisteredPermissions {
 
-    private static final Map<String, MinionPermission> registered = new HashMap<>();
+    private static final Map<String, MinionPermission> registered = new LinkedHashMap<>();
 
     // todo - remove
     static {
-        register(new MinionPermission(
-                "test",
-                "test",
-                ItemBuilder.from(Material.BUCKET).
-                        name("Test permission").
-                        build()
-        ));
+        for (int i = 0; i < 100; i++) {
+            register(new MinionPermission(
+                    "test" + i,
+                    "test" + i,
+                    ItemBuilder.from(Material.BUCKET).
+                            name("Test permission " + i).
+                            build()
+            ));
+        }
     }
 
     public static void register(final MinionPermission minionPermission) {

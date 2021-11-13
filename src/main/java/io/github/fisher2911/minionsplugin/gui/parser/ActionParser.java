@@ -219,7 +219,6 @@ public class ActionParser {
 
                 upgrades.attemptUpgrade(type, menu.getGuiOwner());
                 menu.updateItems();
-                menu.get().update();
             } catch (final IllegalArgumentException ignored) {}
         });
     }

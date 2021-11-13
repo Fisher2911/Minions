@@ -36,29 +36,30 @@ actions:
       - LEFT
     instructions:
       open:
-        - "main"
-  26:
-  click-types:
-    - RIGHT
-    - LEFT
-  instructions:
-    open:
-      - "next"
+        - "previous"
   22:
     click-types:
       - RIGHT
       - LEFT
     instructions:
       open:
-        - "previous"
+        - "main"
+  26:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      open:
+        - "next"
 fill-items:
   1:
-    permissions:
-      actions:
-        click-types:
-          - RIGHT
-          - LEFT
-        instructions:
-          swap-value
-  2: online-players
-
+    type: permissions
+    actions:
+      click-types:
+        - RIGHT
+        - LEFT
+      instructions:
+        swap-value
+  2:
+    type: online-players
+    actions: none

@@ -19,16 +19,16 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
 public class SimpleMinionGui extends BaseMinionGui<Gui> {
 
     private final List<Gui> guis = new ArrayList<>();
-    private final NavigableMap<Integer, GuiItem> actualItems = new TreeMap<>();
+    private int highestSlot;
+    private final Map<Integer, GuiItem> actualItems = new HashMap<>();
     private int currentPage;
 
     public SimpleMinionGui(
@@ -51,19 +51,23 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
             return;
         }
 
-        this.fillItems();
-
         gui.open(player);
     }
 
     @Override
     public void updateItems() {
         this.fillItems();
+
+        final Gui gui = this.get();
+
+        if (gui != null) {
+            gui.update();
+        }
     }
 
     private void populateGuis() {
         this.fillItems(-1, -1);
-        for (int slot = 0; slot <= this.actualItems.lastEntry().getKey(); slot++) {
+        for (int slot = 0; slot <= this.highestSlot; slot++) {
 
             final int pageNumber = this.getPageNumberFromSlot(slot);
 
@@ -119,12 +123,12 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
             final ClickActions clickActions = entry.getValue();
 
             switch (type.toLowerCase(Locale.ROOT)) {
-                case "permissions" ->
-                        highestSlot = Math.max(this.fillPermissionsItems(clickActions), highestSlot);
-                case "players" ->
-                        highestSlot = Math.max(this.fillPlayerItems(clickActions), highestSlot);
+                case "permissions" -> highestSlot = Math.max(this.fillPermissionsItems(clickActions), highestSlot);
+                case "online-players" -> highestSlot = Math.max(this.fillPlayerItems(clickActions), highestSlot);
             }
         }
+
+        this.highestSlot = Math.max(highestSlot, this.highestSlot);
     }
 
     private void fillItems() {
@@ -137,6 +141,13 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
     }
 
     private void fillItems(int min, int max) {
+        this.actualItems.clear();
+        for (final Gui gui : this.guis) {
+            if (this.guiData.getBorderItemStacks().isEmpty()) {
+                continue;
+            }
+            gui.getFiller().fillBorder(this.guiData.getBorderItemStacks());
+        }
         for (final var entry : this.guiData.getItemStackSlots().entrySet()) {
 
             final int slot = entry.getKey();
@@ -154,12 +165,14 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
             if (typeItem != null) {
                 this.actualItems.put(slot, this.typeItemToGuiItem(typeItem));
             }
+
+            this.highestSlot = Math.max(slot, this.highestSlot);
         }
 
         this.fillItemSlots();
 
         min = Math.max(0, min);
-        max = Math.min(this.actualItems.lastEntry().getKey() - 1, max);
+        max = Math.min(this.highestSlot - 1, max);
 
 
         for (int slot = min; slot <= max; slot++) {
@@ -182,7 +195,6 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
     }
 
     /**
-     *
      * @return the highest slot used
      */
     private int fillPermissionsItems(
@@ -190,13 +202,16 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
             final int minSlot,
             final int maxSlot) {
         int slot = 0;
-        
+
         final Map<String, String> placeholders = Placeholder.getMinionPlaceholders(
                 this.minion,
                 this.guiOwner.getId()
         );
 
         for (final var entry : RegisteredPermissions.getAll().entrySet()) {
+
+            System.out.println("Registered Permission: " + entry.getKey());
+
             slot = this.getNextAvailableSlot(slot);
 
             if (minSlot != -1 && minSlot > slot) {
@@ -233,7 +248,6 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
     }
 
     /**
-     *
      * @return the highest slot used
      */
     private int fillPlayerItems(
@@ -264,7 +278,7 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
                     namePlaceholders(placeholders).
                     lorePlaceholders(placeholders).
                     build();
-            
+
             this.actualItems.put(slot, new GuiItem(itemStack));
             this.guiData.getClickActionSlots().put(slot, clickActions);
         }
@@ -273,9 +287,11 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
     }
 
     private int getNextAvailableSlot(int slot) {
-        while ((isBorderSlot(slot) &&
-                !this.guiData.getBorderItemStacks().isEmpty()) ||
-                this.guiData.getItemStackSlots().containsKey(slot)) {
+
+        final boolean hasBorderItems = !this.guiData.getBorderItemStacks().isEmpty();
+
+        while ((isBorderSlot(slot) && hasBorderItems) ||
+                this.actualItems.containsKey(slot)) {
             slot++;
         }
 
@@ -304,7 +320,8 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
                         build();
 
                 setItem = new GuiItem(itemStack);
-            } catch (final IllegalArgumentException ignored) {}
+            } catch (final IllegalArgumentException ignored) {
+            }
         }
 
         return setItem;
@@ -319,15 +336,18 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
         return this.guis.get(page);
     }
 
-    private boolean isBorderSlot(final int slot) {
-        return slot < 9 ||
+    private boolean isBorderSlot(int slot) {
+        slot = this.pageSlotToRawSLot(slot);
+        return this.guiData.getRows() > 2
+                && (slot < 9 ||
                 slot % 9 == 0 ||
-                (slot - 1) % 9 == 0 ||
-                slot >= this.guiData.getRows() - 9;
+                (slot + 1) % 9 == 0 ||
+                slot >= this.guiData.getRows() * 9 - 9
+                        && slot < this.guiData.getRows() * 9);
     }
 
     private int getPageNumberFromSlot(final int itemSlot) {
-        return (int) (float) (itemSlot -1) / (this.guiData.getRows() * 9);
+        return (int) (float) (itemSlot - 1) / (this.guiData.getRows() * 9);
     }
 
     @Override
@@ -337,7 +357,7 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
         if (gui != null) {
             this.currentPage++;
         }
-        
+
         return gui;
     }
 
@@ -360,6 +380,7 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
             return;
         }
 
+        this.updateItems();
 
         nextPage.open(player);
     }
@@ -372,10 +393,16 @@ public class SimpleMinionGui extends BaseMinionGui<Gui> {
             return;
         }
 
+        this.updateItems();
+
         previousPage.open(player);
     }
 
     private int rawSlotToPageSlot(final int slot) {
-        return slot + (this.getPageNumberFromSlot(slot) * this.guiData.getRows());
+        return slot + (this.getPageNumberFromSlot(slot) * this.guiData.getRows() * 9);
+    }
+
+    private int pageSlotToRawSLot(final int slot) {
+        return slot - (this.getPageNumberFromSlot(slot) * this.guiData.getRows() * 9);
     }
 }
