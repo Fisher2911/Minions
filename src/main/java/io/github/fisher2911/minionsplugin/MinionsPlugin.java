@@ -2,6 +2,7 @@ package io.github.fisher2911.minionsplugin;
 
 import io.github.fisher2911.fishcore.FishCore;
 import io.github.fisher2911.fishcore.user.UserManager;
+import io.github.fisher2911.minionsplugin.command.TestCommand;
 import io.github.fisher2911.minionsplugin.config.GuiLoader;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.listener.BlockAddedToWorldListener;
@@ -10,7 +11,10 @@ import io.github.fisher2911.minionsplugin.listener.EntityClickListener;
 import io.github.fisher2911.minionsplugin.listener.EntityKillListener;
 import io.github.fisher2911.minionsplugin.listener.MinionPlaceListener;
 import io.github.fisher2911.minionsplugin.listener.PlayerJoinListener;
+import io.github.fisher2911.minionsplugin.minion.data.MinionDataManager;
+import io.github.fisher2911.minionsplugin.minion.food.FoodManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
+import io.github.fisher2911.minionsplugin.permission.PermissionManager;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import io.github.fisher2911.minionsplugin.world.MinionConverter;
@@ -25,6 +29,9 @@ public class MinionsPlugin extends FishCore {
     private MinionManager minionManager;
     private UpgradeGroupManager upgradeGroupManager;
     private MinionConverter minionConverter;
+    private MinionDataManager minionDataManager;
+    private PermissionManager permissionManager;
+    private FoodManager foodManager;
 
     @Override
     public void onEnable() {
@@ -32,6 +39,10 @@ public class MinionsPlugin extends FishCore {
         this.initializeClasses();
         this.registerListeners();
         this.test();
+
+        this.foodManager.load();
+        this.upgradeGroupManager.loadAll();
+        this.minionDataManager.load();
     }
 
     @Override
@@ -40,7 +51,7 @@ public class MinionsPlugin extends FishCore {
     }
 
     private void initializeClasses() {
-        this.upgradeGroupManager = new UpgradeGroupManager(this);
+        this.upgradeGroupManager = new UpgradeGroupManager(new HashMap<>(), this);
         this.userManager = new UserManager<>();
         this.minionManager = new MinionManager(this);
         this.guiManager = new GuiManager();
@@ -48,6 +59,9 @@ public class MinionsPlugin extends FishCore {
                 new HashMap<>(),
                 this
         );
+        this.minionDataManager = new MinionDataManager(this, new HashMap<>());
+        this.permissionManager = new PermissionManager(new HashMap<>());
+        this.foodManager = new FoodManager(new HashMap<>(), this);
     }
 
     private void registerListeners() {
@@ -76,6 +90,18 @@ public class MinionsPlugin extends FishCore {
         return this.minionConverter;
     }
 
+    public MinionDataManager getMinionDataManager() {
+        return this.minionDataManager;
+    }
+
+    public PermissionManager getPermissionManager() {
+        return this.permissionManager;
+    }
+
+    public FoodManager getFoodManager() {
+        return this.foodManager;
+    }
+
     private void test() {
         final GuiLoader guiLoader = new GuiLoader(this);
         guiLoader.load("menus", "main.yml");
@@ -83,7 +109,7 @@ public class MinionsPlugin extends FishCore {
         guiLoader.load("menus", "upgrades.yml");
         guiLoader.load("menus", "cosmetics.yml");
 
-        this.upgradeGroupManager.load("upgrades", "cobble-miner-upgrades.yml");
+        this.getCommand("minion").setExecutor(new TestCommand(this));
     }
 
     public GuiManager getGuiManager() {

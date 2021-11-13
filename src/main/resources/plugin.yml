@@ -2,3 +2,8 @@ name: MinionsPlugin
 main: io.github.fisher2911.minionsplugin.MinionsPlugin
 version: 1.0.0-SNAPSHOT
 api-version: 1.16
+depend:
+  - FishCore
+commands:
+  minion:
+    description: Minion Command

@@ -26,7 +26,6 @@ import java.util.UUID;
 public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     protected final JavaPlugin plugin;
-    private Instant lastActionTime;
     protected ArmorStand minion;
     protected final Position position;
     private final MinionData minionData;
@@ -127,11 +126,11 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
     }
 
     public void setLastActionTime(final Instant lastActionTime) {
-        this.lastActionTime = lastActionTime;
+        this.minionData.setLastActionTime(lastActionTime);
     }
 
     public Instant getLastActionTime() {
-        return this.lastActionTime;
+        return this.minionData.getLastActionTime();
     }
 
     public boolean isInRegion(final Position position) {
@@ -140,7 +139,7 @@ public abstract class BaseMinion<T> implements IdHolder<Long> {
 
     public boolean enoughTimePassed() {
         final float speed = this.getUpgrades().getSpeed();
-        return Duration.between(this.lastActionTime, Instant.now()).getSeconds() >= speed;
+        return Duration.between(this.minionData.getLastActionTime(), Instant.now()).getSeconds() >= speed;
     }
 
     public Region getRegion() {

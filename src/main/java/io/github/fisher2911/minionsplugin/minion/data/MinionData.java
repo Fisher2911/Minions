@@ -1,5 +1,6 @@
 package io.github.fisher2911.minionsplugin.minion.data;
 
+import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import io.github.fisher2911.minionsplugin.minion.MinionInventory;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
@@ -11,24 +12,24 @@ import org.bukkit.inventory.ItemStack;
 import java.time.Instant;
 import java.util.UUID;
 
-public class MinionData {
+public class MinionData implements IdHolder<Long> {
 
-    protected final long id;
+    private final long id;
+    private final String namedId;
     private final MinionClass minionClass;
-    protected final UUID owner;
-    protected MinionType minionType;
+    private UUID owner;
     private final MinionPermissionsGroup minionPermissionsGroup;
     private final MinionInventory inventory;
     private final FoodData foodData;
     private final Upgrades upgrades;
     private String name;
-    private final Instant lastActionTime;
+    private Instant lastActionTime;
 
     public MinionData(
             final long id,
+            final String namedId,
             final UUID owner,
             final MinionClass minionClass,
-            final MinionType minionType,
             final MinionPermissionsGroup minionPermissionsGroup,
             final MinionInventory inventory,
             final FoodData foodData,
@@ -36,9 +37,9 @@ public class MinionData {
             final String name,
             final Instant lastActionTime) {
         this.id = id;
+        this.namedId = namedId;
         this.minionClass = minionClass;
         this.owner = owner;
-        this.minionType = minionType;
         this.minionPermissionsGroup = minionPermissionsGroup;
         this.inventory = inventory;
         this.foodData = foodData;
@@ -71,7 +72,8 @@ public class MinionData {
         return this.upgrades;
     }
 
-    public long getId() {
+    @Override
+    public Long getId() {
         return this.id;
     }
 
@@ -83,12 +85,24 @@ public class MinionData {
         return this.owner;
     }
 
+    public void setOwner(final UUID owner) {
+        this.owner = owner;
+    }
+
     public MinionType getMinionType() {
-        return this.minionType;
+        return this.minionClass.getMinionType();
     }
 
     public Instant getLastActionTime() {
         return this.lastActionTime;
+    }
+
+    public void setLastActionTime(final Instant lastActionTime) {
+        this.lastActionTime = lastActionTime;
+    }
+
+    public String getNamedId() {
+        return this.namedId;
     }
 
     public FeedResponse feed(final ItemStack itemStack) {

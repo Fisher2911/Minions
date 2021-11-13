@@ -1,13 +1,24 @@
 package io.github.fisher2911.minionsplugin.minion.data;
 
+import io.github.fisher2911.minionsplugin.minion.MinionType;
+
 public enum MinionClass {
 
-    MINER,
+    MINER(MinionType.BLOCK),
 
-    FARMER,
+    FARMER(MinionType.BLOCK),
 
-    SLAYER,
+    SLAYER(MinionType.ENTITY),
 
-    WOODCUTTER
+    WOODCUTTER(MinionType.BLOCK);
 
+    private final MinionType minionType;
+
+    MinionClass(final MinionType minionType) {
+        this.minionType = minionType;
+    }
+
+    public MinionType getMinionType() {
+        return this.minionType;
+    }
 }

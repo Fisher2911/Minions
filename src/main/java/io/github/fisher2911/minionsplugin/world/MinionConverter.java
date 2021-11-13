@@ -38,7 +38,10 @@ public class MinionConverter {
 
     public ItemStack minionToItemStack(final BaseMinion<?> minion) {
         final MinionData minionData = minion.getMinionData();
+        return this.minionDataToItemStack(minionData);
+    }
 
+    public ItemStack minionDataToItemStack(final MinionData minionData) {
         final double foodLevel = minionData.getFoodData().getFoodLevel();
 
         final List<Component> lore = new ArrayList<>();
@@ -54,6 +57,8 @@ public class MinionConverter {
                     upgradeData.getUpgrade().getDisplayName() +
                             " - Level " + upgradeData.getLevel()));
         }
+
+        this.savedMinionData.put(minionData.getId(), minionData);
 
         return ItemBuilder.from(
                         Material.ARMOR_STAND

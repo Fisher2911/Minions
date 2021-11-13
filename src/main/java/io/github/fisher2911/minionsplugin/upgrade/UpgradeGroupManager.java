@@ -10,20 +10,49 @@ import io.github.fisher2911.minionsplugin.config.serializer.UpgradeGroupSerializ
 import io.github.fisher2911.minionsplugin.gui.GuiData;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class UpgradeGroupManager extends Manager<String, UpgradeGroup> {
 
     private final MinionsPlugin plugin;
 
-    public UpgradeGroupManager(final MinionsPlugin plugin) {
+    private UpgradeGroupManager(final MinionsPlugin plugin) {
+        super();
         this.plugin = plugin;
     }
 
-    public void load(final String... path) {
+    public UpgradeGroupManager(final Map<String, UpgradeGroup> map, final MinionsPlugin plugin) {
+        super(map);
+        this.plugin = plugin;
+    }
+
+    public void loadAll() {
+        final File file = Path.of(this.plugin.getDataFolder().getPath(),
+                "upgrades").toFile();
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        final File[] files = file.listFiles();
+
+        if (files == null) {
+            this.plugin.logger().error("No upgrade files");
+            return;
+        }
+
+        for (final File f : files) {
+            this.load(f);
+        }
+    }
+
+    private void load(final File file) {
+        this.plugin.logger().info("Loaded upgrades: " + file.getName());
         final YamlConfigurationLoader loader = YamlConfigurationLoader.
                 builder().
-                path(Path.of(this.plugin.getDataFolder().getPath(), path)).
+                path(file.toPath()).
                 defaultOptions(opts ->
                         opts.serializers(build -> {
                             build.register(GuiData.class, GuiDataSerializer.INSTANCE);

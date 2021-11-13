@@ -1,5 +1,6 @@
 package io.github.fisher2911.minionsplugin.permission;
 
+import io.github.fisher2911.fishcore.util.helper.IdHolder;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
 import org.jetbrains.annotations.NotNull;
 
@@ -7,8 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class MinionPermissionsGroup implements Comparable<MinionPermissionsGroup> {
+public class MinionPermissionsGroup implements IdHolder<String>, Comparable<MinionPermissionsGroup> {
 
+    private final String id;
     private int ranking;
     private String name;
     private Mode mode;
@@ -17,18 +19,25 @@ public class MinionPermissionsGroup implements Comparable<MinionPermissionsGroup
     private final MinionPermissions minionPermissions;
 
     public MinionPermissionsGroup(
+            final String id,
             final int ranking,
             final String name,
             final Mode mode,
             final Set<Long> minions,
             final List<UUID> members,
             final MinionPermissions minionPermissions) {
+        this.id = id;
         this.ranking = ranking;
         this.name = name;
         this.mode = mode;
         this.minions = minions;
         this.members = members;
         this.minionPermissions = minionPermissions;
+    }
+
+    @Override
+    public String getId() {
+        return this.id;
     }
 
     public String getName() {

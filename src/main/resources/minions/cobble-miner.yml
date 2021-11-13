@@ -1,3 +1,6 @@
 id: cobble_miner
-default-name: "<gray>Cobblestone Miner</gray>"
-upgrades:
+display-name: "Cobblestone Miner"
+upgrades: cobble-miner
+class: MINER
+permnissions: default
+food-group: cobble-miner
