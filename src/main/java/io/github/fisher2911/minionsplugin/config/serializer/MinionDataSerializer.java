@@ -3,16 +3,16 @@ package io.github.fisher2911.minionsplugin.config.serializer;
 import io.github.fisher2911.fishcore.configurate.ConfigurationNode;
 import io.github.fisher2911.fishcore.configurate.serialize.SerializationException;
 import io.github.fisher2911.fishcore.configurate.serialize.TypeSerializer;
-import io.github.fisher2911.fishcore.util.builder.LeatherArmorBuilder;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.data.BaseMinionData;
 import io.github.fisher2911.minionsplugin.minion.data.MinionClass;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MinionDataSerializer implements TypeSerializer<BaseMinionData> {
 
@@ -26,7 +26,6 @@ public class MinionDataSerializer implements TypeSerializer<BaseMinionData> {
     private static final String DISPLAY_NAME = "display-name";
     private static final String UPGRADE_GROUP = "upgrades";
     private static final String MINION_CLASS = "class";
-    private static final String PERMISSION = "permissions";
     private static final String EQUIPMENT = "equipment";
     private static final String FOOD_GROUP = "food-group";
 
@@ -50,28 +49,24 @@ public class MinionDataSerializer implements TypeSerializer<BaseMinionData> {
         final var displayNameNode = this.nonVirtualNode(source, DISPLAY_NAME);
         final var upgradeGroupNode = this.nonVirtualNode(source, UPGRADE_GROUP);
         final var minionClassNode = this.nonVirtualNode(source, MINION_CLASS);
-        final var permissionNode = source.node(PERMISSION);
         final var equipmentNode = this.nonVirtualNode(source, EQUIPMENT);
         final var foodGroupNode = this.nonVirtualNode(source, FOOD_GROUP);
+
+        final List<MinionPermissionsGroup> permissionsGroups = new ArrayList<>();
 
         final String id = idNode.getString();
         final String displayName = displayNameNode.getString();
         final String upgradesGroup = upgradeGroupNode.getString();
         final String minionClassString = minionClassNode.getString();
-        final String permissions = permissionNode.getString();
+        permissionsGroups.add(plugin.getPermissionManager().getDefaultGroup());
         final String equipment = equipmentNode.getString();
         final String foodGroupId = foodGroupNode.getString();
 
         try {
-
-            final LeatherArmorBuilder builder =
-                    LeatherArmorBuilder.from(Material.LEATHER_BOOTS).
-                            color(Color.RED);
-
             return new BaseMinionData(
                     id,
                     MinionClass.valueOf(minionClassString.toUpperCase()),
-                    permissions,
+                    permissionsGroups,
                     equipment,
                     foodGroupId,
                     upgradesGroup,

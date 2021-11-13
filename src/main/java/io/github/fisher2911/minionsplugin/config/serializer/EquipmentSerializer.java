@@ -8,7 +8,7 @@ import io.github.fisher2911.fishcore.util.helper.Utils;
 import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.Arrays;

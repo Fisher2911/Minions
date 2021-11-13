@@ -6,6 +6,7 @@ import io.github.fisher2911.fishcore.util.helper.Utils;
 import io.github.fisher2911.fishcore.world.Position;
 import io.github.fisher2911.minionsplugin.minion.data.MinionData;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import io.github.fisher2911.minionsplugin.permission.RegisteredPermissions;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeData;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
@@ -15,6 +16,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,6 +43,7 @@ public class Placeholder {
     public static final String UPGRADE_LEVEL = "%" + UPGRADE_TYPE + "_level%";
     public static final String UPGRADE_NAME = "%" + UPGRADE_TYPE + "_name%";
     public static final String UPGRADE_ID = "%" + UPGRADE_TYPE + "_id%";
+    public static final String PERMISSION = "%permission + " + NAME + "%";
 
     public static Map<String, String> getMinionPlaceholders(
             final BaseMinion<?> minion) {
@@ -119,6 +122,28 @@ public class Placeholder {
             placeholders.put(replaceNameString, upgrade.getDisplayName());
             placeholders.put(replaceIdString, upgrade.getId());
             placeholders.put(replaceMoneyCostString, moneyCost);
+        }
+
+        return placeholders;
+    }
+
+    public static Map<String, String> getMinionPlaceholders(
+            final BaseMinion<?> minion,
+            final UUID uuid) {
+
+        final Map<String, String> placeholders = getMinionPlaceholders(minion);
+
+        final MinionData minionData = minion.getMinionData();
+
+        for (final var entry : RegisteredPermissions.getAll().entrySet()) {
+            final String permission = entry.getKey();
+
+            final String hasPermission =
+                    String.valueOf(
+                            minionData.hasPermission(permission, uuid)
+                    ).toLowerCase(Locale.ROOT);
+
+            placeholders.put(PERMISSION.replace(NAME, permission), hasPermission);
         }
 
         return placeholders;

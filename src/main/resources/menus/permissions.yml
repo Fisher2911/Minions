@@ -1,8 +1,8 @@
-title: "<green>Cosmetics Menu</green>"
+title: "<green>Permissions Menu</green>"
 rows: 3
 border-items:
   1:
-    material: WHITE_STAINED_GLASS_PANE
+    material: RED_STAINED_GLASS_PANE
     name: " "
     glow: true
   2:
@@ -10,25 +10,55 @@ border-items:
     name: " "
     glow: true
 items:
-  4:
-    material: FEATHER
+  18:
+    material: ARROW
     amount: 1
-    name: "<green>Example Permissions</green>"
-    lore:
-      - ""
-      - "<green>Example Permissions</green>"
-  13:
+    name: "<green>Previous Page"
+  22:
     material: ARROW
     amount: 1
     name: "<green>Go Back</green>"
     lore:
       - ""
       - "<green>Go Back</green>"
+  26:
+    material: ARROW
+    amount: 1
+    name: "<green>Next Page"
+  32:
+    material: GOLD_BLOCK
+    amount: 1
+    name: "Test"
 actions:
-  13:
+  18:
     click-types:
       - RIGHT
       - LEFT
     instructions:
       open:
         - "main"
+  26:
+  click-types:
+    - RIGHT
+    - LEFT
+  instructions:
+    open:
+      - "next"
+  22:
+    click-types:
+      - RIGHT
+      - LEFT
+    instructions:
+      open:
+        - "previous"
+fill-items:
+  1:
+    permissions:
+      actions:
+        click-types:
+          - RIGHT
+          - LEFT
+        instructions:
+          swap-value
+  2: online-players
+

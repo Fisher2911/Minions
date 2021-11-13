@@ -3,12 +3,13 @@ package io.github.fisher2911.minionsplugin.gui.parser;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
+import io.github.fisher2911.minionsplugin.gui.BaseMinionGui;
 import io.github.fisher2911.minionsplugin.gui.ClickAction;
 import io.github.fisher2911.minionsplugin.gui.ClickActions;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
-import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
+import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.ClickType;
@@ -58,33 +59,29 @@ public class ActionParser {
     public static ClickActions create(
             final String type,
             final List<String> instructions,
-            final Set<ClickType> clickTypes,
-            final int slot) {
+            final Set<ClickType> clickTypes) {
 
         if (instructions.isEmpty()) {
             return ClickActions.none();
         }
 
-        return parseInstructions(type, instructions, clickTypes, slot);
+        return parseInstructions(type, instructions, clickTypes);
     }
 
     private static ClickActions parseInstructions(
             String previousInstruction,
             final List<String> instructions,
-            final Set<ClickType> clickTypes,
-            final int slot) {
+            final Set<ClickType> clickTypes) {
         final var instructionsMap = getInstructions(previousInstruction, instructions);
         return translateInstructions(
                 instructionsMap,
-                clickTypes,
-                slot
+                clickTypes
         );
     }
 
     private static ClickActions translateInstructions(
             final ListMultimap<String, String> instructionsMap,
-            final Set<ClickType> clickTypes,
-            final int slot) {
+            final Set<ClickType> clickTypes) {
 
         final ClickActions clickActions = new ClickActions();
 
@@ -116,7 +113,7 @@ public class ActionParser {
                                 final UpgradeType upgradeType = UpgradeType.valueOf(instruction);
 
                                 return createAttemptUpgradeAction(
-                                        upgradeType, clickTypes, slot
+                                        upgradeType, clickTypes
                                 );
                             } catch (final IllegalArgumentException ignored) {
                                 return ClickAction.none();
@@ -163,26 +160,39 @@ public class ActionParser {
             final String guiName,
             final Set<ClickType> clickTypes) {
         final GuiManager guiManager = plugin.getGuiManager();
-        return new ClickAction(clickTypes, menu -> {
+        return new ClickAction(clickTypes, (menu, slot) -> {
             final MinionUser minionUser = menu.getGuiOwner();
-            minionUser.ifOnline(player -> guiManager.openMinionGui(guiName, minionUser, menu.getMinion()));
+
+            minionUser.ifOnline(player -> {
+
+                if (guiName.equals(BaseMinionGui.PREVIOUS_PAGE)) {
+                    menu.openPreviousPage(player);
+                    return;
+                }
+
+                if (guiName.equals(BaseMinionGui.NEXT_PAGE)) {
+                    menu.openNextPage(player);
+                    return;
+                }
+
+                guiManager.openMinionGui(guiName, minionUser, menu.getMinion());
+            });
         });
     }
 
     private static ClickAction createSetGuiItemsAction(
             final List<String> instructions,
             final Set<ClickType> clickTypes) {
-        return new ClickAction(clickTypes, menu -> {
+        return new ClickAction(clickTypes, (menu, slot) -> {
         });
     }
 
     private static ClickAction createAttemptUpgradeAction(
             final UpgradeType upgradeType,
-            final Set<ClickType> clickTypes,
-            final int slot) {
+            final Set<ClickType> clickTypes) {
 
         return new ClickAction(
-                clickTypes, menu -> {
+                clickTypes, (menu, slot) -> {
 
             final MinionUser user = menu.getGuiOwner();
             final TypeItem typeItem = menu.getGuiData().getTypeItem(slot);

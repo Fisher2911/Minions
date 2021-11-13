@@ -1,23 +1,26 @@
 package io.github.fisher2911.minionsplugin.minion.data;
 
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
-import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
+import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.Bukkit;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class BaseMinionData {
 
     private final String namedId;
     private final MinionClass minionClass;
-    private final String minionPermissionsGroupId;
+    private final List<MinionPermissionsGroup> minionPermissionsGroups;
     private final String equipmentId;
     private final String foodDataId;
     private final String upgradesId;
@@ -26,22 +29,23 @@ public class BaseMinionData {
     public BaseMinionData(
             final String namedId,
             final MinionClass minionClass,
-            final String minionPermissionsGroupId,
+            final List<MinionPermissionsGroup> minionPermissionsGroups,
             final String equipmentId,
             final String foodDataId,
             final String upgradesId,
             final String name) {
         this.namedId = namedId;
         this.minionClass = minionClass;
-        this.minionPermissionsGroupId = minionPermissionsGroupId;
+        this.minionPermissionsGroups = minionPermissionsGroups;
         this.equipmentId = equipmentId;
         this.foodDataId = foodDataId;
         this.upgradesId = upgradesId;
         this.name = name;
     }
 
-    public String getMinionPermissionsGroupId() {
-        return this.minionPermissionsGroupId;
+    @Unmodifiable
+    public List<MinionPermissionsGroup> getMinionPermissionsGroup() {
+        return Collections.unmodifiableList(this.minionPermissionsGroups);
     }
 
     public String getEquipmentId() {
@@ -89,21 +93,12 @@ public class BaseMinionData {
         final var foodManger = plugin.getFoodManager();
 
         final var upgradeGroupOptional = upgradesGroupManager.get(this.upgradesId);
-        final var permissionGroupOptional = permissionsManager.get(this.minionPermissionsGroupId);
         final var equipmentOptional = equipmentManager.get(this.equipmentId);
         final var foodGroupOptional = foodManger.get(this.foodDataId);
 
         if (upgradeGroupOptional.isEmpty()) {
             Bukkit.broadcastMessage("Upgrade group missing");
             return null;
-        }
-
-        final MinionPermissionsGroup permissionsGroup;
-
-        if (permissionGroupOptional.isEmpty()) {
-            permissionsGroup = permissionsManager.getDefaultGroup();
-        } else {
-            permissionsGroup = permissionGroupOptional.get();
         }
 
         if (equipmentOptional.isEmpty()) {
@@ -125,7 +120,7 @@ public class BaseMinionData {
                 this.namedId,
                 owner,
                 this.minionClass,
-                permissionsGroup,
+                this.minionPermissionsGroups,
                 equipment,
                 new FoodData(
                         foodGroup,

@@ -29,9 +29,12 @@ public class ClickActions {
         this.clickActions.addAll(clickActions.getClickActions());
     }
 
-    public void runAll(final BaseMinionGui<?> gui, final ClickType clickType) {
+    public void runAll(
+            final BaseMinionGui<?> gui,
+            final int clickedSlot,
+            final ClickType clickType) {
         this.clickActions.forEach(clickAction ->
-                clickAction.act(gui, clickType));
+                clickAction.act(gui, clickedSlot, clickType));
     }
 
     public static ClickActions none() {

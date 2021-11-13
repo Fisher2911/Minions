@@ -12,7 +12,7 @@ import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.world.Range;
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;

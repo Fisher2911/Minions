@@ -18,12 +18,15 @@ public class ClickAction {
     }
 
     public static ClickAction none() {
-        return new ClickAction(EnumSet.noneOf(ClickType.class), gui -> {});
+        return new ClickAction(EnumSet.noneOf(ClickType.class), (gui, slot) -> {});
     }
 
-    public void act(final BaseMinionGui<?> baseMinionGui, final ClickType clickType) {
+    public void act(
+            final BaseMinionGui<?> baseMinionGui,
+            final int slotClicked,
+            final ClickType clickType) {
         if (this.clickTypes.contains(clickType)) {
-            this.action.act(baseMinionGui);
+            this.action.act(baseMinionGui, slotClicked);
         }
     }
 
@@ -38,7 +41,7 @@ public class ClickAction {
     @FunctionalInterface
     public interface Action {
 
-        void act(final BaseMinionGui<?> baseMinionGui);
+        void act(final BaseMinionGui<?> baseMinionGui, final int slotClicked);
 
     }
 

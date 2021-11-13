@@ -59,6 +59,9 @@ public class GuiLoader {
             final var source = loader.load();
 
             final GuiData guiData = source.get(GuiData.class);
+
+            this.plugin.getLogger().severe("Loaded gui: " + file.getName());
+
             this.guiManager.registerGui(file.getName().replace(".yml", ""), guiData);
         } catch (ConfigurateException e) {
             e.printStackTrace();

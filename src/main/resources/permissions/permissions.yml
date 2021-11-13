@@ -1,0 +1,20 @@
+place-minion:
+  display-name: "<green>Place Minion Permission"
+  display-item:
+    material: DISPENSER
+    name: "<green>Place Minion Permission"
+pickup-minion:
+  display-name: "<green>Pickup Minion Permission"
+  display-item:
+  material: WOODEN_PICKAXE
+  name: "<green>Pickup Minion Permission"
+open-minion-menu:
+  display-name: "<green>View Minion Menu"
+  display-item:
+    material: PAINTING
+    name: "<green>View Minion Menu Permission"
+upgrade-minion:
+  display-name: "<green>Upgrade Minion Permission"
+  display-item:
+    material: ANVIL
+    name: "<green>Upgrade Minion Permission"

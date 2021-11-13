@@ -6,7 +6,7 @@ import io.github.fisher2911.fishcore.configurate.serialize.TypeSerializer;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
 import org.bukkit.Material;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.EnumMap;
@@ -15,7 +15,7 @@ import java.util.Map;
 public class FoodGroupSerializer implements TypeSerializer<FoodGroup> {
 
     private static final String ID = "id";
-    private static final String FOOD = "food";
+    private static final String FOOD = "foods";
 
     private static final MinionsPlugin plugin;
 
@@ -49,7 +49,7 @@ public class FoodGroupSerializer implements TypeSerializer<FoodGroup> {
                 foodValues.put(material, value);
 
             } catch (final IllegalArgumentException exception) {
-                plugin.logger().configWarning(foodType + " is not a valid material");
+                plugin.logger().configWarning(foodType + " is not a valid food material");
             }
         }
 

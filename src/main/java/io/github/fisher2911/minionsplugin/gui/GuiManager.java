@@ -36,13 +36,14 @@ public class GuiManager {
             final String id,
             final MinionUser minionUser,
             final BaseMinion<?> minion) {
+
         final SimpleMinionGui gui = this.getGui(id, minionUser, minion);
 
         if (gui == null) {
             return;
         }
 
-        minionUser.ifOnline(gui.get()::open);
+        minionUser.ifOnline(gui::open);
     }
 
 }

@@ -1,17 +1,20 @@
 package io.github.fisher2911.minionsplugin.minion.data;
 
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
-import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.minion.MinionType;
 import io.github.fisher2911.minionsplugin.minion.food.FeedResponse;
 import io.github.fisher2911.minionsplugin.minion.food.FoodData;
+import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 public class MinionData implements IdHolder<Long> {
@@ -20,7 +23,7 @@ public class MinionData implements IdHolder<Long> {
     private final String namedId;
     private final MinionClass minionClass;
     private UUID owner;
-    private final MinionPermissionsGroup minionPermissionsGroup;
+    private final List<MinionPermissionsGroup> minionPermissionsGroups;
     private final Equipment equipment;
     private final FoodData foodData;
     private final Upgrades upgrades;
@@ -32,7 +35,7 @@ public class MinionData implements IdHolder<Long> {
             final String namedId,
             final UUID owner,
             final MinionClass minionClass,
-            final MinionPermissionsGroup minionPermissionsGroup,
+            final List<MinionPermissionsGroup> minionPermissionsGroups,
             final Equipment equipment,
             final FoodData foodData,
             final Upgrades upgrades,
@@ -42,7 +45,8 @@ public class MinionData implements IdHolder<Long> {
         this.namedId = namedId;
         this.minionClass = minionClass;
         this.owner = owner;
-        this.minionPermissionsGroup = minionPermissionsGroup;
+        this.minionPermissionsGroups = minionPermissionsGroups;
+        Collections.sort(this.minionPermissionsGroups);
         this.equipment = equipment;
         this.foodData = foodData;
         this.upgrades = upgrades;
@@ -50,8 +54,24 @@ public class MinionData implements IdHolder<Long> {
         this.lastActionTime = lastActionTime;
     }
 
-    public MinionPermissionsGroup getMinionPermissionsGroup() {
-        return this.minionPermissionsGroup;
+    @Unmodifiable
+    public List<MinionPermissionsGroup> getMinionPermissionsGroup() {
+        return Collections.unmodifiableList(this.minionPermissionsGroups);
+    }
+
+    public boolean hasPermission(
+            final String permission,
+            final UUID uuid) {
+        boolean hasPermission = false;
+        for (final MinionPermissionsGroup group : this.minionPermissionsGroups) {
+            hasPermission = group.hasPermission(uuid, permission);
+
+            if (hasPermission) {
+                break;
+            }
+        }
+
+        return hasPermission;
     }
 
     public Equipment getArmor() {

@@ -14,18 +14,21 @@ public class GuiData {
     private final List<GuiItem> borderItemStacks;
     private final Map<Integer, TypeItem> itemStackSlots;
     private final Map<Integer, ClickActions> clickActionSlots;
+    private final Map<String, ClickActions> fillItems;
 
     public GuiData(
             final String title,
             final int rows,
             final List<GuiItem> borderItemStacks,
             final Map<Integer, TypeItem> itemStackSlots,
-            final Map<Integer, ClickActions> clickActionSlots) {
+            final Map<Integer, ClickActions> clickActionSlots,
+            final Map<String, ClickActions> fillItems) {
         this.title = title;
         this.rows = rows;
         this.borderItemStacks = borderItemStacks;
         this.itemStackSlots = itemStackSlots;
         this.clickActionSlots = clickActionSlots;
+        this.fillItems = fillItems;
     }
 
     public String getTitle() {
@@ -50,6 +53,10 @@ public class GuiData {
 
     public @Nullable TypeItem getTypeItem(final int slot) {
         return this.itemStackSlots.get(slot);
+    }
+
+    public Map<String, ClickActions> getFillItems() {
+        return this.fillItems;
     }
 
     @Override
