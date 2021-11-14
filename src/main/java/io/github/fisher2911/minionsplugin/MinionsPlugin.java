@@ -34,6 +34,7 @@ public class MinionsPlugin extends FishCore {
     private PermissionManager permissionManager;
     private EquipmentManager equipmentManager;
     private FoodManager foodManager;
+    private GuiLoader guiLoader;
 
     @Override
     public void onEnable() {
@@ -47,6 +48,7 @@ public class MinionsPlugin extends FishCore {
         this.foodManager.load();
         this.upgradeGroupManager.loadAll();
         this.minionDataManager.load();
+        this.guiLoader.loadAll();
     }
 
     @Override
@@ -67,6 +69,7 @@ public class MinionsPlugin extends FishCore {
         this.permissionManager = new PermissionManager(new HashMap<>());
         this.equipmentManager = new EquipmentManager(new HashMap<>(), this);
         this.foodManager = new FoodManager(new HashMap<>(), this);
+        this.guiLoader = new GuiLoader(this);
     }
 
     private void registerListeners() {
@@ -112,12 +115,6 @@ public class MinionsPlugin extends FishCore {
     }
 
     private void test() {
-        final GuiLoader guiLoader = new GuiLoader(this);
-        guiLoader.load("menus", "main.yml");
-        guiLoader.load("menus", "permissions.yml");
-        guiLoader.load("menus", "upgrades.yml");
-        guiLoader.load("menus", "cosmetics.yml");
-
         this.getCommand("minion").setExecutor(new TestCommand(this));
     }
 

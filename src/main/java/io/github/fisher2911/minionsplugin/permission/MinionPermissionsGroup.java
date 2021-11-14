@@ -1,18 +1,21 @@
 package io.github.fisher2911.minionsplugin.permission;
 
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
+import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import io.github.fisher2911.minionsplugin.util.Displayable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public class MinionPermissionsGroup implements IdHolder<String>, Comparable<MinionPermissionsGroup> {
+public class MinionPermissionsGroup implements IdHolder<String>, Displayable, Comparable<MinionPermissionsGroup> {
 
     private final String id;
     private int ranking;
     private String name;
+    private TypeItem displayItem;
     private Mode mode;
     private Set<Long> minions;
     private List<UUID> members;
@@ -22,6 +25,7 @@ public class MinionPermissionsGroup implements IdHolder<String>, Comparable<Mini
             final String id,
             final int ranking,
             final String name,
+            final TypeItem displayItem,
             final Mode mode,
             final Set<Long> minions,
             final List<UUID> members,
@@ -29,6 +33,7 @@ public class MinionPermissionsGroup implements IdHolder<String>, Comparable<Mini
         this.id = id;
         this.ranking = ranking;
         this.name = name;
+        this.displayItem = displayItem;
         this.mode = mode;
         this.minions = minions;
         this.members = members;
@@ -46,6 +51,19 @@ public class MinionPermissionsGroup implements IdHolder<String>, Comparable<Mini
 
     public void setName(final String name) {
         this.name = name;
+    }
+
+    @Override
+    public TypeItem getDisplayItem() {
+        return this.displayItem;
+    }
+
+    public void setDisplayItem(final TypeItem displayItem) {
+        this.displayItem = displayItem;
+    }
+
+    public void setMinions(final Set<Long> minions) {
+        this.minions = minions;
     }
 
     public Mode getMode() {

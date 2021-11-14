@@ -1,9 +1,10 @@
 package io.github.fisher2911.minionsplugin.permission;
 
 import io.github.fisher2911.fishcore.util.helper.IdHolder;
-import org.bukkit.inventory.ItemStack;
+import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
+import io.github.fisher2911.minionsplugin.util.Displayable;
 
-public class MinionPermission implements IdHolder<String> {
+public class MinionPermission implements IdHolder<String>, Displayable {
 
     public static final String PLACE_MINION = "place-minion";
     public static final String PICKUP_MINION = "pickup-minion";
@@ -12,12 +13,12 @@ public class MinionPermission implements IdHolder<String> {
     
     private final String id;
     private final String displayName;
-    private final ItemStack displayItem;
+    private final TypeItem displayItem;
 
     public MinionPermission(
             final String id,
             final String displayName,
-            final ItemStack displayItem) {
+            final TypeItem displayItem) {
         this.id = id;
         this.displayName = displayName;
         this.displayItem = displayItem;
@@ -32,7 +33,8 @@ public class MinionPermission implements IdHolder<String> {
         return this.displayName;
     }
 
-    public ItemStack getDisplayItem() {
+    @Override
+    public TypeItem getDisplayItem() {
         return this.displayItem;
     }
 }

@@ -44,6 +44,8 @@ public class Placeholder {
     public static final String UPGRADE_NAME = "%" + UPGRADE_TYPE + "_name%";
     public static final String UPGRADE_ID = "%" + UPGRADE_TYPE + "_id%";
     public static final String PERMISSION = "%permission + " + NAME + "%";
+    public static final String THIS = "%this%";
+    public static final String CLICKED = "%clicked%";
 
     public static Map<String, String> getMinionPlaceholders(
             final BaseMinion<?> minion) {

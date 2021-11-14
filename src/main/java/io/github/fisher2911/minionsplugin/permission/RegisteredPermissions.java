@@ -1,6 +1,7 @@
 package io.github.fisher2911.minionsplugin.permission;
 
 import io.github.fisher2911.fishcore.util.builder.ItemBuilder;
+import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
 import org.bukkit.Material;
 import org.jetbrains.annotations.Unmodifiable;
 
@@ -14,14 +15,16 @@ public class RegisteredPermissions {
 
     // todo - remove
     static {
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 2; i++) {
             register(new MinionPermission(
                     "test" + i,
                     "test" + i,
+                    new TypeItem(
+                            "permission",
+                    "test",
                     ItemBuilder.from(Material.BUCKET).
                             name("Test permission " + i).
-                            build()
-            ));
+                            build())));
         }
     }
 

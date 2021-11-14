@@ -1,7 +1,10 @@
 package io.github.fisher2911.minionsplugin.permission;
 
 import io.github.fisher2911.fishcore.manager.Manager;
+import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
 import io.github.fisher2911.minionsplugin.minion.types.BaseMinion;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,6 +31,7 @@ public class PermissionManager extends Manager<String, MinionPermissionsGroup> {
                 "default",
                 1,
                 "Default Permissions",
+                new TypeItem("permission", "default", new ItemStack(Material.GOLD_BLOCK, 1)),
                 MinionPermissionsGroup.Mode.NOT_SPECIFIED,
                 new HashSet<>(),
                 new ArrayList<>(),

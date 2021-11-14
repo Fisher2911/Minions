@@ -59,6 +59,9 @@ public class MinionPlaceListener implements Listener {
         );
 
         minionOptional.ifPresentOrElse(minion -> {
+
+            minion.getMinionData().getMinionPermissionsGroup("default").getMembers().add(player.getUniqueId());
+
             minion.place();
             this.minionManager.addMinion(minion);
             event.setCancelled(true);

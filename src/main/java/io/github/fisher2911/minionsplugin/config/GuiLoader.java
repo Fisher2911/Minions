@@ -26,28 +26,34 @@ public class GuiLoader {
         this.guiManager = this.plugin.getGuiManager();
     }
 
-    // Loads a minion gui and registers it
-    public void load(final String... path) {
+    public void loadAll() {
+        final File parent = Path.of(this.plugin.getDataFolder().getPath(), "menus").toFile();
 
-        final File file = Path.of(this.plugin.getDataFolder().getPath(), path).toFile();
+        if (!parent.exists()) {
+            parent.mkdirs();
+        }
+
+        final File[] files = parent.listFiles();
+
+        if (files == null) {
+            return;
+        }
+
+        for (final File file : files) {
+            this.load(file);
+        }
+    }
+
+    // Loads a minion gui and registers it
+    private void load(final File file) {
 
         if (!file.exists()) {
-//            file.getParentFile().mkdirs();
-//            final String first = path[0];
-//
-//            if (path.length <= 1) {
-//                this.plugin.saveResource(first, false);
-//            } else {
-//                final String[] rest = new String[path.length - 1];
-//                System.arraycopy(path, 1, rest, 0, path.length - 1);
-//                this.plugin.saveResource(Path.of(first, rest).toString(), false);
-//            }
             return;
         }
 
         final YamlConfigurationLoader loader = YamlConfigurationLoader.
                 builder().
-                path(Path.of(this.plugin.getDataFolder().getPath(), path)).
+                path(Path.of(file.getPath())).
                  defaultOptions(opts ->
                          opts.serializers(build -> {
                              build.register(GuiData.class, GuiDataSerializer.INSTANCE);

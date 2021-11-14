@@ -10,6 +10,7 @@ import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.time.Instant;
@@ -57,6 +58,16 @@ public class MinionData implements IdHolder<Long> {
     @Unmodifiable
     public List<MinionPermissionsGroup> getMinionPermissionsGroup() {
         return Collections.unmodifiableList(this.minionPermissionsGroups);
+    }
+
+    public @Nullable MinionPermissionsGroup getMinionPermissionsGroup(final String id) {
+        for (final var group : this.minionPermissionsGroups) {
+            if (group.getId().equals(id)) {
+                return group;
+            }
+        }
+
+        return null;
     }
 
     public boolean hasPermission(

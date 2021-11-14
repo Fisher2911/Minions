@@ -22,22 +22,24 @@ public class GuiManager {
     public @Nullable SimpleMinionGui getGui(
             final String id,
             final MinionUser minionUser,
-            final BaseMinion<?> minion) {
+            final BaseMinion<?> minion,
+            final String extraData) {
         final GuiData guiData = this.getGuiData(id);
 
         if (guiData == null) {
             return null;
         }
 
-        return new SimpleMinionGui(minion, minionUser, guiData);
+        return new SimpleMinionGui(minion, minionUser, guiData, extraData);
     }
 
     public void openMinionGui(
             final String id,
             final MinionUser minionUser,
-            final BaseMinion<?> minion) {
+            final BaseMinion<?> minion,
+            final String extraData) {
 
-        final SimpleMinionGui gui = this.getGui(id, minionUser, minion);
+        final SimpleMinionGui gui = this.getGui(id, minionUser, minion, extraData);
 
         if (gui == null) {
             return;

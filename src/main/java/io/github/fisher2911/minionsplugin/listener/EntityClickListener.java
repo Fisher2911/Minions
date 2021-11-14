@@ -69,7 +69,8 @@ public class EntityClickListener implements Listener {
                 this.guiManager.
                         openMinionGui(BaseMinionGui.MAIN,
                                 user,
-                                minion
+                                minion,
+                                ""
                         );
 
 //                event.getPlayer().openInventory(minion.getInventory());

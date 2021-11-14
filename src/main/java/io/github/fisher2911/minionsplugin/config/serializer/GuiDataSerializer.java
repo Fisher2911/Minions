@@ -42,6 +42,7 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
     private static final String CLICK_TYPES = "click-types";
     private static final String FILL_ITEMS = "fill-items";
     private static final String TYPE = "type";
+    private static final String VALUE = "value";
 
     private ConfigurationNode nonVirtualNode(final ConfigurationNode source, final Object... path) throws SerializationException {
         if (!source.hasChild(path)) {
@@ -117,7 +118,8 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
                     return 0;
                 }, entry -> {
 
-                    final String itemType = entry.getValue().node("type").getString();
+                    final String itemType = entry.getValue().node(TYPE).getString();
+                    final String itemValue = entry.getValue().node(VALUE).getString();
 
                     try {
                         ItemStack itemStack = ItemSerializer.
@@ -128,10 +130,10 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
                             itemStack = new ItemStack(Material.AIR);
                         }
 
-                        return new TypeItem(itemType, new GuiItem(itemStack));
+                        return new TypeItem(itemType, itemValue, new GuiItem(itemStack));
                     } catch (final SerializationException exception) {
                         exception.printStackTrace();
-                        return new TypeItem(itemType, new GuiItem(Material.AIR));
+                        return new TypeItem(itemType, itemValue, new GuiItem(Material.AIR));
                     }
                 }));
     }
@@ -169,28 +171,10 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
                     node(slot).
                     node(INSTRUCTIONS);
 
-            final var actionChildrenMap = instructionsNode.childrenMap();
-
-            final ClickActions clickActions = new ClickActions(new ArrayList<>());
-
-            for (final var actionEntry : actionChildrenMap.entrySet()) {
-                if (!(actionEntry.getKey() instanceof final String action)) {
-                    continue;
-                }
-
-                final List<String> instructions = Utils.replaceIfNull(
-                        actionEntry.getValue().getList(String.class),
-                        new ArrayList<>()
-                );
-
-                final ClickActions parsed = ActionParser.create(
-                        action,
-                        instructions,
-                        clickTypes);
-                clickActions.addAll(parsed);
-            }
-
-            clickActionMap.put(slot, clickActions);
+            clickActionMap.put(slot, this.loadInstructions(
+                    instructionsNode,
+                    clickTypes
+            ));
         }
 
         return clickActionMap;
@@ -202,26 +186,12 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
 
         final var childrenMap = fillNode.childrenMap();
 
-        System.out.println("Loading fill types");
-
         for (final var childrenEntry : childrenMap.entrySet()) {
 
             final var typeNode = fillNode.node(childrenEntry.getKey()).node(TYPE);
             final var actionsNode = fillNode.node(childrenEntry.getKey()).node(ACTIONS);
 
-
-            System.out.println("Node = " + childrenEntry.getValue().node(TYPE).virtual());
-            System.out.println("Test = " + childrenEntry.getValue().virtual());
-            System.out.println("Test 2 = " + childrenEntry.getValue().childrenList());
-            System.out.println("Test 2 = " + childrenEntry.getValue().childrenMap());
-            System.out.println("Test 2 = " + childrenEntry.getValue().node("permissions"));
-            System.out.println("Node = " + childrenEntry.getValue().node(ACTIONS).virtual());
-
             final String fillType = typeNode.getString();
-
-            System.out.println("Key = " + fillNode.node(childrenEntry.getKey()).getString());
-
-            System.out.println("Loaded fill type: " + fillType);
 
             final List<String> clickTypesStrings = Utils.replaceIfNull(
                     actionsNode.node(CLICK_TYPES).getList(String.class),
@@ -236,19 +206,13 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
                 } catch (final IllegalArgumentException ignored) {}
             }
 
-            final List<String> instructions = Utils.replaceIfNull(
-                    actionsNode.node(INSTRUCTIONS).getList(String.class),
-                    new ArrayList<>()
-            );
 
-            if (instructions.isEmpty()) {
-                clickActionsMap.put(fillType, ClickActions.none());
-                continue;
-            }
+            final var instructionsNode = actionsNode.
+                    node(INSTRUCTIONS);
 
-            final ClickActions clickActions = ActionParser.create(
-                    instructions.get(0),
-                    instructions,
+
+            final ClickActions clickActions = this.loadInstructions(
+                    instructionsNode,
                     clickTypes
             );
 
@@ -258,6 +222,33 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
         return clickActionsMap;
     }
 
+    private ClickActions loadInstructions(
+            final ConfigurationNode instructionsNode,
+            final Set<ClickType> clickTypes) throws SerializationException {
+
+        final var actionChildrenMap = instructionsNode.childrenMap();
+
+        final ClickActions clickActions = new ClickActions(new ArrayList<>());
+
+        for (final var actionEntry : actionChildrenMap.entrySet()) {
+            if (!(actionEntry.getKey() instanceof final String action)) {
+                continue;
+            }
+
+            final List<String> instructions = Utils.replaceIfNull(
+                    actionEntry.getValue().getList(String.class),
+                    new ArrayList<>()
+            );
+
+            final ClickActions parsed = ActionParser.create(
+                    action,
+                    instructions,
+                    clickTypes);
+            clickActions.addAll(parsed);
+        }
+
+        return clickActions;
+    }
 
     @Override
     public void serialize(

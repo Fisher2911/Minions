@@ -1,4 +1,4 @@
-title: "<green>Permissions Menu</green>"
+title: "<green>Permissions Group</green>"
 rows: 3
 border-items:
   1:
@@ -49,13 +49,5 @@ actions:
         - "next"
 fill-items:
   1:
-    type: permission-groups
-    actions:
-      click-types:
-        - RIGHT
-        - LEFT
-      instructions:
-        open:
-          - permissions-group
-          - extra-data
-          - "%clicked%"
+    type: permission-group-players
+    actions: none

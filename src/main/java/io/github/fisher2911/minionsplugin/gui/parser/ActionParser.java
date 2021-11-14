@@ -8,6 +8,7 @@ import io.github.fisher2911.minionsplugin.gui.ClickAction;
 import io.github.fisher2911.minionsplugin.gui.ClickActions;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
+import io.github.fisher2911.minionsplugin.lang.Placeholder;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
@@ -43,6 +44,8 @@ public class ActionParser {
     public static final String ADD_ITEMS = "add-items";
     // used to set items in the gui
     public static final String SET_ITEMS = "set-items";
+    // used for extra data when opening guis
+    public static final String EXTRA_DATA = "extra-data";
     // used to end instructions
     public static final String END = "end";
 
@@ -99,7 +102,9 @@ public class ActionParser {
                             clickActions,
                             instructions,
                             instruction -> createOpenMenuAction(
-                                    instruction, clickTypes
+                                    instruction,
+                                    instructions,
+                                    clickTypes
                             )
                     );
                 }
@@ -158,11 +163,43 @@ public class ActionParser {
 
     private static ClickAction createOpenMenuAction(
             final String guiName,
+            final List<String> instructions,
             final Set<ClickType> clickTypes) {
         final GuiManager guiManager = plugin.getGuiManager();
         return new ClickAction(clickTypes, (menu, slot) -> {
             final MinionUser minionUser = menu.getGuiOwner();
 
+            String extraData = "";
+
+            int index = 0;
+
+
+            for (final String instruction : instructions) {
+
+                if (instruction.equals(EXTRA_DATA)) {
+                    if (instructions.size() <= index + 1) {
+                        break;
+                    }
+                    extraData = instructions.get(index + 1);
+
+                    if (extraData.equals(Placeholder.THIS)) {
+                        extraData = menu.getExtraData();
+                    }
+
+                    if (extraData.equals(Placeholder.CLICKED)) {
+                        final TypeItem typeItem = menu.getItemAtSlot(slot, true);
+                        if (typeItem == null) {
+                            continue;
+                        }
+                        extraData = typeItem.getValue() == null ? "" : typeItem.getValue();
+                    }
+
+                    break;
+                }
+                index++;
+            }
+
+            final String finalExtraData = extraData;
             minionUser.ifOnline(player -> {
 
                 if (guiName.equals(BaseMinionGui.PREVIOUS_PAGE)) {
@@ -175,7 +212,7 @@ public class ActionParser {
                     return;
                 }
 
-                guiManager.openMinionGui(guiName, minionUser, menu.getMinion());
+                guiManager.openMinionGui(guiName, minionUser, menu.getMinion(), finalExtraData);
             });
         });
     }
@@ -219,7 +256,8 @@ public class ActionParser {
 
                 upgrades.attemptUpgrade(type, menu.getGuiOwner());
                 menu.updateItems();
-            } catch (final IllegalArgumentException ignored) {}
+            } catch (final IllegalArgumentException ignored) {
+            }
         });
     }
 
