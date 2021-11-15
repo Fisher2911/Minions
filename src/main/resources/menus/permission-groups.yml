@@ -1,4 +1,4 @@
-title: "<green>Permissions Menu</green>"
+title: "<green>Permissions Group</green>"
 rows: 3
 border-items:
   1:
@@ -27,7 +27,7 @@ items:
     name: "<green>Next Page"
 actions:
   18:
-    1:
+    3:
       click-types:
         - RIGHT
         - LEFT
@@ -35,7 +35,7 @@ actions:
         open:
           - "previous"
   22:
-    1:
+    2:
       click-types:
         - RIGHT
         - LEFT
@@ -52,15 +52,34 @@ actions:
         - "next"
 fill-items:
   1:
-    type: permissions
+    type: permission-groups
     lore:
       - ""
-      - "<blue>Enabled: %permission_%value%%"
+      - "<blue>Right Click: View Permissions"
+      - "<blue>Left Click: Add Players to Group"
+      - "<blue>Middle Click: View Players in Group"
     actions:
       1:
         click-types:
           - RIGHT
+        instructions:
+          open:
+            - permissions
+            - extra-data
+            - "%clicked%"
+      2:
+        click-types:
           - LEFT
         instructions:
-          swap-value:
+          open:
+            - add-player-to-group
+            - extra-data
+            - "%clicked%"
+      3:
+        click-types:
+          - MIDDLE
+        instructions:
+          open:
+            - view-members-in-group
+            - extra-data
             - "%clicked%"

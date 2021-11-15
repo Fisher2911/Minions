@@ -41,25 +41,26 @@ items:
       - "Max Food: %max_food%"
 actions:
   10:
-    click-types:
-      - RIGHT
-      - LEFT
-    instructions:
-      open:
-        - "upgrades"
+    1:
+      click-types:
+        - RIGHT
+        - LEFT
+      instructions:
+        open:
+          - "upgrades"
   11:
-    click-types:
-      - RIGHT
-      - LEFT
-    instructions:
-      open:
-        - "cosmetics"
+    1:
+      click-types:
+        - RIGHT
+        - LEFT
+      instructions:
+        open:
+          - "cosmetics"
   12:
-    click-types:
-      - RIGHT
-      - LEFT
-    instructions:
-      open:
-        - "permissions"
-        - "extra-data"
-        - "default"
+    1:
+      click-types:
+        - RIGHT
+        - LEFT
+      instructions:
+        open:
+          - "permission-groups"

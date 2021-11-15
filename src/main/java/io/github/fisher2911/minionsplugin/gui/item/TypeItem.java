@@ -45,4 +45,18 @@ public class TypeItem {
                         build()
         );
     }
+
+    public ItemStack getItemStack() {
+        return this.guiItem.getItemStack();
+    }
+
+    public static final class Types {
+
+        public static final String PERMISSION = "permission";
+        public static final String PLAYER_UUID = "player-uuid";
+        public static final String PLAYER_NAME = "player-name";
+        public static final String PERMISSION_GROUP = "permission-group";
+        public static final String UPGRADE = "upgrade";
+
+    }
 }

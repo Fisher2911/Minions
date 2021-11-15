@@ -15,7 +15,6 @@ import io.github.fisher2911.minionsplugin.minion.data.MinionDataManager;
 import io.github.fisher2911.minionsplugin.minion.food.FoodManager;
 import io.github.fisher2911.minionsplugin.minion.inventory.EquipmentManager;
 import io.github.fisher2911.minionsplugin.minion.manager.MinionManager;
-import io.github.fisher2911.minionsplugin.permission.PermissionManager;
 import io.github.fisher2911.minionsplugin.upgrade.UpgradeGroupManager;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import io.github.fisher2911.minionsplugin.world.MinionConverter;
@@ -31,7 +30,6 @@ public class MinionsPlugin extends FishCore {
     private UpgradeGroupManager upgradeGroupManager;
     private MinionConverter minionConverter;
     private MinionDataManager minionDataManager;
-    private PermissionManager permissionManager;
     private EquipmentManager equipmentManager;
     private FoodManager foodManager;
     private GuiLoader guiLoader;
@@ -43,7 +41,6 @@ public class MinionsPlugin extends FishCore {
         this.registerListeners();
         this.test();
 
-        this.permissionManager.load();
         this.equipmentManager.load();
         this.foodManager.load();
         this.upgradeGroupManager.loadAll();
@@ -66,7 +63,6 @@ public class MinionsPlugin extends FishCore {
                 this
         );
         this.minionDataManager = new MinionDataManager(this, new HashMap<>());
-        this.permissionManager = new PermissionManager(new HashMap<>());
         this.equipmentManager = new EquipmentManager(new HashMap<>(), this);
         this.foodManager = new FoodManager(new HashMap<>(), this);
         this.guiLoader = new GuiLoader(this);
@@ -100,10 +96,6 @@ public class MinionsPlugin extends FishCore {
 
     public MinionDataManager getMinionDataManager() {
         return this.minionDataManager;
-    }
-
-    public PermissionManager getPermissionManager() {
-        return this.permissionManager;
     }
 
     public EquipmentManager getEquipmentManager() {

@@ -1,5 +1,7 @@
 package io.github.fisher2911.minionsplugin.config.serializer;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import dev.triumphteam.gui.guis.GuiItem;
 import io.github.fisher2911.fishcore.config.serializer.ItemSerializer;
 import io.github.fisher2911.fishcore.configurate.ConfigurationNode;
@@ -7,10 +9,12 @@ import io.github.fisher2911.fishcore.configurate.serialize.SerializationExceptio
 import io.github.fisher2911.fishcore.configurate.serialize.TypeSerializer;
 import io.github.fisher2911.fishcore.util.helper.StringUtils;
 import io.github.fisher2911.fishcore.util.helper.Utils;
-import io.github.fisher2911.minionsplugin.gui.ClickActions;
 import io.github.fisher2911.minionsplugin.gui.GuiData;
+import io.github.fisher2911.minionsplugin.gui.action.ActionParser;
+import io.github.fisher2911.minionsplugin.gui.action.ClickActions;
+import io.github.fisher2911.minionsplugin.gui.action.FillInstructions;
+import io.github.fisher2911.minionsplugin.gui.item.FillItem;
 import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
-import io.github.fisher2911.minionsplugin.gui.parser.ActionParser;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +23,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -43,6 +48,8 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
     private static final String FILL_ITEMS = "fill-items";
     private static final String TYPE = "type";
     private static final String VALUE = "value";
+    private static final String NAME = "name";
+    private static final String LORE = "lore";
 
     private ConfigurationNode nonVirtualNode(final ConfigurationNode source, final Object... path) throws SerializationException {
         if (!source.hasChild(path)) {
@@ -72,9 +79,9 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
 
         final Map<Integer, TypeItem> items = this.loadTypeItems(itemsNode);
 
-        final Map<Integer, ClickActions> clickActionMap = this.loadClickActions(actionsNode);
+        final Multimap<Integer, ClickActions> clickActionMap = this.loadClickActions(actionsNode);
 
-        final Map<String, ClickActions> fillItems = this.loadFillItems(fillNode);
+        final Map<String, FillInstructions> fillInstructions = this.loadFillItems(fillNode);
 
         return new GuiData(
                 title,
@@ -82,7 +89,7 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
                 borderItems,
                 items,
                 clickActionMap,
-                fillItems);
+                fillInstructions);
     }
 
     private List<GuiItem> loadBorderItems(final ConfigurationNode borderItemsNode) {
@@ -138,9 +145,11 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
                 }));
     }
 
-    private Map<Integer, ClickActions> loadClickActions(final ConfigurationNode actionsNode) throws SerializationException {
+    private Multimap<Integer, ClickActions> loadClickActions(final ConfigurationNode actionsNode) throws SerializationException {
 
-        final Map<Integer, ClickActions> clickActionMap = new HashMap<>();
+        final Multimap<Integer, ClickActions> clickActionMap = Multimaps.newSetMultimap(
+                new HashMap<>(), HashSet::new
+        );
 
         final var childrenMap = actionsNode.childrenMap();
 
@@ -149,77 +158,105 @@ public class GuiDataSerializer implements TypeSerializer<GuiData> {
                 continue;
             }
 
-            final Set<ClickType> clickTypes = new HashSet<>();
+            for (final var actionsChildNode : actionsNode.node(slot).childrenMap().values()) {
 
-            final var clickTypesNode = actionsNode.
-                    node(slot).
-                    node(CLICK_TYPES);
+                final Set<ClickType> clickTypes = new HashSet<>();
 
-            final List<String> clickTypesList = Utils.replaceIfNull(
-                    clickTypesNode.getList(String.class),
-                    new ArrayList<>());
+                final var clickTypesNode = actionsChildNode.
+                        node(CLICK_TYPES);
 
-            for (final String clickType : clickTypesList) {
-                try {
-                    clickTypes.add(ClickType.valueOf(clickType));
-                } catch (final IllegalArgumentException exception) {
-                    clickTypes.add(ClickType.UNKNOWN);
+                final List<String> clickTypesList = Utils.replaceIfNull(
+                        clickTypesNode.getList(String.class),
+                        new ArrayList<>());
+
+                for (final String clickType : clickTypesList) {
+                    try {
+                        clickTypes.add(ClickType.valueOf(clickType));
+                    } catch (final IllegalArgumentException exception) {
+                        clickTypes.add(ClickType.UNKNOWN);
+                    }
                 }
+
+                final var instructionsNode = actionsChildNode.
+                        node(INSTRUCTIONS);
+
+                clickActionMap.put(slot, this.loadInstructions(
+                        instructionsNode,
+                        clickTypes
+                ));
             }
-
-            final var instructionsNode = actionsNode.
-                    node(slot).
-                    node(INSTRUCTIONS);
-
-            clickActionMap.put(slot, this.loadInstructions(
-                    instructionsNode,
-                    clickTypes
-            ));
         }
 
         return clickActionMap;
     }
 
-    private Map<String, ClickActions> loadFillItems(final ConfigurationNode fillNode) throws SerializationException {
+    private Map<String, FillInstructions> loadFillItems(final ConfigurationNode fillNode) throws SerializationException {
 
-        final Map<String, ClickActions> clickActionsMap = new HashMap<>();
+        final Map<String, FillInstructions> fillInstructionsMap = new HashMap<>();
 
         final var childrenMap = fillNode.childrenMap();
 
         for (final var childrenEntry : childrenMap.entrySet()) {
 
-            final var typeNode = fillNode.node(childrenEntry.getKey()).node(TYPE);
-            final var actionsNode = fillNode.node(childrenEntry.getKey()).node(ACTIONS);
+            final Object key = childrenEntry.getKey();
+
+            final var node = fillNode.node(key);
+
+            final var typeNode = node.node(TYPE);
+            final var nameNode = node.node(NAME);
+            final var loreNode = node.node(LORE);
+            final var actionsNode = node.node(ACTIONS);
 
             final String fillType = typeNode.getString();
 
-            final List<String> clickTypesStrings = Utils.replaceIfNull(
-                    actionsNode.node(CLICK_TYPES).getList(String.class),
-                    new ArrayList<>()
-            );
+            final Collection<ClickActions> clickActions = new HashSet<>();
 
-            final Set<ClickType> clickTypes = new HashSet<>();
+            for (final var actionChildNode : actionsNode.childrenMap().values()) {
 
-            for (final String clickType : clickTypesStrings) {
-                try {
-                    clickTypes.add(ClickType.valueOf(clickType));
-                } catch (final IllegalArgumentException ignored) {}
+                final List<String> clickTypesStrings = Utils.replaceIfNull(
+                        actionChildNode.node(CLICK_TYPES).getList(String.class),
+                        new ArrayList<>()
+                );
+
+                final Set<ClickType> clickTypes = new HashSet<>();
+
+                for (final String clickType : clickTypesStrings) {
+                    try {
+                        clickTypes.add(ClickType.valueOf(clickType));
+                    } catch (final IllegalArgumentException ignored) {
+                    }
+                }
+
+                final var instructionsNode = actionChildNode.
+                        node(INSTRUCTIONS);
+
+                clickActions.add(this.loadInstructions(
+                        instructionsNode, clickTypes
+                ));
             }
 
+            String name = nameNode.getString();
 
-            final var instructionsNode = actionsNode.
-                    node(INSTRUCTIONS);
+            if (name != null) {
+                name = StringUtils.parseStringToString(name);
+            }
 
+            List<String> lore = loreNode.getList(String.class);
 
-            final ClickActions clickActions = this.loadInstructions(
-                    instructionsNode,
-                    clickTypes
-            );
+            if (lore != null) {
+                final List<String> clone = new ArrayList<>(lore);
+                lore.clear();
+                clone.forEach(line -> lore.add(StringUtils.parseStringToString(line)));
+            }
 
-            clickActionsMap.put(fillType, clickActions);
+            fillInstructionsMap.put(fillType, new FillInstructions(fillType,
+                    new FillItem(
+                            name,
+                            lore,
+                            clickActions)));
         }
 
-        return clickActionsMap;
+        return fillInstructionsMap;
     }
 
     private ClickActions loadInstructions(

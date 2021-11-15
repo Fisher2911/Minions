@@ -7,6 +7,7 @@ import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.minion.data.BaseMinionData;
 import io.github.fisher2911.minionsplugin.minion.data.MinionClass;
 import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
+import io.github.fisher2911.minionsplugin.permission.PermissionManager;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Type;
@@ -58,7 +59,7 @@ public class MinionDataSerializer implements TypeSerializer<BaseMinionData> {
         final String displayName = displayNameNode.getString();
         final String upgradesGroup = upgradeGroupNode.getString();
         final String minionClassString = minionClassNode.getString();
-        permissionsGroups.add(plugin.getPermissionManager().getDefaultGroup());
+        permissionsGroups.add(PermissionManager.getInstance().getDefaultGroup());
         final String equipment = equipmentNode.getString();
         final String foodGroupId = foodGroupNode.getString();
 

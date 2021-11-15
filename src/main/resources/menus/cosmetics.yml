@@ -27,9 +27,10 @@ items:
       - "<green>Go Back</green>"
 actions:
   13:
-    click-types:
-      - RIGHT
-      - LEFT
-    instructions:
-      open:
-        - "main"
+    1:
+      click-types:
+        - RIGHT
+        - LEFT
+      instructions:
+        open:
+          - "main"

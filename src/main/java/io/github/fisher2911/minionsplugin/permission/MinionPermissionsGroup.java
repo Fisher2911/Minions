@@ -7,6 +7,7 @@ import io.github.fisher2911.minionsplugin.util.Displayable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -78,6 +79,14 @@ public class MinionPermissionsGroup implements IdHolder<String>, Displayable, Co
         return this.members;
     }
 
+    public void addMember(final UUID uuid) {
+        this.members.add(uuid);
+    }
+
+    public void removeMember(final UUID uuid) {
+        this.members.remove(uuid);
+    }
+
     public void setMembers(final List<UUID> members) {
         this.members = members;
     }
@@ -109,7 +118,7 @@ public class MinionPermissionsGroup implements IdHolder<String>, Displayable, Co
         final boolean hasUuid = this.members.contains(uuid);
 
         return switch (this.mode) {
-            case SPECIFIED -> {
+            case IN_GROUP -> {
                 if (!hasUuid) {
                     yield false;
                 }
@@ -117,8 +126,16 @@ public class MinionPermissionsGroup implements IdHolder<String>, Displayable, Co
                 yield this.minionPermissions.hasPermission(permission);
             }
 
-            case NOT_SPECIFIED -> this.minionPermissions.hasPermission(permission);
+            case ALL -> this.minionPermissions.hasPermission(permission);
         };
+    }
+
+    public boolean hasMember(final UUID uuid) {
+        if (this.mode == Mode.ALL) {
+            return true;
+        }
+
+        return this.members.contains(uuid);
     }
 
     @Override
@@ -131,12 +148,25 @@ public class MinionPermissionsGroup implements IdHolder<String>, Displayable, Co
         /**
          * Applies to players explicitly defined
          */
-        SPECIFIED,
+        IN_GROUP,
 
         /**
          * Applies to both players explicitly and not explicitly defined
          */
-        NOT_SPECIFIED
+        ALL
 
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final MinionPermissionsGroup that = (MinionPermissionsGroup) o;
+        return Objects.equals(this.id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.id);
     }
 }

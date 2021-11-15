@@ -1,20 +1,32 @@
-place-minion:
-  display-name: "<green>Place Minion Permission"
-  display-item:
-    material: DISPENSER
-    name: "<green>Place Minion Permission"
-pickup-minion:
-  display-name: "<green>Pickup Minion Permission"
-  display-item:
-  material: WOODEN_PICKAXE
-  name: "<green>Pickup Minion Permission"
-open-minion-menu:
-  display-name: "<green>View Minion Menu"
-  display-item:
-    material: PAINTING
-    name: "<green>View Minion Menu Permission"
-upgrade-minion:
-  display-name: "<green>Upgrade Minion Permission"
-  display-item:
-    material: ANVIL
-    name: "<green>Upgrade Minion Permission"
+default-group-id: "default-permissions"
+default-group-name: "<green>Default Permissions"
+default-group-display-item:
+  material: PAPER
+  name: "<green>Default Permissions"
+  amount: 1
+  glow: true
+permissions:
+  place-minion:
+    id: place-minion
+    display-name: "<green>Place Minion Permission"
+    display-item:
+      material: DISPENSER
+      name: "<green>Place Minion Permission"
+  pickup-minion:
+    id: pickup-minion
+    display-name: "<green>Pickup Minion Permission"
+    display-item:
+      material: WOODEN_PICKAXE
+      name: "<green>Pickup Minion Permission"
+  open-minion-menu:
+    id: open-minion-menu
+    display-name: "<green>View Minion Menu"
+    display-item:
+      material: PAINTING
+      name: "<green>View Minion Menu Permission"
+  upgrade-minion:
+    id: upgrade-minion
+    display-name: "<green>Upgrade Minion Permission"
+    display-item:
+      material: ANVIL
+      name: "<green>Upgrade Minion Permission"

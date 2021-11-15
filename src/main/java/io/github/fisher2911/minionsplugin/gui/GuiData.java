@@ -1,6 +1,9 @@
 package io.github.fisher2911.minionsplugin.gui;
 
+import com.google.common.collect.Multimap;
 import dev.triumphteam.gui.guis.GuiItem;
+import io.github.fisher2911.minionsplugin.gui.action.ClickActions;
+import io.github.fisher2911.minionsplugin.gui.action.FillInstructions;
 import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,22 +16,22 @@ public class GuiData {
     private final int rows;
     private final List<GuiItem> borderItemStacks;
     private final Map<Integer, TypeItem> itemStackSlots;
-    private final Map<Integer, ClickActions> clickActionSlots;
-    private final Map<String, ClickActions> fillItems;
+    private final Multimap<Integer, ClickActions> clickActionSlots;
+    private final Map<String, FillInstructions> fillInstructions;
 
     public GuiData(
             final String title,
             final int rows,
             final List<GuiItem> borderItemStacks,
             final Map<Integer, TypeItem> itemStackSlots,
-            final Map<Integer, ClickActions> clickActionSlots,
-            final Map<String, ClickActions> fillItems) {
+            final Multimap<Integer, ClickActions> clickActionSlots,
+            final Map<String, FillInstructions> fillInstructions) {
         this.title = title;
         this.rows = rows;
         this.borderItemStacks = borderItemStacks;
         this.itemStackSlots = itemStackSlots;
         this.clickActionSlots = clickActionSlots;
-        this.fillItems = fillItems;
+        this.fillInstructions = fillInstructions;
     }
 
     public String getTitle() {
@@ -47,7 +50,7 @@ public class GuiData {
         return this.itemStackSlots;
     }
 
-    public Map<Integer, ClickActions> getClickActionSlots() {
+    public Multimap<Integer, ClickActions> getClickActionSlots() {
         return this.clickActionSlots;
     }
 
@@ -55,8 +58,8 @@ public class GuiData {
         return this.itemStackSlots.get(slot);
     }
 
-    public Map<String, ClickActions> getFillItems() {
-        return this.fillItems;
+    public Map<String, FillInstructions> getFillInstructions() {
+        return this.fillInstructions;
     }
 
     @Override

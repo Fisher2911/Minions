@@ -6,6 +6,7 @@ import io.github.fisher2911.minionsplugin.minion.food.FoodData;
 import io.github.fisher2911.minionsplugin.minion.food.FoodGroup;
 import io.github.fisher2911.minionsplugin.minion.inventory.Equipment;
 import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
+import io.github.fisher2911.minionsplugin.permission.PermissionManager;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.Nullable;
@@ -88,7 +89,6 @@ public class BaseMinionData {
             final MinionsPlugin plugin) {
 
         final var upgradesGroupManager = plugin.getUpgradeGroupManager();
-        final var permissionsManager = plugin.getPermissionManager();
         final var equipmentManager = plugin.getEquipmentManager();
         final var foodManger = plugin.getFoodManager();
 

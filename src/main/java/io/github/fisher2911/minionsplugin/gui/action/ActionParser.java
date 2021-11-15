@@ -1,24 +1,27 @@
-package io.github.fisher2911.minionsplugin.gui.parser;
+package io.github.fisher2911.minionsplugin.gui.action;
 
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimaps;
 import io.github.fisher2911.minionsplugin.MinionsPlugin;
 import io.github.fisher2911.minionsplugin.gui.BaseMinionGui;
-import io.github.fisher2911.minionsplugin.gui.ClickAction;
-import io.github.fisher2911.minionsplugin.gui.ClickActions;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.gui.item.TypeItem;
 import io.github.fisher2911.minionsplugin.lang.Placeholder;
+import io.github.fisher2911.minionsplugin.minion.data.MinionData;
+import io.github.fisher2911.minionsplugin.permission.MinionPermissionsGroup;
 import io.github.fisher2911.minionsplugin.upgrade.Upgrades;
 import io.github.fisher2911.minionsplugin.upgrade.type.UpgradeType;
 import io.github.fisher2911.minionsplugin.user.MinionUser;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Function;
 
 public class ActionParser {
@@ -37,9 +40,13 @@ public class ActionParser {
     // used for upgrading a minion
     public static final String ATTEMPT_UPGRADE = "attempt-upgrade";
     // used for things like permissions, changing true to false
-    public static final String CHANGE_VALUE = "change-value";
+    public static final String SWAP_VALUE = "swap-value";
     // used for things like permissions, adding players
     public static final String ADD_VALUE = "add-value";
+    // used to add a player to a permission group
+    public static final String ADD_TO_PERMISSION_GROUP = "add-to-permission-group";
+    // used to remove a player from a permission group
+    public static final String REMOVE_FROM_PERMISSION_GROUP = "remove-from-permission-group";
     // used to add items, such as upgrade items
     public static final String ADD_ITEMS = "add-items";
     // used to set items in the gui
@@ -52,9 +59,11 @@ public class ActionParser {
     private static final Set<String> keyWords = Set.of(
             OPEN_MENU,
             ATTEMPT_UPGRADE,
-            CHANGE_VALUE,
+            SWAP_VALUE,
             ADD_VALUE,
             ADD_ITEMS,
+            ADD_TO_PERMISSION_GROUP,
+            REMOVE_FROM_PERMISSION_GROUP,
             SET_ITEMS,
             END
     );
@@ -97,7 +106,6 @@ public class ActionParser {
             final List<String> instructions = (List<String>) entry.getValue();
             switch (keyWord.toLowerCase()) {
                 case OPEN_MENU -> {
-                    Bukkit.getLogger().info("Open Menu Task");
                     addAllClickActions(
                             clickActions,
                             instructions,
@@ -125,6 +133,31 @@ public class ActionParser {
                             }
                         }
                 );
+
+                case SWAP_VALUE -> {
+                    addAllClickActions(
+                            clickActions,
+                            instructions,
+                            instruction ->
+                                    createSwapValueAction(instructions, clickTypes)
+                    );
+                }
+
+                case ADD_TO_PERMISSION_GROUP -> addAllClickActions(clickActions,
+                        instructions,
+                        instruction ->
+                                createAddToMinionGroupValueAction(
+                                        instructions,
+                                        clickTypes
+                                ));
+
+                case REMOVE_FROM_PERMISSION_GROUP -> addAllClickActions(clickActions,
+                        instructions,
+                        instruction ->
+                                createRemoveFromPermissionGroupAction(
+                                        instructions,
+                                        clickTypes
+                                ));
             }
         }
 
@@ -200,6 +233,7 @@ public class ActionParser {
             }
 
             final String finalExtraData = extraData;
+
             minionUser.ifOnline(player -> {
 
                 if (guiName.equals(BaseMinionGui.PREVIOUS_PAGE)) {
@@ -231,22 +265,21 @@ public class ActionParser {
         return new ClickAction(
                 clickTypes, (menu, slot) -> {
 
-            final MinionUser user = menu.getGuiOwner();
             final TypeItem typeItem = menu.getGuiData().getTypeItem(slot);
 
             if (typeItem == null) {
                 return;
             }
 
-
             try {
                 final String stringType = typeItem.getType();
+                final String value = typeItem.getValue();
 
-                if (stringType == null) {
+                if (stringType == null || value == null) {
                     return;
                 }
 
-                final UpgradeType type = UpgradeType.valueOf(stringType);
+                final UpgradeType type = UpgradeType.valueOf(value);
 
                 if (!upgradeType.equals(type)) {
                     return;
@@ -261,16 +294,149 @@ public class ActionParser {
         });
     }
 
-    private static ClickAction createChangeValueAction(
+    private static ClickAction createSwapValueAction(
             final List<String> instructions,
             final Set<ClickType> clickTypes) {
-        return ClickAction.none();
+
+        return new ClickAction(clickTypes, (menu, slot) -> {
+            for (final String instruction : instructions) {
+                if (instruction.equals(Placeholder.CLICKED)) {
+                    final TypeItem clicked = menu.getItemAtSlot(slot, true);
+
+                    if (clicked == null || clicked.getType() == null) {
+                        continue;
+                    }
+
+                    if (clicked.getType().equals(TypeItem.Types.PERMISSION)) {
+                        final String permissionId = clicked.getValue();
+
+                        if (permissionId == null) {
+                            continue;
+                        }
+
+                        final String permissionGroup = menu.getExtraData();
+
+                        final MinionData minionData = menu.getMinion().getMinionData();
+
+                        final MinionPermissionsGroup group = minionData.getMinionPermissionsGroup(permissionGroup);
+
+                        if (group == null) {
+                            continue;
+                        }
+
+                        group.getMinionPermissions().swapPermissionValue(permissionId);
+                        menu.updateItems();
+                    }
+                }
+            }
+        });
     }
 
-    private static ClickAction createAddValueAction(
+    private static ClickAction createAddToMinionGroupValueAction(
             final List<String> instructions,
             final Set<ClickType> clickTypes) {
-        return ClickAction.none();
+
+        return new ClickAction(
+                clickTypes,
+                (menu, slot) -> {
+
+                    final TypeItem clicked = menu.getItemAtSlot(slot, true);
+
+                    final MinionPermissionsGroup group = getPermissionGroup(clicked, menu);
+
+                    if (group == null) {
+                        return;
+                    }
+
+                    final Player player = Bukkit.getPlayer(UUID.fromString(clicked.getValue()));
+
+                    if (player == null) {
+                        return;
+                    }
+
+                    if (group.hasMember(player.getUniqueId())) {
+                        menu.getGuiOwner().ifOnline(p -> p.sendMessage("Already in group"));
+                    } else {
+                        group.addMember(player.getUniqueId());
+                        menu.getGuiOwner().ifOnline(p -> p.sendMessage("Added to group"));
+                    }
+
+                    menu.updateItems();
+                }
+        );
+    }
+
+    private static ClickAction createRemoveFromPermissionGroupAction(
+            final List<String> instructions,
+            final Set<ClickType> clickTypes) {
+        return new ClickAction(
+                clickTypes,
+                (menu, slot) -> {
+                    final TypeItem clicked = menu.getItemAtSlot(slot, true);
+
+                    final MinionPermissionsGroup group = getPermissionGroup(
+                            clicked,
+                            menu
+                    );
+
+                    if (group == null) {
+                        return;
+                    }
+
+                    final Player player = Bukkit.getPlayer(UUID.fromString(clicked.getValue()));
+
+                    if (player == null) {
+                        return;
+                    }
+
+                    if (group.hasMember(player.getUniqueId())) {
+                        menu.getGuiOwner().ifOnline(p -> p.sendMessage("Removed from group"));
+                        group.removeMember(player.getUniqueId());
+                    } else {
+                        menu.getGuiOwner().ifOnline(p -> p.sendMessage("Not in group"));
+                    }
+
+                    menu.updateItems();
+                }
+        );
+    }
+
+    @Nullable
+    private static MinionPermissionsGroup getPermissionGroup(
+            final @Nullable TypeItem clicked,
+            final BaseMinionGui<?> menu
+            ) {
+        final String extraData = menu.getExtraData();
+
+        if (extraData == null) {
+            return null;
+        }
+
+        if (clicked == null) {
+            return null;
+        }
+
+        final String permissionGroup = menu.getExtraData();
+
+        if (permissionGroup == null) {
+            return null;
+        }
+
+        final String type = clicked.getType();
+
+        final String value = clicked.getValue();
+
+        if (type == null || !type.equals(TypeItem.Types.PLAYER_UUID) ||
+                value == null) {
+            return null;
+        }
+
+        final MinionPermissionsGroup group = menu.
+                getMinion().
+                getMinionData().
+                getMinionPermissionsGroup(extraData);
+
+        return group;
     }
 
 }

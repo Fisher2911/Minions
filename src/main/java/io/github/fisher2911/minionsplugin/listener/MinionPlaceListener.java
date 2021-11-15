@@ -60,7 +60,9 @@ public class MinionPlaceListener implements Listener {
 
         minionOptional.ifPresentOrElse(minion -> {
 
-            minion.getMinionData().getMinionPermissionsGroup("default").getMembers().add(player.getUniqueId());
+//            minion.getMinionData().getMinionPermissionsGroup(PermissionManager.getInstance().getDefaultGroupId()).
+//                    getMembers().
+//                    add(player.getUniqueId());
 
             minion.place();
             this.minionManager.addMinion(minion);

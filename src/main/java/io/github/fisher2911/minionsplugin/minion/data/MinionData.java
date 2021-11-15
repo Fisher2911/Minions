@@ -47,7 +47,7 @@ public class MinionData implements IdHolder<Long> {
         this.minionClass = minionClass;
         this.owner = owner;
         this.minionPermissionsGroups = minionPermissionsGroups;
-        Collections.sort(this.minionPermissionsGroups);
+        this.sortPermissionGroups();
         this.equipment = equipment;
         this.foodData = foodData;
         this.upgrades = upgrades;
@@ -55,8 +55,13 @@ public class MinionData implements IdHolder<Long> {
         this.lastActionTime = lastActionTime;
     }
 
+    private void sortPermissionGroups() {
+        Collections.sort(this.minionPermissionsGroups);
+        Collections.reverse(this.minionPermissionsGroups);
+    }
+
     @Unmodifiable
-    public List<MinionPermissionsGroup> getMinionPermissionsGroup() {
+    public List<MinionPermissionsGroup> getMinionPermissionsGroups() {
         return Collections.unmodifiableList(this.minionPermissionsGroups);
     }
 
@@ -68,6 +73,16 @@ public class MinionData implements IdHolder<Long> {
         }
 
         return null;
+    }
+
+    public void addPermissionsGroup(final MinionPermissionsGroup group) {
+        this.minionPermissionsGroups.add(group);
+        this.sortPermissionGroups();
+    }
+
+    public void removePermissionsGroup(final MinionPermissionsGroup group) {
+        this.minionPermissionsGroups.remove(group);
+        this.sortPermissionGroups();
     }
 
     public boolean hasPermission(

@@ -1,5 +1,6 @@
-package io.github.fisher2911.minionsplugin.gui;
+package io.github.fisher2911.minionsplugin.gui.action;
 
+import io.github.fisher2911.minionsplugin.gui.BaseMinionGui;
 import org.bukkit.event.inventory.ClickType;
 
 import java.util.EnumSet;

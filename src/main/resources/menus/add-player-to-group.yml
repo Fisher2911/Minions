@@ -1,4 +1,4 @@
-title: "<green>Permissions Menu</green>"
+title: "<green>Add Players</green>"
 rows: 3
 border-items:
   1:
@@ -49,18 +49,19 @@ actions:
         - LEFT
       instructions:
         open:
-        - "next"
+          - "next"
 fill-items:
   1:
-    type: permissions
+    type: online-players
+    name: "<green>%player_name%"
     lore:
       - ""
-      - "<blue>Enabled: %permission_%value%%"
+      - "<blue>Already in group: %in_%extra-data%_group_%value%%"
     actions:
       1:
         click-types:
           - RIGHT
           - LEFT
         instructions:
-          swap-value:
+          add-to-permission-group:
             - "%clicked%"
