@@ -5,6 +5,7 @@ import io.github.fisher2911.fishcore.message.MessageHandlerRegistry;
 import io.github.fisher2911.fishcore.user.UserManager;
 import io.github.fisher2911.minionsplugin.command.CommandManager;
 import io.github.fisher2911.minionsplugin.command.GiveMinionCommand;
+import io.github.fisher2911.minionsplugin.command.PermissionsGroupCommand;
 import io.github.fisher2911.minionsplugin.config.GuiLoader;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.listener.BlockAddedToWorldListener;
@@ -88,8 +89,8 @@ public class MinionsPlugin extends FishCore {
 
         this.getCommand(this.commandManager.getName()).setExecutor(this.commandManager);
 
-
         this.commandManager.register(new GiveMinionCommand(this));
+        this.commandManager.register(new PermissionsGroupCommand(this));
 
     }
 

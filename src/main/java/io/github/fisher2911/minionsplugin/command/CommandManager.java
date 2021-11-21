@@ -131,7 +131,7 @@ public class CommandManager implements CommandExecutor, TabExecutor {
     private String[] getActualArgs(final String[] args) {
         final String[] actualArgs = new String[args.length - 1];
 
-        System.arraycopy(args, 1, actualArgs, 1, args.length - 1);
+        System.arraycopy(args, 1, actualArgs, 0, args.length - 1);
 
         return actualArgs;
     }

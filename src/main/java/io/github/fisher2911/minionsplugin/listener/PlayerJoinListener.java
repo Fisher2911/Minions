@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class PlayerJoinListener implements Listener {
@@ -28,7 +29,8 @@ public class PlayerJoinListener implements Listener {
         this.userManager.add(new MinionUser(
                 player.getUniqueId(),
                 player.getName(),
-                new HashSet<>()
+                new HashSet<>(),
+                new HashMap<>()
         ));
     }
 

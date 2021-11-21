@@ -80,9 +80,9 @@ public class GiveMinionCommand extends BaseCommand {
 
         final List<String> tabs = new ArrayList<>();
 
-        final String arg = args[1];
+        final String arg = args[0];
 
-        if (args.length == 2) {
+        if (args.length == 1) {
 
             for (final String id : ids) {
                 if (id.startsWith(arg)) {

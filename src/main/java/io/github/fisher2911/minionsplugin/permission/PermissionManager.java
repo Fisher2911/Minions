@@ -23,6 +23,8 @@ public class PermissionManager {
     private static final MinionsPlugin plugin;
     private static final PermissionManager INSTANCE;
 
+    private final Map<String, Boolean> defaultPermissions = new HashMap<>();
+
     static {
         plugin = MinionsPlugin.getPlugin(MinionsPlugin.class);
         INSTANCE = new PermissionManager();
@@ -99,10 +101,9 @@ public class PermissionManager {
             exception.printStackTrace();
         }
 
-        final Map<String, Boolean> defaultPermissionsMap = new HashMap<>();
 
         for (final var entry : this.getAll().entrySet()) {
-            defaultPermissionsMap.put(entry.getValue().getId(), false);
+            this.defaultPermissions.put(entry.getValue().getId(), false);
         }
 
         this.defaultGroup = new MinionPermissionsGroup(
@@ -114,9 +115,13 @@ public class PermissionManager {
                 MinionPermissionsGroup.Mode.IN_GROUP,
                 new HashSet<>(),
                 new ArrayList<>(),
-                new MinionPermissions(defaultPermissionsMap)
+                new MinionPermissions(new HashMap<>(this.defaultPermissions))
         );
 
+    }
+
+    public Map<String, Boolean> getDefaultPermissions() {
+        return new HashMap<>(this.defaultPermissions);
     }
 
     public MinionPermissionsGroup getDefaultGroup() {
