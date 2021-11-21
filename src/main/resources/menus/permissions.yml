@@ -55,7 +55,7 @@ fill-items:
     type: permissions
     lore:
       - ""
-      - "<blue>Enabled: %permission_%value%%"
+      - "<blue>Enabled: %permission_enabled_%extra-data%_%value%%"
     actions:
       1:
         click-types:

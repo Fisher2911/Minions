@@ -1,8 +1,10 @@
 package io.github.fisher2911.minionsplugin;
 
 import io.github.fisher2911.fishcore.FishCore;
+import io.github.fisher2911.fishcore.message.MessageHandlerRegistry;
 import io.github.fisher2911.fishcore.user.UserManager;
-import io.github.fisher2911.minionsplugin.command.TestCommand;
+import io.github.fisher2911.minionsplugin.command.CommandManager;
+import io.github.fisher2911.minionsplugin.command.GiveMinionCommand;
 import io.github.fisher2911.minionsplugin.config.GuiLoader;
 import io.github.fisher2911.minionsplugin.gui.GuiManager;
 import io.github.fisher2911.minionsplugin.listener.BlockAddedToWorldListener;
@@ -33,13 +35,14 @@ public class MinionsPlugin extends FishCore {
     private EquipmentManager equipmentManager;
     private FoodManager foodManager;
     private GuiLoader guiLoader;
+    private CommandManager commandManager;
 
     @Override
     public void onEnable() {
         super.onEnable();
         this.initializeClasses();
         this.registerListeners();
-        this.test();
+        this.registerCommands();
 
         this.equipmentManager.load();
         this.foodManager.load();
@@ -78,6 +81,18 @@ public class MinionsPlugin extends FishCore {
                 forEach(this::registerListener);
     }
 
+    private void registerCommands() {
+        this.commandManager = new CommandManager("minion",
+                MessageHandlerRegistry.REGISTRY.get(this.getClass()),
+                        null);
+
+        this.getCommand(this.commandManager.getName()).setExecutor(this.commandManager);
+
+
+        this.commandManager.register(new GiveMinionCommand(this));
+
+    }
+
     public UpgradeGroupManager getUpgradeGroupManager() {
         return this.upgradeGroupManager;
     }
@@ -104,10 +119,6 @@ public class MinionsPlugin extends FishCore {
 
     public FoodManager getFoodManager() {
         return this.foodManager;
-    }
-
-    private void test() {
-        this.getCommand("minion").setExecutor(new TestCommand(this));
     }
 
     public GuiManager getGuiManager() {

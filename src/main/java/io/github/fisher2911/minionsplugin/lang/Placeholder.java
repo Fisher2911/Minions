@@ -46,7 +46,8 @@ public class Placeholder {
     public static final String UPGRADE_LEVEL = "%" + UPGRADE_TYPE + "_level%";
     public static final String UPGRADE_NAME = "%" + UPGRADE_TYPE + "_name%";
     public static final String UPGRADE_ID = "%" + UPGRADE_TYPE + "_id%";
-    public static final String PERMISSION = "%permission_" + ID + "%";
+    public static final String HAS_PERMISSION = "%has_permission_" + ID + "%";
+    public static final String PERMISSION_ENABLED = "%permission_enabled_" + ID + "_" + NAME + "%";
     public static final String IN_PERMISSION_GROUP = "%in_" + ID + "_group_" + PLAYER_UUID + "%";
     public static final String THIS = "%this%";
     public static final String CLICKED = "%clicked%";
@@ -162,7 +163,17 @@ public class Placeholder {
                             minionData.hasPermission(permission, uuid)
                     ).toLowerCase(Locale.ROOT);
 
-            placeholders.put(PERMISSION.replace(ID, permission), hasPermission);
+            placeholders.put(HAS_PERMISSION.replace(ID, permission), hasPermission);
+
+            for (final MinionPermissionsGroup group : minionData.getMinionPermissionsGroups()) {
+                    placeholders.put(PERMISSION_ENABLED.replace(
+                                            ID, group.getId()).
+                                    replace(NAME, permission),
+                            String.valueOf(
+                                    group.getMinionPermissions().hasPermission(permission)
+                            )
+                    );
+            }
         }
 
         return placeholders;
